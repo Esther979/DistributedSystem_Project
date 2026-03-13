@@ -237,9 +237,19 @@ fn main() {
                                                 send_reply(&my_node_id_str, &client, "write_ok", Some(msg_id), reply_msg_id, None);
                                             },
                                             KVCommand::Read { key, msg_id, client } => {
-                                                let val = kv_store.get(&key).copied();
-                                                reply_msg_id += 1;
-                                                send_reply(&my_node_id_str, &client, "read_ok", Some(msg_id), reply_msg_id, val);
+                                                // let val = kv_store.get(&key).copied();
+                                                // reply_msg_id += 1;
+                                                // send_reply(&my_node_id_str, &client, "read_ok", Some(msg_id), reply_msg_id, val);
+                                                reply_msg_id += 1; // 统一递增，确保每个回复都有独立的 msg_id
+
+                                                if let Some(&val) = kv_store.get(&key) {
+                                                    // 场景 1：如果这个 key 之前被写入过，正常返回 value
+                                                    send_reply(&my_node_id_str, &client, "read_ok", Some(msg_id), reply_msg_id, Some(val));
+                                                } else {
+                                                    // 场景 2：如果这个 key 压根不存在，遵循 Maelstrom 协议返回 20 号错误
+                                                    // （注意：如果你在辅助函数里也给 send_error 加上了 reply_msg_id 参数，请把它传进去；如果没有加，保持下面这样即可）
+                                                    send_error(&my_node_id_str, &client, msg_id, 20, "Key does not exist");
+                                                }
                                             },
                                             KVCommand::Cas { key, from, to, msg_id, client } => {
                                                 let current = kv_store.get(&key).copied();
