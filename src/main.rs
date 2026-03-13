@@ -43,14 +43,23 @@ pub struct Message {
 pub struct Body {
     #[serde(rename = "type")]
     pub msg_type: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub msg_id: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub in_reply_to: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub from: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub to: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub node_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub node_ids: Option<Vec<String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub paxos_data: Option<Vec<u8>>,
     #[serde(flatten)]
     pub extra: serde_json::Map<String, serde_json::Value>,
@@ -88,7 +97,8 @@ fn main() {
     let mut my_node_id_str = String::new();
     let mut my_pid: NodeId = 0;
     let mut kv_store: HashMap<u64, u64> = HashMap::new();
-    let mut applied_idx: u64 = 0; 
+    let mut applied_idx: u64 = 0;
+    let mut reply_msg_id: u64 = 0;  // ← 新增：reply 的 msg_id 计数器
     let mut omnipaxos: Option<OmniPaxos<KVCommand, PersistentStorage<KVCommand>>> = None;
 
     for event in rx {
@@ -146,7 +156,8 @@ fn main() {
                             }
 
                             omnipaxos = Some(op);
-                            send_reply(&my_node_id_str, &msg.src, "init_ok", msg.body.msg_id, None);
+                            reply_msg_id += 1;
+                            send_reply(&my_node_id_str, &msg.src, "init_ok", msg.body.msg_id, reply_msg_id, None);
                             eprintln!("✅ Node {} recovered. Applied Index: {}", my_node_id_str, applied_idx);
                         }
                     },
@@ -222,17 +233,20 @@ fn main() {
                                         match cmd {
                                             KVCommand::Write { key, value, msg_id, client } => {
                                                 kv_store.insert(key, value);
-                                                send_reply(&my_node_id_str, &client, "write_ok", Some(msg_id), None);
+                                                reply_msg_id += 1;
+                                                send_reply(&my_node_id_str, &client, "write_ok", Some(msg_id), reply_msg_id, None);
                                             },
                                             KVCommand::Read { key, msg_id, client } => {
                                                 let val = kv_store.get(&key).copied();
-                                                send_reply(&my_node_id_str, &client, "read_ok", Some(msg_id), val);
+                                                reply_msg_id += 1;
+                                                send_reply(&my_node_id_str, &client, "read_ok", Some(msg_id), reply_msg_id, val);
                                             },
                                             KVCommand::Cas { key, from, to, msg_id, client } => {
                                                 let current = kv_store.get(&key).copied();
                                                 if current == Some(from) {
                                                     kv_store.insert(key, to);
-                                                    send_reply(&my_node_id_str, &client, "cas_ok", Some(msg_id), None);
+                                                    reply_msg_id += 1;
+                                                    send_reply(&my_node_id_str, &client, "cas_ok", Some(msg_id), reply_msg_id, None);
                                                 } else {
                                                     send_error(&my_node_id_str, &client, msg_id, 22, "CAS mismatch");
                                                 }
@@ -258,11 +272,11 @@ fn main() {
 // ==========================================
 // 4. 辅助发送函数
 // ==========================================
-fn send_reply(src: &str, dest: &str, msg_type: &str, in_reply_to: Option<u64>, value: Option<u64>) {
+fn send_reply(src: &str, dest: &str, msg_type: &str, in_reply_to: Option<u64>, msg_id: u64, value: Option<u64>) {
     let msg = Message {
         src: src.to_string(), dest: dest.to_string(),
         body: Body {
-            msg_type: msg_type.to_string(), msg_id: None, in_reply_to,
+            msg_type: msg_type.to_string(), msg_id: Some(msg_id), in_reply_to,
             key: None, value, from: None, to: None, node_id: None, node_ids: None, paxos_data: None, extra: serde_json::Map::new(),
         }
     };
