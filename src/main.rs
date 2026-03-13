@@ -275,15 +275,11 @@ fn main() {
             Event::Tick => {
                 if let Some(op) = &mut omnipaxos {
 
-                    // 🔥 FIX 1：tick() 也包进 catch_unwind
+                    // 🔥 FIX 1：tick() 包进 catch_unwind
                     //    leader 选举时 send_accsync 会读 log suffix，可能 panic
-                    let tick_ok = panic::catch_unwind(
-                        panic::AssertUnwindSafe(|| op.tick())
-                    ).is_ok();
-
-                    if !tick_ok {
-                        eprintln!("⚠️ Caught panic in tick(), skipping this tick...");
-                        continue;
+                    // panic 时不 continue，继续处理 outgoing+apply，否则节点会哑掉导致大量超时
+                    if panic::catch_unwind(panic::AssertUnwindSafe(|| op.tick())).is_err() {
+                        eprintln!("⚠️ Caught panic in tick(), still processing messages...");
                     }
 
                     // 🔥 FIX 2：outgoing_messages() 也包起来
