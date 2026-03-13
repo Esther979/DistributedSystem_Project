@@ -21,7 +21,11 @@ pub enum KVCommand {
 }
 
 fn parse_node_id(s: &str) -> NodeId {
-    s.trim_start_matches('n').parse::<u64>().unwrap_or(0)
+    // 提取数字并 +1，确保结果永远不为 0
+    s.trim_start_matches('n')
+     .parse::<u64>()
+     .map(|id| id + 1) 
+     .unwrap_or(1) // 如果解析失败，默认给 1 也不要给 0
 }
 
 // ==========================================
@@ -182,7 +186,9 @@ fn main() {
                     
                     // 1. 发送 Paxos 内部消息
                     for out_msg in op.outgoing_messages() {
-                        let dest = format!("n{}", out_msg.get_receiver());
+                        // 内部 pid 是 x+1，发给 Maelstrom 时要还原回 n(x)
+                        let receiver_id = out_msg.get_receiver();
+                        let dest = format!("n{}", receiver_id - 1);
                         if let Ok(data) = bincode::serialize(&out_msg) {
                             let net_msg = Message {
                                 src: my_node_id_str.clone(), dest,
