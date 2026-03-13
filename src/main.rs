@@ -287,8 +287,8 @@ fn main() {
                     }
 
                     // 🔥 FIX 2：outgoing_messages() 也包起来
-                    let out_msgs: Vec<_> = panic::catch_unwind(
-                        panic::AssertUnwindSafe(|| op.outgoing_messages().collect::<Vec<_>>())
+                    let out_msgs: Vec<omnipaxos::messages::Message<KVCommand>> = panic::catch_unwind(
+                        panic::AssertUnwindSafe(|| op.outgoing_messages().into_iter().collect::<Vec<_>>())
                     ).unwrap_or_default();
 
                     for out_msg in out_msgs {
