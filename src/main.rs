@@ -260,7 +260,13 @@ fn main() {
                             (&mut omnipaxos, msg.body.paxos_data)
                         {
                             if let Ok(p_msg) = bincode::deserialize(&data) {
-                                op.handle_incoming(p_msg);
+                                // 🔥 FIX：handle_incoming 也可能触发 storage panic
+                                //    handle_promise_accept → send_accsync → read log suffix → ErrHelper
+                                if panic::catch_unwind(panic::AssertUnwindSafe(|| {
+                                    op.handle_incoming(p_msg);
+                                })).is_err() {
+                                    eprintln!("⚠️ Caught panic in handle_incoming(), ignoring message...");
+                                }
                             }
                         }
                     }
