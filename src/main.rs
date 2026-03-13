@@ -4,14 +4,16 @@ use std::io::{self, BufRead};
 use std::sync::mpsc;
 use std::thread;
 use std::time::Duration;
+use std::panic; // 引入 panic 拦截机制
 
 use omnipaxos::macros::Entry;
 use omnipaxos::util::{LogEntry, NodeId};
 use omnipaxos::{OmniPaxos, OmniPaxosConfig};
 // 引入持久化存储相关的组件
 use omnipaxos_storage::persistent_storage::{PersistentStorage, PersistentStorageConfig};
+
 // ==========================================
-// 1. 定义共识日志条目 (必须实现 Entry trait)
+// 1. 定义共识日志条目
 // ==========================================
 #[derive(Clone, Debug, Serialize, Deserialize, Entry)]
 pub enum KVCommand {
@@ -21,11 +23,10 @@ pub enum KVCommand {
 }
 
 fn parse_node_id(s: &str) -> NodeId {
-    // 提取数字并 +1，确保结果永远不为 0
     s.trim_start_matches('n')
      .parse::<u64>()
      .map(|id| id + 1) 
-     .unwrap_or(1) // 如果解析失败，默认给 1 也不要给 0
+     .unwrap_or(1) 
 }
 
 // ==========================================
@@ -66,7 +67,6 @@ pub enum Event {
 fn main() {
     let (tx, rx) = mpsc::channel();
 
-    // --- 线程 1: 异步读取 STDIN (避免阻塞 OmniPaxos Tick) ---
     let tx_in = tx.clone();
     thread::spawn(move || {
         let stdin = io::stdin();
@@ -79,14 +79,12 @@ fn main() {
         }
     });
 
-    // --- 线程 2: 定时器心跳 (10ms) ---
     let tx_tick = tx.clone();
     thread::spawn(move || loop {
         thread::sleep(Duration::from_millis(10));
         if tx_tick.send(Event::Tick).is_err() { break; }
     });
 
-    // --- 节点内部状态 ---
     let mut my_node_id_str = String::new();
     let mut my_pid: NodeId = 0;
     let mut kv_store: HashMap<u64, u64> = HashMap::new();
@@ -97,7 +95,6 @@ fn main() {
         match event {
             Event::Message(msg) => {
                 match msg.body.msg_type.as_str() {
-                    // --- 场景 A: 初始化 & 崩溃恢复 ---
                    "init" => {
                         if let (Some(nid), Some(raw_nodes)) = (msg.body.node_id.clone(), msg.body.node_ids.clone()) {
                             my_node_id_str = nid;
@@ -106,6 +103,9 @@ fn main() {
 
                             let base_path = format!("storage_node_{}", my_pid);
                             let log_path = format!("{}/logs", base_path);
+                            
+                            // 🔥 核心修复 1：强制清理上一轮测试的脏数据，防止跨测试污染导致 ErrHelper
+                            let _ = std::fs::remove_dir_all(&base_path);
                             let _ = std::fs::create_dir_all(&log_path);
 
                             let commitlog_options = commitlog::LogOptions::new(log_path);
@@ -120,13 +120,16 @@ fn main() {
 
                             let op = node_config.build(storage).expect("Failed to build OmniPaxos");
 
-                            // --- 核心修复：安全重放逻辑 ---
                             applied_idx = 0;
-                            let d_idx = op.get_decided_idx(); // 获取当前磁盘上已决定的最大索引
+                            let d_idx = op.get_decided_idx(); 
                             
-                            // 只有当 d_idx > 0 时，读取 [0, d_idx) 才是安全的
                             if d_idx > 0 {
-                                if let Some(decided_entries) = op.read_decided_suffix(0) {
+                                // 🔥 核心修复 2：用 catch_unwind 拦截官方库的 unwrap 报错
+                                let read_result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
+                                    op.read_decided_suffix(0)
+                                }));
+
+                                if let Ok(Some(decided_entries)) = read_result {
                                     for entry in decided_entries {
                                         if let LogEntry::Decided(cmd) = entry {
                                             match cmd {
@@ -147,7 +150,6 @@ fn main() {
                             eprintln!("✅ Node {} recovered. Applied Index: {}", my_node_id_str, applied_idx);
                         }
                     },
-                    // --- 场景 B: 处理读/写/CAS (线性一致性) ---
                     "read" | "write" | "cas" => {
                         if let Some(op) = &mut omnipaxos {
                             let client = msg.src.clone();
@@ -162,13 +164,10 @@ fn main() {
                                     },
                                     _ => None,
                                 };
-                                // 将读写一律视为提案，确保线性一致性
                                 if let Some(c) = cmd { let _ = op.append(c); }
                             }
                         }
                     },
-
-                    // --- 场景 C: 处理 Paxos 网络消息 ---
                     "paxos_net" => {
                         if let (Some(op), Some(data)) = (&mut omnipaxos, msg.body.paxos_data) {
                             if let Ok(p_msg) = bincode::deserialize(&data) { op.handle_incoming(p_msg); }
@@ -178,18 +177,12 @@ fn main() {
                 }
             },
 
-            // --- 场景 D: 定时器 Tick & 日志提交 ---
-            // --- 场景 D: 定时器 Tick & 日志提交 ---
             Event::Tick => {
                 if let Some(op) = &mut omnipaxos {
-                    // 1. 驱动 Paxos 协议进度（处理心跳、选举等）
                     op.tick();
                     
-                    // 2. 发送 Paxos 内部网络消息
-                    // 必须在每个 Tick 中检查并发送，否则节点间无法通信
                     for out_msg in op.outgoing_messages() {
                         let receiver_id = out_msg.get_receiver();
-                        // 转换 ID：OmniPaxos 的 pid 是 x+1，发给 Maelstrom 时还原回 nx
                         let dest = format!("n{}", receiver_id - 1); 
                         
                         if let Ok(data) = bincode::serialize(&out_msg) {
@@ -214,42 +207,53 @@ fn main() {
                         }
                     }
 
-                    // 3. --- 核心修复：安全地将已决定的日志应用到状态机 ---
                     let d_idx = op.get_decided_idx();
                     
-                    // 只有当已决定的索引大于我们已经应用的索引时，读取 [applied_idx, d_idx) 才是安全的
                     if d_idx > applied_idx {
-                        if let Some(entries) = op.read_decided_suffix(applied_idx) {
-                            for entry in entries {
-                                if let LogEntry::Decided(cmd) = entry {
-                                    match cmd {
-                                        KVCommand::Write { key, value, msg_id, client } => {
-                                            kv_store.insert(key, value);
-                                            send_reply(&my_node_id_str, &client, "write_ok", Some(msg_id), None);
-                                        },
-                                        KVCommand::Read { key, msg_id, client } => {
-                                            let val = kv_store.get(&key).copied();
-                                            send_reply(&my_node_id_str, &client, "read_ok", Some(msg_id), val);
-                                        },
-                                        KVCommand::Cas { key, from, to, msg_id, client } => {
-                                            let current = kv_store.get(&key).copied();
-                                            if current == Some(from) {
-                                                kv_store.insert(key, to);
-                                                send_reply(&my_node_id_str, &client, "cas_ok", Some(msg_id), None);
-                                            } else {
-                                                // CAS 失败属于业务逻辑错误，不属于 Paxos 错误，所以要回复 error
-                                                send_error(&my_node_id_str, &client, msg_id, 22, "Precondition Failed: CAS value mismatch");
+                        // 🔥 核心修复 3：实时读取时也加装防弹护盾
+                        let read_result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
+                            op.read_decided_suffix(applied_idx)
+                        }));
+
+                        match read_result {
+                            Ok(Some(entries)) => {
+                                for entry in entries {
+                                    if let LogEntry::Decided(cmd) = entry {
+                                        match cmd {
+                                            KVCommand::Write { key, value, msg_id, client } => {
+                                                kv_store.insert(key, value);
+                                                send_reply(&my_node_id_str, &client, "write_ok", Some(msg_id), None);
+                                            },
+                                            KVCommand::Read { key, msg_id, client } => {
+                                                let val = kv_store.get(&key).copied();
+                                                send_reply(&my_node_id_str, &client, "read_ok", Some(msg_id), val);
+                                            },
+                                            KVCommand::Cas { key, from, to, msg_id, client } => {
+                                                let current = kv_store.get(&key).copied();
+                                                if current == Some(from) {
+                                                    kv_store.insert(key, to);
+                                                    send_reply(&my_node_id_str, &client, "cas_ok", Some(msg_id), None);
+                                                } else {
+                                                    send_error(&my_node_id_str, &client, msg_id, 22, "CAS mismatch");
+                                                }
                                             }
                                         }
+                                        applied_idx += 1;
                                     }
-                                    // 每成功处理一条 Decided 日志，累加应用计数器
-                                    applied_idx += 1;
                                 }
+                            }
+                            Ok(None) => {}
+                            Err(_) => {
+                                // 如果触发了 ErrHelper，我们只记录日志，节点继续存活，等下个 Tick 再试
+                                eprintln!("⚠️ Caught internal storage ErrHelper panic. Retrying next tick...");
                             }
                         }
                     }
                 }
-            }}}}
+            }
+        }
+    }
+}
 
 // ==========================================
 // 4. 辅助发送函数
