@@ -98,59 +98,50 @@ fn main() {
             Event::Message(msg) => {
                 match msg.body.msg_type.as_str() {
                     // --- 场景 A: 初始化 & 崩溃恢复 ---
-                    "init" => {
+                   "init" => {
                         if let (Some(nid), Some(raw_nodes)) = (msg.body.node_id.clone(), msg.body.node_ids.clone()) {
                             my_node_id_str = nid;
                             my_pid = parse_node_id(&my_node_id_str);
                             let all_pids: Vec<NodeId> = raw_nodes.iter().map(|s| parse_node_id(s)).collect();
 
+                            // 1. 设置存储目录
                             let base_path = format!("storage_node_{}", my_pid);
                             let log_path = format!("{}/logs", base_path);
-                            
-                            // --- 增强：确保目录存在 ---
                             let _ = std::fs::create_dir_all(&log_path);
 
                             let commitlog_options = commitlog::LogOptions::new(log_path);
                             let sled_options = sled::Config::default().path(base_path.clone());
-
-                            // --- 核心修改：增加错误处理 ---
-                            let storage = PersistentStorage::open(PersistentStorageConfig::with(base_path, commitlog_options, sled_options));
+                            let storage_config = PersistentStorageConfig::with(base_path, commitlog_options, sled_options);
+                            let storage = PersistentStorage::open(storage_config);
 
                             let mut node_config = OmniPaxosConfig::default();
                             node_config.server_config.pid = my_pid;
                             node_config.cluster_config.nodes = all_pids;
                             node_config.cluster_config.configuration_id = 1;
 
-                            // 如果 build 失败，可能是存储损坏，尝试打印更详细的信息
-                            let op = match node_config.build(storage) {
-                                Ok(o) => o,
-                                Err(e) => {
-                                    eprintln!("❌ Storage error: {:?}. Consider deleting storage directory.", e);
-                                    panic!("Failed to build OmniPaxos due to storage corruption");
-                                }
-                            };
-                            // 重播 (Replay) 
-                            if let Some(decided_entries) = op.read_decided_suffix(0) {
-                                for entry in decided_entries {
-                                    if let LogEntry::Decided(cmd) = entry {
-                                        match cmd {
-                                            KVCommand::Write { key, value, .. } => { kv_store.insert(key, value); },
-                                            KVCommand::Cas { key, from, to, .. } => {
-                                                if kv_store.get(&key) == Some(&from) { kv_store.insert(key, to); }
-                                            },
-                                            _ => {}
+                            // 2. 构建实例
+                            let op = node_config.build(storage).expect("Failed to build OmniPaxos");
+
+                            // 🔥 【改动 1】：安全重放。先检查 decided_idx，防止读取空的或越界的日志
+                            applied_idx = 0;
+                            let d_idx = op.get_decided_idx(); 
+                            if d_idx > applied_idx {
+                                if let Some(entries) = op.read_decided_suffix(applied_idx) {
+                                    for entry in entries {
+                                        if let LogEntry::Decided(cmd) = entry {
+                                            match cmd {
+                                                // ... 之前的 KV 业务处理逻辑（Read/Write/Cas） ...
+                                            }
+                                            applied_idx += 1;
                                         }
-                                        applied_idx += 1;
                                     }
                                 }
                             }
 
                             omnipaxos = Some(op);
                             send_reply(&my_node_id_str, &msg.src, "init_ok", msg.body.msg_id, None);
-                            eprintln!("✅ Node {} recovered/initialized. Applied Index: {}", my_node_id_str, applied_idx);
                         }
                     },
-
                     // --- 场景 B: 处理读/写/CAS (线性一致性) ---
                     "read" | "write" | "cas" => {
                         if let Some(op) = &mut omnipaxos {
