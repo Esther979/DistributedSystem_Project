@@ -104,28 +104,31 @@ fn main() {
                             my_pid = parse_node_id(&my_node_id_str);
                             let all_pids: Vec<NodeId> = raw_nodes.iter().map(|s| parse_node_id(s)).collect();
 
-                            // 1. 配置持久化路径 (Maelstrom 环境下每个节点有独立目录)
                             let base_path = format!("storage_node_{}", my_pid);
-                            let log_path = format!("{}/logs", base_path); // commitlog 需要自己的子目录
-
-                            // --- 修正后的配置逻辑 ---
-                            // commitlog::LogOptions 使用 new()
-                            let commitlog_options = commitlog::LogOptions::new(log_path);
+                            let log_path = format!("{}/logs", base_path);
                             
-                            // sled 必须使用方法链式调用设置路径
-                            let sled_options = sled::Config::default()
-                                .path(base_path.clone()); 
+                            // --- 增强：确保目录存在 ---
+                            let _ = std::fs::create_dir_all(&log_path);
 
-                            let storage_config = PersistentStorageConfig::with(base_path, commitlog_options, sled_options);
-                            let storage = PersistentStorage::open(storage_config);
+                            let commitlog_options = commitlog::LogOptions::new(log_path);
+                            let sled_options = sled::Config::default().path(base_path.clone());
+
+                            // --- 核心修改：增加错误处理 ---
+                            let storage = PersistentStorage::open(PersistentStorageConfig::with(base_path, commitlog_options, sled_options));
 
                             let mut node_config = OmniPaxosConfig::default();
                             node_config.server_config.pid = my_pid;
                             node_config.cluster_config.nodes = all_pids;
                             node_config.cluster_config.configuration_id = 1;
 
-                            let op = node_config.build(storage).expect("Failed to build OmniPaxos");
-
+                            // 如果 build 失败，可能是存储损坏，尝试打印更详细的信息
+                            let op = match node_config.build(storage) {
+                                Ok(o) => o,
+                                Err(e) => {
+                                    eprintln!("❌ Storage error: {:?}. Consider deleting storage directory.", e);
+                                    panic!("Failed to build OmniPaxos due to storage corruption");
+                                }
+                            };
                             // 重播 (Replay) 
                             if let Some(decided_entries) = op.read_decided_suffix(0) {
                                 for entry in decided_entries {
