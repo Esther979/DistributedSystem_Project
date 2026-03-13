@@ -318,12 +318,14 @@ fn main() {
                                     eprintln!("⚠️ handle_incoming panic #{}/{}",
                                         handle_incoming_panic_count, PANIC_REBUILD_THRESHOLD);
 
+                                    // 注意：不在 else 里归零！
+                                    // 如果成功了就归零，panic 永远累积不到阈值（日志里一直是 #1/5）
+                                    // 原因：panic 和成功交替发生时，每次成功都把计数器清掉
                                     if handle_incoming_panic_count >= PANIC_REBUILD_THRESHOLD {
                                         eprintln!("🔄 Instance corrupted, rebuilding fresh...");
                                         let (new_op, _) = build_omnipaxos(
                                             my_pid, all_pids_cache.clone(), false,
                                         );
-                                        // 清掉 marker，下次 init 也是全新启动
                                         let marker = format!("storage_node_{}/.initialized", my_pid);
                                         let _ = std::fs::remove_file(&marker);
                                         kv_store.clear();
@@ -332,8 +334,6 @@ fn main() {
                                         omnipaxos = Some(new_op);
                                         eprintln!("✅ Instance rebuilt.");
                                     }
-                                } else {
-                                    handle_incoming_panic_count = 0;
                                 }
                             }
                         }
