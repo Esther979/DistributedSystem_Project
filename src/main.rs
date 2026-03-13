@@ -6,41 +6,38 @@ use std::thread;
 use std::time::Duration;
 use std::panic;
 
-use omnipaxos::macros::Entry;
-use omnipaxos::util::{LogEntry, NodeId};
-use omnipaxos::{OmniPaxos, OmniPaxosConfig};
-use omnipaxos::storage::{Storage, StorageResult, StopSignEntry};
+use omnipaxos::macros::Entry;           // derive macro，用于 #[derive(Entry)]
+use omnipaxos::storage::Entry as OPEntry; // Storage trait 的泛型约束用这个
+use omnipaxos::storage::{Storage, StorageResult};
 use omnipaxos::ballot_leader_election::Ballot;
+use omnipaxos::util::{LogEntry, NodeId, StopSign}; // StopSign 在 util 里，不是 StopSignEntry
+use omnipaxos::{OmniPaxos, OmniPaxosConfig};
 use omnipaxos_storage::persistent_storage::{PersistentStorage, PersistentStorageConfig};
 
 // ==========================================
 // OmniPaxos 0.2.2 / commitlog 空日志 BUG 修复
 // ==========================================
-//
 // 根本原因：
-//   commitlog 在 log 为空时，read_suffix(0) 返回 Err(ErrHelper)
-//   OmniPaxos 0.2.2 的 leader.rs:230:
-//     self.storage.get_suffix(sync_idx)
-//         .unwrap_or_else(|e| panic!("storage error while trying to read log suffix: {}", e))
-//   空 log → get_suffix 返回 Err → panic
+//   commitlog 在 log 为空时 read_suffix(0) 返回 Err(ErrHelper)
+//   leader.rs:230: self.storage.get_suffix(idx).unwrap_or_else(|e| panic!(...))
+//   → 空 log → Err → panic
 //
-// 修复方案：SafePersistentStorage 包装器
-//   拦截 get_suffix / get_entries 的 Err 返回：
-//     若 from >= log_len（即确实是"没有条目"的情况）→ 返回 Ok(vec![])
-//     其他真实错误 → 照常传播
-//   这样彻底消除了 panic，不再需要依赖 catch_unwind + 重建。
+// 修复：SafePersistentStorage 包装器
+//   get_suffix / get_entries 返回 Err 时，
+//   若 from >= log_len（确实无条目）→ 返回 Ok(vec![])
+//   其他真实错误 → 照常传播
 // ==========================================
-pub struct SafePersistentStorage<T: Entry> {
+pub struct SafePersistentStorage<T: OPEntry> {
     inner: PersistentStorage<T>,
 }
 
-impl<T: Entry> SafePersistentStorage<T> {
+impl<T: OPEntry> SafePersistentStorage<T> {
     pub fn new(inner: PersistentStorage<T>) -> Self {
         Self { inner }
     }
 }
 
-impl<T: Entry> Storage<T> for SafePersistentStorage<T> {
+impl<T: OPEntry> Storage<T> for SafePersistentStorage<T> {
     fn append_entry(&mut self, entry: T) -> StorageResult<u64> {
         self.inner.append_entry(entry)
     }
@@ -73,7 +70,7 @@ impl<T: Entry> Storage<T> for SafePersistentStorage<T> {
         self.inner.get_accepted_round()
     }
 
-    // ★ 修复点 1：get_entries 空日志时返回 Ok(vec![])
+    // ★ 修复点 1
     fn get_entries(&self, from: u64, to: u64) -> StorageResult<Vec<T>> {
         match self.inner.get_entries(from, to) {
             Err(_) => {
@@ -92,8 +89,7 @@ impl<T: Entry> Storage<T> for SafePersistentStorage<T> {
         self.inner.get_log_len()
     }
 
-    // ★ 修复点 2（核心）：get_suffix 空日志时返回 Ok(vec![])
-    //   send_accsync (leader.rs:230) 调用此方法，空日志时不再 panic
+    // ★ 修复点 2（核心）：空日志时 Ok(vec![]) 而非 Err → 不再 panic
     fn get_suffix(&self, from: u64) -> StorageResult<Vec<T>> {
         match self.inner.get_suffix(from) {
             Err(_) => {
@@ -112,11 +108,12 @@ impl<T: Entry> Storage<T> for SafePersistentStorage<T> {
         self.inner.get_promise()
     }
 
-    fn set_stopsign(&mut self, s: Option<StopSignEntry>) -> StorageResult<()> {
+    // StopSign 类型在 omnipaxos::util 里（不是 StopSignEntry）
+    fn set_stopsign(&mut self, s: Option<StopSign>) -> StorageResult<()> {
         self.inner.set_stopsign(s)
     }
 
-    fn get_stopsign(&self) -> StorageResult<Option<StopSignEntry>> {
+    fn get_stopsign(&self) -> StorageResult<Option<StopSign>> {
         self.inner.get_stopsign()
     }
 
@@ -132,6 +129,7 @@ impl<T: Entry> Storage<T> for SafePersistentStorage<T> {
         self.inner.get_compacted_idx()
     }
 
+    // T::Snapshot 需要 T: OPEntry（omnipaxos::storage::Entry），不是 derive macro
     fn set_snapshot(&mut self, snapshot: Option<T::Snapshot>) -> StorageResult<()> {
         self.inner.set_snapshot(snapshot)
     }
@@ -144,6 +142,8 @@ impl<T: Entry> Storage<T> for SafePersistentStorage<T> {
 // ==========================================
 // 1. KV 命令定义
 // ==========================================
+// #[derive(Entry)] 用的是 omnipaxos::macros::Entry（derive macro）
+// Storage<T> 约束用的是 omnipaxos::storage::Entry（trait）—— 两者不同！
 #[derive(Clone, Debug, Serialize, Deserialize, Entry)]
 pub enum KVCommand {
     Read  { key: u64, msg_id: u64, client: String },
@@ -280,8 +280,6 @@ fn main() {
     let mut reply_msg_id: u64 = 0;
     let mut omnipaxos: Option<OmniPaxos<KVCommand, SafePersistentStorage<KVCommand>>> = None;
 
-    // SafePersistentStorage 修复了主要 panic 源。
-    // catch_unwind 作为最后防线保留，阈值调低为 2。
     let mut handle_incoming_panic_count: u32 = 0;
     const PANIC_REBUILD_THRESHOLD: u32 = 2;
 
@@ -290,10 +288,6 @@ fn main() {
             Event::Message(msg) => {
                 match msg.body.msg_type.as_str() {
 
-                    // --------------------------------------------------
-                    // init
-                    // 用磁盘 marker 文件区分 crash 重启 vs 全新启动
-                    // --------------------------------------------------
                     "init" => {
                         if let (Some(nid), Some(raw_nodes)) =
                             (msg.body.node_id.clone(), msg.body.node_ids.clone())
@@ -362,10 +356,6 @@ fn main() {
                         }
                     }
 
-                    // --------------------------------------------------
-                    // 客户端 read/write/cas
-                    // 全部走 Paxos log，commit 后再回复 → 线性一致性
-                    // --------------------------------------------------
                     "read" | "write" | "cas" => {
                         if let Some(op) = &mut omnipaxos {
                             let client = msg.src.clone();
@@ -395,11 +385,6 @@ fn main() {
                         }
                     }
 
-                    // --------------------------------------------------
-                    // paxos_net：节点间内部消息
-                    // SafePersistentStorage 已修复空日志 panic，
-                    // catch_unwind 作为最后保险
-                    // --------------------------------------------------
                     "paxos_net" => {
                         if let Some(data) = msg.body.paxos_data.clone() {
                             if let Ok(p_msg) = bincode::deserialize::<
@@ -438,9 +423,6 @@ fn main() {
                 }
             }
 
-            // --------------------------------------------------
-            // Tick：每 10ms 驱动一次
-            // --------------------------------------------------
             Event::Tick => {
                 if let Some(op) = &mut omnipaxos {
 
@@ -481,7 +463,6 @@ fn main() {
                         }
                     }
 
-                    // Apply 已 commit 条目，回复客户端
                     let d_idx = op.get_decided_idx();
                     if d_idx > applied_idx {
                         match panic::catch_unwind(
