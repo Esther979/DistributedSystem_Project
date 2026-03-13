@@ -104,7 +104,6 @@ fn main() {
                             my_pid = parse_node_id(&my_node_id_str);
                             let all_pids: Vec<NodeId> = raw_nodes.iter().map(|s| parse_node_id(s)).collect();
 
-                            // 1. 设置存储目录
                             let base_path = format!("storage_node_{}", my_pid);
                             let log_path = format!("{}/logs", base_path);
                             let _ = std::fs::create_dir_all(&log_path);
@@ -119,18 +118,23 @@ fn main() {
                             node_config.cluster_config.nodes = all_pids;
                             node_config.cluster_config.configuration_id = 1;
 
-                            // 2. 构建实例
                             let op = node_config.build(storage).expect("Failed to build OmniPaxos");
 
-                            // 🔥 【改动 1】：安全重放。先检查 decided_idx，防止读取空的或越界的日志
+                            // --- 核心修复：安全重放逻辑 ---
                             applied_idx = 0;
-                            let d_idx = op.get_decided_idx(); 
-                            if d_idx > applied_idx {
-                                if let Some(entries) = op.read_decided_suffix(applied_idx) {
-                                    for entry in entries {
+                            let d_idx = op.get_decided_idx(); // 获取当前磁盘上已决定的最大索引
+                            
+                            // 只有当 d_idx > 0 时，读取 [0, d_idx) 才是安全的
+                            if d_idx > 0 {
+                                if let Some(decided_entries) = op.read_decided_suffix(0) {
+                                    for entry in decided_entries {
                                         if let LogEntry::Decided(cmd) = entry {
                                             match cmd {
-                                                // ... 之前的 KV 业务处理逻辑（Read/Write/Cas） ...
+                                                KVCommand::Write { key, value, .. } => { kv_store.insert(key, value); },
+                                                KVCommand::Cas { key, from, to, .. } => {
+                                                    if kv_store.get(&key) == Some(&from) { kv_store.insert(key, to); }
+                                                },
+                                                _ => {} 
                                             }
                                             applied_idx += 1;
                                         }
@@ -140,6 +144,7 @@ fn main() {
 
                             omnipaxos = Some(op);
                             send_reply(&my_node_id_str, &msg.src, "init_ok", msg.body.msg_id, None);
+                            eprintln!("✅ Node {} recovered. Applied Index: {}", my_node_id_str, applied_idx);
                         }
                     },
                     // --- 场景 B: 处理读/写/CAS (线性一致性) ---
@@ -174,60 +179,77 @@ fn main() {
             },
 
             // --- 场景 D: 定时器 Tick & 日志提交 ---
+            // --- 场景 D: 定时器 Tick & 日志提交 ---
             Event::Tick => {
                 if let Some(op) = &mut omnipaxos {
+                    // 1. 驱动 Paxos 协议进度（处理心跳、选举等）
                     op.tick();
                     
-                    // 1. 发送 Paxos 内部消息
+                    // 2. 发送 Paxos 内部网络消息
+                    // 必须在每个 Tick 中检查并发送，否则节点间无法通信
                     for out_msg in op.outgoing_messages() {
-                        // 内部 pid 是 x+1，发给 Maelstrom 时要还原回 n(x)
                         let receiver_id = out_msg.get_receiver();
-                        let dest = format!("n{}", receiver_id - 1);
+                        // 转换 ID：OmniPaxos 的 pid 是 x+1，发给 Maelstrom 时还原回 nx
+                        let dest = format!("n{}", receiver_id - 1); 
+                        
                         if let Ok(data) = bincode::serialize(&out_msg) {
                             let net_msg = Message {
-                                src: my_node_id_str.clone(), dest,
+                                src: my_node_id_str.clone(),
+                                dest,
                                 body: Body {
-                                    msg_type: "paxos_net".to_string(), msg_id: None, in_reply_to: None,
-                                    key: None, value: None, from: None, to: None, node_id: None, node_ids: None,
-                                    paxos_data: Some(data), extra: serde_json::Map::new(),
-                                }
+                                    msg_type: "paxos_net".to_string(),
+                                    msg_id: None,
+                                    in_reply_to: None,
+                                    key: None,
+                                    value: None,
+                                    from: None,
+                                    to: None,
+                                    node_id: None,
+                                    node_ids: None,
+                                    paxos_data: Some(data),
+                                    extra: serde_json::Map::new(),
+                                },
                             };
                             println!("{}", serde_json::to_string(&net_msg).unwrap());
                         }
                     }
 
-                    // 2. 应用已决定的日志到本地状态机 (HashMap)
-                    if let Some(entries) = op.read_decided_suffix(applied_idx) {
-                        for entry in entries {
-                            if let LogEntry::Decided(cmd) = entry {
-                                match cmd {
-                                    KVCommand::Write { key, value, msg_id, client } => {
-                                        kv_store.insert(key, value);
-                                        send_reply(&my_node_id_str, &client, "write_ok", Some(msg_id), None);
-                                    },
-                                    KVCommand::Read { key, msg_id, client } => {
-                                        let val = kv_store.get(&key).copied();
-                                        send_reply(&my_node_id_str, &client, "read_ok", Some(msg_id), val);
-                                    },
-                                    KVCommand::Cas { key, from, to, msg_id, client } => {
-                                        let current = kv_store.get(&key).copied();
-                                        if current == Some(from) {
-                                            kv_store.insert(key, to);
-                                            send_reply(&my_node_id_str, &client, "cas_ok", Some(msg_id), None);
-                                        } else {
-                                            send_error(&my_node_id_str, &client, msg_id, 22, "CAS mismatch");
+                    // 3. --- 核心修复：安全地将已决定的日志应用到状态机 ---
+                    let d_idx = op.get_decided_idx();
+                    
+                    // 只有当已决定的索引大于我们已经应用的索引时，读取 [applied_idx, d_idx) 才是安全的
+                    if d_idx > applied_idx {
+                        if let Some(entries) = op.read_decided_suffix(applied_idx) {
+                            for entry in entries {
+                                if let LogEntry::Decided(cmd) = entry {
+                                    match cmd {
+                                        KVCommand::Write { key, value, msg_id, client } => {
+                                            kv_store.insert(key, value);
+                                            send_reply(&my_node_id_str, &client, "write_ok", Some(msg_id), None);
+                                        },
+                                        KVCommand::Read { key, msg_id, client } => {
+                                            let val = kv_store.get(&key).copied();
+                                            send_reply(&my_node_id_str, &client, "read_ok", Some(msg_id), val);
+                                        },
+                                        KVCommand::Cas { key, from, to, msg_id, client } => {
+                                            let current = kv_store.get(&key).copied();
+                                            if current == Some(from) {
+                                                kv_store.insert(key, to);
+                                                send_reply(&my_node_id_str, &client, "cas_ok", Some(msg_id), None);
+                                            } else {
+                                                // CAS 失败属于业务逻辑错误，不属于 Paxos 错误，所以要回复 error
+                                                send_error(&my_node_id_str, &client, msg_id, 22, "Precondition Failed: CAS value mismatch");
+                                            }
                                         }
                                     }
+                                    // 每成功处理一条 Decided 日志，累加应用计数器
+                                    applied_idx += 1;
                                 }
-                                applied_idx += 1;
                             }
                         }
                     }
                 }
-            }
-        }
-    }
-}
+            }}}}
 
 // ==========================================
 // 4. 辅助发送函数
