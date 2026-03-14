@@ -42,7 +42,6 @@ pub struct Message {
 pub struct Body {
     #[serde(rename = "type")]
     pub msg_type: String,
-    // 必须加上 skip_serializing_if，否则返回的 JSON 会带有 null 字段，导致 Maelstrom 协议报错
     #[serde(skip_serializing_if = "Option::is_none")]
     pub msg_id: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -68,28 +67,118 @@ pub struct Body {
 pub enum Event {
     Message(Message),
     Tick,
-    Shutdown, 
+    Shutdown,
 }
 
 // ==========================================
-// 3. 构建 OmniPaxos 实例
+// 3. KV Snapshot 持久化（独立于 OmniPaxos commitlog）
+//
+// 核心设计：用一个与 OmniPaxos 完全独立的 sled::Tree（路径 kv_snap/）来持久化：
+//   - 每个 KV key  -> value（u64 big-endian）
+//   - 特殊 key "__applied_idx__" -> applied_idx（u64 big-endian）
+//
+// 好处：即使 OmniPaxos commitlog 在进程被 SIGKILL 时损坏，
+// KV 状态本身仍然完整可读，崩溃重启时直接加载，不需要依赖 read_decided_suffix。
+// ==========================================
+
+const APPLIED_IDX_KEY: &[u8] = b"__applied_idx__";
+
+fn open_kv_db(my_pid: NodeId) -> sled::Db {
+    let path = format!("storage_node_{}/kv_snap", my_pid);
+    sled::Config::default()
+        .path(&path)
+        .flush_every_ms(Some(50))   // 每 50ms 后台 flush，缩小崩溃丢失窗口
+        .open()
+        .expect("failed to open kv snapshot db")
+}
+
+/// 从 sled 加载 KV 快照和 applied_idx
+fn load_kv_snapshot(db: &sled::Db) -> (HashMap<u64, u64>, u64) {
+    let mut kv = HashMap::new();
+    let mut applied_idx: u64 = 0;
+
+    for item in db.iter() {
+        if let Ok((k, v)) = item {
+            if k.as_ref() == APPLIED_IDX_KEY {
+                let bytes: [u8; 8] = v.as_ref().try_into().unwrap_or([0u8; 8]);
+                applied_idx = u64::from_be_bytes(bytes);
+            } else if k.len() == 8 {
+                let key_bytes: [u8; 8] = k.as_ref().try_into().unwrap();
+                let val_bytes: [u8; 8] = v.as_ref().try_into().unwrap_or([0u8; 8]);
+                kv.insert(u64::from_be_bytes(key_bytes), u64::from_be_bytes(val_bytes));
+            }
+        }
+    }
+    (kv, applied_idx)
+}
+
+/// 将一条已 decide 的命令原子写入 sled，同时更新内存 kv_store
+fn persist_apply(
+    db: &sled::Db,
+    cmd: &KVCommand,
+    new_applied_idx: u64,
+    kv: &mut HashMap<u64, u64>,
+) {
+    let mut batch = sled::Batch::default();
+
+    match cmd {
+        KVCommand::Write { key, value, .. } => {
+            kv.insert(*key, *value);
+            batch.insert(key.to_be_bytes().to_vec(), value.to_be_bytes().to_vec());
+        }
+        KVCommand::Cas { key, from, to, .. } => {
+            if kv.get(key).copied() == Some(*from) {
+                kv.insert(*key, *to);
+                batch.insert(key.to_be_bytes().to_vec(), to.to_be_bytes().to_vec());
+            }
+            // from 不匹配时不修改，也不写 sled
+        }
+        KVCommand::Read { .. } => {
+            // Read 是 no-op，只推进 applied_idx
+        }
+    }
+
+    // 总是更新 applied_idx（即使是 Read 或 CAS 未命中）
+    batch.insert(
+        APPLIED_IDX_KEY.to_vec(),
+        new_applied_idx.to_be_bytes().to_vec(),
+    );
+    let _ = db.apply_batch(batch);
+    // 注意：不在热路径调用 db.flush()，依赖 flush_every_ms 后台刷盘。
+    // 如需更强持久性（允许更高延迟），可改为：let _ = db.flush();
+}
+
+// ==========================================
+// 4. 构建 OmniPaxos 实例
 // ==========================================
 fn build_omnipaxos(
     my_pid: NodeId,
     all_pids: Vec<NodeId>,
-    keep_storage: bool,
-) -> (OmniPaxos<KVCommand, PersistentStorage<KVCommand>>, bool) {
+    keep_paxos_storage: bool,
+) -> OmniPaxos<KVCommand, PersistentStorage<KVCommand>> {
     let base_path = format!("storage_node_{}", my_pid);
     let log_path  = format!("{}/logs", base_path);
 
-    if !keep_storage {
-        let _ = std::fs::remove_dir_all(&base_path);
+    if !keep_paxos_storage {
+        // 只清 OmniPaxos 的 commitlog + sled 元数据，保留 kv_snap/
+        let _ = std::fs::remove_dir_all(&log_path);
+        for entry in std::fs::read_dir(&base_path).into_iter().flatten().flatten() {
+            let p = entry.path();
+            let name = p.file_name().and_then(|n| n.to_str()).unwrap_or("");
+            if name != "kv_snap" && name != ".initialized" {
+                if p.is_dir() {
+                    let _ = std::fs::remove_dir_all(&p);
+                } else {
+                    let _ = std::fs::remove_file(&p);
+                }
+            }
+        }
     }
     let _ = std::fs::create_dir_all(&log_path);
 
     let make_storage = || -> PersistentStorage<KVCommand> {
         let commitlog_opts = commitlog::LogOptions::new(&log_path);
-        let sled_opts      = sled::Config::default().path(&base_path);
+        let sled_opts = sled::Config::default().path(&base_path);
         let cfg = PersistentStorageConfig::with(
             base_path.clone(), commitlog_opts, sled_opts,
         );
@@ -101,30 +190,46 @@ fn build_omnipaxos(
     node_config.cluster_config.nodes            = all_pids.clone();
     node_config.cluster_config.configuration_id = 1;
 
+    // 先尝试带存储打开（恢复 np/na/va，帮助更快重选 leader）
     let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
         node_config.clone().build(make_storage()).expect("build failed")
     }));
 
     match result {
         Ok(op) => {
-            // "is_restart" is the source of truth: if we intentionally kept storage,
-            // we MUST attempt to replay regardless of what get_decided_idx() reports.
-            // get_decided_idx() can legitimately be 0 on a node that was a follower
-            // and only had undecided entries flushed, so we cannot rely on it alone.
-            (op, keep_storage)
+            eprintln!(
+                "✅ OmniPaxos opened (decided_idx={}, keep_paxos={})",
+                op.get_decided_idx(), keep_paxos_storage
+            );
+            op
         }
         Err(_) => {
-            eprintln!("⚠️ Storage corrupted on open, clearing and rebuilding fresh...");
-            let _ = std::fs::remove_dir_all(&base_path);
+            // commitlog 损坏：清空 paxos 状态，用空存储重建
+            // kv_snap 不受影响，KV 状态由上层从 snapshot 恢复
+            eprintln!("⚠️  OmniPaxos storage corrupt; rebuilding paxos state from scratch \
+                       (kv_snap kept)...");
+            let _ = std::fs::remove_dir_all(&log_path);
             let _ = std::fs::create_dir_all(&log_path);
-            let op = node_config.build(make_storage()).expect("rebuild after clear failed");
-            (op, false)
+            // 同样清掉 sled 里 paxos 的 metadata
+            for entry in std::fs::read_dir(&base_path).into_iter().flatten().flatten() {
+                let p = entry.path();
+                let name = p.file_name().and_then(|n| n.to_str()).unwrap_or("");
+                if name != "kv_snap" && name != ".initialized" {
+                    if p.is_dir() {
+                        let _ = std::fs::remove_dir_all(&p);
+                    } else {
+                        let _ = std::fs::remove_file(&p);
+                    }
+                }
+            }
+            let _ = std::fs::create_dir_all(&log_path);
+            node_config.build(make_storage()).expect("rebuild failed")
         }
     }
 }
 
 // ==========================================
-// 4. 主程序
+// 5. 主程序
 // ==========================================
 fn main() {
     let (tx, rx) = mpsc::channel();
@@ -151,18 +256,22 @@ fn main() {
     let mut my_node_id_str = String::new();
     let mut my_pid: NodeId  = 0;
     let mut all_pids_cache: Vec<NodeId> = Vec::new();
-    let mut kv_store: HashMap<u64, u64> = HashMap::new();
+
+    let mut kv_store:    HashMap<u64, u64> = HashMap::new();
     let mut applied_idx: u64 = 0;
     let mut reply_msg_id: u64 = 0;
+
     let mut omnipaxos: Option<OmniPaxos<KVCommand, PersistentStorage<KVCommand>>> = None;
+    let mut kv_db:     Option<sled::Db> = None;
 
     let mut handle_incoming_panic_count: u32 = 0;
-    const PANIC_REBUILD_THRESHOLD: u32 = 2; 
+    const PANIC_REBUILD_THRESHOLD: u32 = 2;
 
     for event in rx {
         match event {
             Event::Message(msg) => {
                 match msg.body.msg_type.as_str() {
+
                     "init" => {
                         if let (Some(nid), Some(raw_nodes)) =
                             (msg.body.node_id.clone(), msg.body.node_ids.clone())
@@ -173,98 +282,58 @@ fn main() {
                                 .map(|s| parse_node_id(s))
                                 .collect();
 
-                            let marker_path = format!("storage_node_{}/.initialized", my_pid);
-                            let is_crash_restart = std::path::Path::new(&marker_path).exists();
+                            let _ = std::fs::create_dir_all(
+                                format!("storage_node_{}", my_pid)
+                            );
+                            let marker_path = format!(
+                                "storage_node_{}/.initialized", my_pid
+                            );
+                            let is_crash_restart =
+                                std::path::Path::new(&marker_path).exists();
 
                             eprintln!(
                                 "{} Node {} {}",
                                 if is_crash_restart { "🔄" } else { "🆕" },
                                 my_node_id_str,
-                                if is_crash_restart { "restarting, keeping storage." } else { "started fresh." }
+                                if is_crash_restart {
+                                    "restarting — loading KV snapshot."
+                                } else {
+                                    "started fresh."
+                                }
                             );
 
-                            let (op, recovered) =
-                                build_omnipaxos(my_pid, all_pids_cache.clone(), is_crash_restart);
+                            // ── 1. 打开 KV snapshot DB（始终保留）
+                            let db = open_kv_db(my_pid);
 
-                            kv_store.clear();
-                            applied_idx = 0;
-                            handle_incoming_panic_count = 0;
-
-                            // Always attempt replay when keep_storage=true (i.e. crash-restart).
-                            // We do not gate on get_decided_idx() > 0 because a follower may have
-                            // flushed np/na/va to sled but decided_idx might still read as 0 from
-                            // the in-memory OmniPaxos instance until the cluster re-elects a leader
-                            // and drives decisions again.  The important thing is to replay whatever
-                            // Decided entries ARE readable right now, set applied_idx accordingly,
-                            // and let OmniPaxos sync the rest via the normal Paxos protocol.
-                            if recovered {
-                                let decided_idx = op.get_decided_idx();
-                                eprintln!("📂 Crash-restart detected. decided_idx from storage={}. Replaying log...", decided_idx);
-
-                                // Primary path: read_decided_suffix(0) gives all decided entries.
-                                // Fallback: if it returns None (can happen when the commitlog segment
-                                // is empty but sled has metadata), we gracefully skip and let the
-                                // cluster re-sync this node.
-                                let replay_result = panic::catch_unwind(
-                                    panic::AssertUnwindSafe(|| op.read_decided_suffix(0))
+                            if is_crash_restart {
+                                // ── 直接从 sled kv_snap 加载 KV 状态
+                                let (snap_kv, snap_idx) = load_kv_snapshot(&db);
+                                kv_store    = snap_kv;
+                                applied_idx = snap_idx;
+                                eprintln!(
+                                    "📂 KV snapshot loaded: {} keys, applied_idx={}",
+                                    kv_store.len(), applied_idx
                                 );
-
-                                match replay_result {
-                                    Ok(Some(entries)) => {
-                                        let mut replayed = 0u64;
-                                        for entry in entries {
-                                            if let LogEntry::Decided(cmd) = entry {
-                                                match cmd {
-                                                    KVCommand::Write { key, value, .. } => {
-                                                        kv_store.insert(key, value);
-                                                    }
-                                                    KVCommand::Cas { key, from, to, .. } => {
-                                                        if kv_store.get(&key).copied() == Some(from) {
-                                                            kv_store.insert(key, to);
-                                                        }
-                                                    }
-                                                    KVCommand::Read { .. } => {}
-                                                }
-                                                replayed += 1;
-                                            }
-                                        }
-                                        // applied_idx should reflect how many entries we've applied.
-                                        // Use max of replayed count and decided_idx so we never
-                                        // re-apply entries the storage layer already committed.
-                                        applied_idx = replayed.max(decided_idx);
-                                        eprintln!("✅ Recovery done: {} entries replayed, {} keys in store, applied_idx={}",
-                                            replayed, kv_store.len(), applied_idx);
-                                        omnipaxos = Some(op);
-                                    }
-                                    Ok(None) => {
-                                        // read_decided_suffix returned None: the commitlog has no
-                                        // readable segment (e.g. node was follower with 0 decided
-                                        // entries flushed locally).  Trust decided_idx from sled
-                                        // metadata and let the leader re-sync us.
-                                        applied_idx = decided_idx;
-                                        omnipaxos = Some(op);
-                                        eprintln!("✅ Recovery: no decided entries in local log (decided_idx={}). Will re-sync from leader.", decided_idx);
-                                    }
-                                    Err(_) => {
-                                        eprintln!("⚠️ Recovery replay panicked — storage likely corrupted. Clearing and starting fresh...");
-                                        drop(op);
-                                        let _ = std::fs::remove_dir_all(format!("storage_node_{}", my_pid));
-                                        let _ = std::fs::create_dir_all(format!("storage_node_{}/logs", my_pid));
-                                        // Also remove the marker so next init is treated as fresh.
-                                        let _ = std::fs::remove_file(&marker_path);
-                                        let (fresh_op, _) = build_omnipaxos(my_pid, all_pids_cache.clone(), false);
-                                        kv_store.clear();
-                                        applied_idx = 0;
-                                        omnipaxos = Some(fresh_op);
-                                        eprintln!("✅ Fresh start after replay failure — will re-sync from cluster.");
-                                    }
-                                }
                             } else {
-                                // Fresh start (no marker file existed).
-                                omnipaxos = Some(op);
+                                // ── 全新节点：清空 snapshot
+                                let _ = db.clear();
+                                let _ = db.flush();
+                                kv_store.clear();
+                                applied_idx = 0;
                             }
+                            kv_db = Some(db);
 
-                            let _ = std::fs::create_dir_all(format!("storage_node_{}", my_pid));
+                            // ── 2. 构建 OmniPaxos
+                            //    keep_paxos_storage=true 时尝试恢复 np/na/va，
+                            //    即使 commitlog 损坏也只重建 paxos 状态，不动 kv_snap
+                            let op = build_omnipaxos(
+                                my_pid, all_pids_cache.clone(), is_crash_restart,
+                            );
+
+                            handle_incoming_panic_count = 0;
+                            omnipaxos = Some(op);
+
+                            // ── 3. 写 marker
                             let _ = std::fs::write(&marker_path, b"1");
 
                             reply_msg_id += 1;
@@ -293,7 +362,8 @@ fn main() {
                                             (msg.body.key, msg.body.from, msg.body.to)
                                         {
                                             Some(KVCommand::Cas {
-                                                key: k, from: f, to: t, msg_id: m_id, client,
+                                                key: k, from: f, to: t,
+                                                msg_id: m_id, client,
                                             })
                                         } else { None }
                                     }
@@ -317,20 +387,32 @@ fn main() {
 
                                 if panicked {
                                     handle_incoming_panic_count += 1;
-                                    eprintln!("⚠️ handle_incoming panic #{}/{}",
-                                        handle_incoming_panic_count, PANIC_REBUILD_THRESHOLD);
+                                    eprintln!(
+                                        "⚠️ handle_incoming panic #{}/{}",
+                                        handle_incoming_panic_count, PANIC_REBUILD_THRESHOLD
+                                    );
 
                                     if handle_incoming_panic_count >= PANIC_REBUILD_THRESHOLD {
-                                        eprintln!("🔄 Instance corrupted (commitlog ErrHelper), rebuilding fresh...");
-                                        drop(omnipaxos.take());  
-                                        let (new_op, _) = build_omnipaxos(
+                                        eprintln!(
+                                            "🔄 Commitlog corrupted; rebuilding paxos \
+                                             state (kv_snap kept)..."
+                                        );
+                                        drop(omnipaxos.take());
+                                        let new_op = build_omnipaxos(
                                             my_pid, all_pids_cache.clone(), false,
                                         );
-                                        kv_store.clear();
-                                        applied_idx = 0;
+                                        // 从 kv_snap 重新加载 KV（不丢数据）
+                                        if let Some(db) = &kv_db {
+                                            let (snap_kv, snap_idx) = load_kv_snapshot(db);
+                                            kv_store    = snap_kv;
+                                            applied_idx = snap_idx;
+                                        }
                                         handle_incoming_panic_count = 0;
                                         omnipaxos = Some(new_op);
-                                        eprintln!("✅ Instance rebuilt fresh (will re-sync from cluster).");
+                                        eprintln!(
+                                            "✅ Paxos rebuilt; kv_snap restored \
+                                             (applied_idx={}).", applied_idx
+                                        );
                                     }
                                 }
                             }
@@ -346,7 +428,7 @@ fn main() {
                     if panic::catch_unwind(
                         panic::AssertUnwindSafe(|| op.tick())
                     ).is_err() {
-                        eprintln!("⚠️ panic in tick(), continuing to process messages...");
+                        eprintln!("⚠️ panic in tick(), continuing...");
                     }
 
                     let out_msgs: Vec<omnipaxos::messages::Message<KVCommand>> =
@@ -380,6 +462,7 @@ fn main() {
                         }
                     }
 
+                    // ── Apply 新 decided 条目 + 持久化到 kv_snap
                     let d_idx = op.get_decided_idx();
                     if d_idx > applied_idx {
                         match panic::catch_unwind(
@@ -388,53 +471,80 @@ fn main() {
                             Ok(Some(entries)) => {
                                 for entry in entries {
                                     if let LogEntry::Decided(cmd) = entry {
+                                        let next_idx = applied_idx + 1;
+
+                                        // persist_apply 先写 sled，再改内存
+                                        if let Some(db) = &kv_db {
+                                            persist_apply(db, &cmd, next_idx, &mut kv_store);
+                                        } else {
+                                            // 无 DB fallback（不应发生）
+                                            match &cmd {
+                                                KVCommand::Write { key, value, .. } => {
+                                                    kv_store.insert(*key, *value);
+                                                }
+                                                KVCommand::Cas { key, from, to, .. } => {
+                                                    if kv_store.get(key).copied() == Some(*from) {
+                                                        kv_store.insert(*key, *to);
+                                                    }
+                                                }
+                                                KVCommand::Read { .. } => {}
+                                            }
+                                        }
+                                        applied_idx = next_idx;
+
+                                        // 发送回复
+                                        reply_msg_id += 1;
                                         match cmd {
-                                            KVCommand::Write { key, value, msg_id, client } => {
-                                                kv_store.insert(key, value);
-                                                reply_msg_id += 1;
+                                            KVCommand::Write { msg_id, client, .. } => {
                                                 send_reply(
                                                     &my_node_id_str, &client,
-                                                    "write_ok", Some(msg_id), reply_msg_id, None,
+                                                    "write_ok", Some(msg_id),
+                                                    reply_msg_id, None,
                                                 );
                                             }
                                             KVCommand::Read { key, msg_id, client } => {
-                                                reply_msg_id += 1;
-                                                // 完美修复：确保找不到 Key 时返回标准协议错误
                                                 if let Some(&val) = kv_store.get(&key) {
                                                     send_reply(
                                                         &my_node_id_str, &client,
-                                                        "read_ok", Some(msg_id), reply_msg_id, Some(val),
+                                                        "read_ok", Some(msg_id),
+                                                        reply_msg_id, Some(val),
                                                     );
                                                 } else {
                                                     send_error(
                                                         &my_node_id_str, &client,
-                                                        msg_id, reply_msg_id, 20, "key does not exist",
+                                                        msg_id, reply_msg_id,
+                                                        20, "key does not exist",
                                                     );
                                                 }
                                             }
                                             KVCommand::Cas { key, from, to, msg_id, client } => {
-                                                reply_msg_id += 1;
-                                                if kv_store.get(&key).copied() == Some(from) {
-                                                    kv_store.insert(key, to);
+                                                // persist_apply 已更新 kv_store；
+                                                // 判断是否成功：若 kv[key] == to 则成功
+                                                if kv_store.get(&key).copied() == Some(to) {
                                                     send_reply(
                                                         &my_node_id_str, &client,
-                                                        "cas_ok", Some(msg_id), reply_msg_id, None,
+                                                        "cas_ok", Some(msg_id),
+                                                        reply_msg_id, None,
                                                     );
                                                 } else {
+                                                    // CAS 未命中（from 不匹配）
+                                                    let _ = (from, to); // 已 move，suppress lint
                                                     send_error(
                                                         &my_node_id_str, &client,
-                                                        msg_id, reply_msg_id, 22, "CAS mismatch",
+                                                        msg_id, reply_msg_id,
+                                                        22, "CAS mismatch",
                                                     );
                                                 }
                                             }
                                         }
-                                        applied_idx += 1;
                                     }
                                 }
                             }
                             Ok(None) => {}
                             Err(_) => {
-                                eprintln!("⚠️ panic in read_decided_suffix, retrying next tick...");
+                                eprintln!(
+                                    "⚠️ panic in read_decided_suffix, retrying next tick..."
+                                );
                             }
                         }
                     }
@@ -442,15 +552,18 @@ fn main() {
             }
 
             Event::Shutdown => {
-                eprintln!("🛑 stdin closed, shutting down cleanly (exit 0)...");
+                if let Some(db) = &kv_db {
+                    let _ = db.flush();
+                }
+                eprintln!("🛑 stdin closed, shutting down (exit 0)...");
                 break;
             }
-        } 
-    } 
+        }
+    }
 }
 
 // ==========================================
-// 5. 辅助发送函数
+// 6. 辅助发送函数
 // ==========================================
 fn send_reply(
     src: &str, dest: &str, msg_type: &str,
