@@ -427,6 +427,22 @@ fn main() {
             }
 
             Event::Tick => {
+                // Step 1: if commitlog just broke, rebuild paxos storage NOW.
+                // Done OUTSIDE if-let so we can replace omnipaxos cleanly.
+                // After rebuild, applied_idx stays (from kv_snap), decided_idx
+                // resets to 0, and the leader will re-sync new entries via Paxos.
+                if commitlog_broken {
+                    eprintln!(
+                        "🔄 commitlog_broken — rebuilding paxos storage fresh \
+                         (applied_idx={} preserved)...", applied_idx
+                    );
+                    drop(omnipaxos.take());
+                    let new_op = build_omnipaxos(my_pid, all_pids_cache.clone(), false);
+                    omnipaxos = Some(new_op);
+                    commitlog_broken = false;
+                    eprintln!("✅ Paxos rebuilt. Waiting for leader sync.");
+                }
+
                 if let Some(op) = &mut omnipaxos {
                     if panic::catch_unwind(
                         panic::AssertUnwindSafe(|| op.tick())
@@ -461,41 +477,11 @@ fn main() {
                         }
                     }
 
+                    // Step 2: apply newly decided entries.
+                    // After a paxos rebuild, decided_idx starts at 0 and grows
+                    // as the leader syncs. We only read when d_idx > applied_idx
+                    // so we never double-apply entries already in kv_snap.
                     let d_idx = op.get_decided_idx();
-
-                    // ── commitlog_broken=true 时，跳过 read_decided_suffix。
-                    //    OmniPaxos 会通过 Paxos 协议（DecideSync/AcceptSync 等消息）
-                    //    把新 decided entries 推送给我们，届时 d_idx 会增长，
-                    //    我们重新尝试读取。
-                    //    在此期间节点可以正常参与投票，不会卡死。
-                    if commitlog_broken {
-                        // 一旦 leader 把新 entries sync 过来，d_idx 会从 0 往上涨。
-                        // 此时 commitlog 是新的（没有损坏），可以安全读取。
-                        // 判断：新 d_idx > applied_idx 且不是从旧损坏 segment 来的
-                        // （因为 paxos state 已被重建，d_idx 从 0 开始增长）
-                        if d_idx > applied_idx {
-                            let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
-                                op.read_decided_suffix(applied_idx)
-                            }));
-                            match result {
-                                Ok(Some(entries)) => {
-                                    commitlog_broken = false; // 成功读取，标记恢复
-                                    apply_entries(
-                                        entries, &mut kv_store, &mut applied_idx,
-                                        &mut reply_msg_id, &my_node_id_str, &snap_db,
-                                    );
-                                }
-                                Ok(None) => {}
-                                Err(_) => {
-                                    // 仍然损坏，继续等待
-                                }
-                            }
-                        }
-                        // 跳过下面的正常路径
-                        continue;
-                    }
-
-                    // ── 正常路径：commitlog 可用
                     if d_idx > applied_idx {
                         match panic::catch_unwind(
                             panic::AssertUnwindSafe(|| op.read_decided_suffix(applied_idx))
@@ -511,10 +497,11 @@ fn main() {
                                 eprintln!(
                                     "⚠️  read_decided_suffix panicked \
                                      (applied={}, decided={}). \
-                                     Marking commitlog broken.",
+                                     Will rebuild paxos on next tick.",
                                     applied_idx, d_idx
                                 );
-                                // 标记损坏，下次 tick 走上面的 broken 路径
+                                // Set flag; rebuild happens at TOP of next Tick
+                                // outside if-let so omnipaxos can be replaced.
                                 commitlog_broken = true;
                             }
                         }
