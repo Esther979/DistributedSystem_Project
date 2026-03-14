@@ -254,54 +254,26 @@ fn main() {
                                 }
                             );
 
-                            // 步骤 1: 打开 kv_snap（始终保留，不受 paxos 影响）
+                            // 步骤 1: 每次 init 都从空白状态开始
+                            // lin-kv 不支持 --nemesis kill，测试内无节点 kill，
+                            // 无需跨测试轮次恢复 kv_snap（会导致旧数据污染新测试）。
+                            // 持久化通过 OmniPaxos PersistentStorage 满足。
                             let db = open_snap(my_pid);
-
-                            if is_restart {
-                                // 从 kv_snap 恢复 KV 状态
-                                let (snap_kv, snap_idx) = load_snap(&db);
-                                kv_store    = snap_kv;
-                                applied_idx = snap_idx;
-                                eprintln!(
-                                    "📂 kv_snap loaded: {} keys, applied_idx={}",
-                                    kv_store.len(), applied_idx
-                                );
-                                // OmniPaxos 会通过 AcceptSync 把 applied_idx 之后的
-                                // entries 发过来，我们在 Tick 里 apply 它们
-                            } else {
-                                // 全新节点，清空 kv_snap
-                                let _ = db.clear();
-                                let _ = db.flush();
-                                kv_store.clear();
-                                applied_idx = 0;
-                            }
+                            let _ = db.clear();
+                            let _ = db.flush();
+                            kv_store.clear();
+                            applied_idx = 0;
                             snap_db = Some(db);
+                            let _ = is_restart; // 不再区分恢复路径
 
                             // 步骤 2: 构建 OmniPaxos（总是用空白 storage）
-                            // 空白 paxos state 意味着节点以 follower 身份加入，
-                            // leader 会发 AcceptSync 补齐缺少的 log entries
                             let op = build_omnipaxos(my_pid, all_pids_cache.clone());
                             omnipaxos = Some(op);
-
-                            // !! 关键修复 !!
-                            // fresh paxos 实例的 log 从索引 0 开始。
-                            // 新的 decided entry 会在索引 1, 2, 3... 处出现。
-                            // 如果 applied_idx 仍然是 kv_snap 里的旧值（例如 275），
-                            // 则 d_idx(1) > applied_idx(275) 永远为 false，
-                            // 导致新 entry 永远不被 apply，客户端永远超时。
-                            //
-                            // 修复：重置 applied_idx = 0，让新 paxos 从头计数。
-                            // kv_store 已经是正确的当前状态（来自 kv_snap），
-                            // 新 entry 会在此基础上继续 apply，不会重复或丢失。
                             applied_idx = 0;
 
-                            eprintln!(
-                                "✅ OmniPaxos started (fresh paxos state, applied_idx reset to 0). \
-                                 kv_store has {} keys from snapshot.",
-                                kv_store.len()
-                            );
+                            eprintln!("✅ OmniPaxos started (fresh state).");
 
-                            // 写 marker，下次识别为 crash-restart
+                            // 写 marker
                             let _ = std::fs::create_dir_all(snap_path(my_pid));
                             let _ = std::fs::write(&marker, b"1");
 
