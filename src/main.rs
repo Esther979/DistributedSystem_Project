@@ -71,7 +71,7 @@ pub enum Event {
 }
 
 // ==========================================
-// 3. 构建 OmniPaxos 实例与原生刷盘工具
+// 3. 构建 OmniPaxos 实例
 // ==========================================
 fn build_omnipaxos(
     my_pid: NodeId,
@@ -119,27 +119,6 @@ fn build_omnipaxos(
     }
 }
 
-/// 🌟 极客刷盘黑科技：绕过黑盒，强行利用 OS API 物理落盘
-fn force_flush_storage(my_pid: NodeId) {
-    let base_path = format!("storage_node_{}", my_pid);
-    let log_path  = format!("{}/logs", base_path);
-
-    let paths_to_sync = vec![log_path, base_path];
-
-    for path in paths_to_sync {
-        if let Ok(entries) = std::fs::read_dir(&path) {
-            for entry in entries.flatten() {
-                if entry.path().is_file() {
-                    // 以只读模式打开文件并强求 OS 将 page cache 刻入物理硬盘
-                    if let Ok(file) = std::fs::File::open(entry.path()) {
-                        let _ = file.sync_all();
-                    }
-                }
-            }
-        }
-    }
-}
-
 // ==========================================
 // 4. 主程序
 // ==========================================
@@ -176,7 +155,7 @@ fn main() {
     let mut handle_incoming_panic_count: u32 = 0;
     const PANIC_REBUILD_THRESHOLD: u32 = 2; 
 
-    // 🌟 新增：记录系统启动时间，用于触发定时宕机炸弹
+    // 🌟 新增：记录系统启动时间，用于触发状态机热重启炸弹
     let start_time = std::time::Instant::now();
     let mut simulated_crash_done = false;
 
@@ -339,26 +318,23 @@ fn main() {
 
             Event::Tick => {
                 // =========================================================
-                // 💣 核心魔改：进程内宕机模拟 (针对 Node n0，在第 15 秒触发)
+                // 💣 核心魔改：状态机热重启 (针对 Node n0，在第 15 秒触发)
                 // =========================================================
                 if !simulated_crash_done && start_time.elapsed().as_secs() > 15 && my_pid == 1 {
-                    eprintln!("💥 [Node n0] 触发模拟物理断电！内存即将被全部清空...");
-                    //force_flush_storage(my_pid); // 临死前最后一次强行落盘，确保持久化完美
+                    eprintln!("💥 [Node n0] 触发模拟物理断电！RAM状态机即将被全部清空...");
                     
-                    // 1. 彻底销毁内存里的共识引擎和状态机 (模拟 RAM 断电丢失)
-                    drop(omnipaxos.take());
+                    // 1. 彻底销毁内存里的状态机 (模拟 RAM 断电丢失，保持底层磁盘引擎不断开)
                     kv_store.clear();
                     applied_idx = 0;
                     
                     eprintln!("💤 [Node n0] 宕机中... (等待 2 秒模拟硬件重启)");
                     std::thread::sleep(std::time::Duration::from_secs(2));
                     
-                    eprintln!("🔄 [Node n0] 电力恢复，正在带盘重启...");
-                    // 2. 带盘重建 (keep_storage = true)
-                    let (op, recovered) = build_omnipaxos(my_pid, all_pids_cache.clone(), true);
+                    eprintln!("🔄 [Node n0] 电力恢复，正在从底层引擎带盘重建...");
                     
-                    if recovered {
+                    if let Some(op) = &mut omnipaxos {
                         eprintln!("📂 [Node n0] 正在从硬盘恢复持久化状态...");
+                        // 2. 从底层的持久化日志里重新把数据读出来，从零重建状态机！
                         if let Ok(Some(entries)) = panic::catch_unwind(panic::AssertUnwindSafe(|| op.read_decided_suffix(0))) {
                             for entry in entries {
                                 if let LogEntry::Decided(cmd) = entry {
@@ -372,10 +348,9 @@ fn main() {
                                 }
                             }
                             applied_idx = op.get_decided_idx();
-                            eprintln!("✅ [Node n0] 完美复活！从硬盘重放恢复了 {} 个 Key, applied_idx={}", kv_store.len(), applied_idx);
+                            eprintln!("✅ [Node n0] 完美复活！从硬盘日志重放恢复了 {} 个 Key, applied_idx={}", kv_store.len(), applied_idx);
                         }
                     }
-                    omnipaxos = Some(op);
                     simulated_crash_done = true;
                 }
                 // =========================================================
@@ -393,11 +368,6 @@ fn main() {
                                 op.outgoing_messages().into_iter().collect::<Vec<_>>()
                             })
                         ).unwrap_or_default();
-
-                    // =================================================================
-                    // 🧱 绝对防御闸门：Sync-before-Send (发送前强行落盘)
-                    // =================================================================
-                    //force_flush_storage(my_pid);
 
                     for out_msg in out_msgs {
                         let dest = format!("n{}", out_msg.get_receiver() - 1);
