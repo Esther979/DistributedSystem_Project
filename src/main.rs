@@ -343,7 +343,7 @@ fn main() {
                 // =========================================================
                 if !simulated_crash_done && start_time.elapsed().as_secs() > 15 && my_pid == 1 {
                     eprintln!("💥 [Node n0] 触发模拟物理断电！内存即将被全部清空...");
-                    force_flush_storage(my_pid); // 临死前最后一次强行落盘，确保持久化完美
+                    //force_flush_storage(my_pid); // 临死前最后一次强行落盘，确保持久化完美
                     
                     // 1. 彻底销毁内存里的共识引擎和状态机 (模拟 RAM 断电丢失)
                     drop(omnipaxos.take());
@@ -397,7 +397,7 @@ fn main() {
                     // =================================================================
                     // 🧱 绝对防御闸门：Sync-before-Send (发送前强行落盘)
                     // =================================================================
-                    force_flush_storage(my_pid);
+                    //force_flush_storage(my_pid);
 
                     for out_msg in out_msgs {
                         let dest = format!("n{}", out_msg.get_receiver() - 1);
