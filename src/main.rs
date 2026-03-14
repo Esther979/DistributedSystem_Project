@@ -115,9 +115,10 @@ fn load_snap(db: &sled::Db) -> (HashMap<u64, u64>, u64) {
 }
 
 /// 原子写入一条 decided 命令到 sled，同时更新内存 kv。
-/// sled 的 apply_batch 是原子的：要么全部写入，要么全部不写。
-fn snap_apply(db: &sled::Db, cmd: &KVCommand, new_idx: u64, kv: &mut HashMap<u64, u64>) {
+/// 返回值：对 CAS 命令返回 true=成功 / false=from 不匹配；其他命令返回 true。
+fn snap_apply(db: &sled::Db, cmd: &KVCommand, new_idx: u64, kv: &mut HashMap<u64, u64>) -> bool {
     let mut batch = sled::Batch::default();
+    let mut cas_ok = true; // Write / Read 总是"成功"
     match cmd {
         KVCommand::Write { key, value, .. } => {
             kv.insert(*key, *value);
@@ -127,14 +128,18 @@ fn snap_apply(db: &sled::Db, cmd: &KVCommand, new_idx: u64, kv: &mut HashMap<u64
             if kv.get(key).copied() == Some(*from) {
                 kv.insert(*key, *to);
                 batch.insert(key.to_be_bytes().as_ref(), to.to_be_bytes().as_ref());
+                cas_ok = true;
+            } else {
+                // from 不匹配：CAS 失败，kv 不变，applied_idx 仍推进
+                cas_ok = false;
             }
-            // CAS 未命中时不改 kv，但 applied_idx 仍然推进
         }
         KVCommand::Read { .. } => {}
     }
-    // 总是更新 applied_idx（即使是 no-op 的 Read 或 CAS 未命中）
+    // 总是更新 applied_idx
     batch.insert(IDX_KEY, new_idx.to_be_bytes().as_ref());
     let _ = db.apply_batch(batch);
+    cas_ok
 }
 
 // ==========================================
@@ -460,21 +465,27 @@ fn apply_entries(
             let next_idx = *applied_idx + 1;
 
             // 先持久化到 sled（原子操作），再改内存，最后发 reply
-            // 顺序保证：即使进程在任意时刻被 kill，sled 状态是一致的
-            if let Some(db) = snap_db {
-                snap_apply(db, &cmd, next_idx, kv_store);
+            // snap_apply 返回 CAS 是否成功（Write/Read 总返回 true）
+            let cmd_ok = if let Some(db) = snap_db {
+                snap_apply(db, &cmd, next_idx, kv_store)
             } else {
                 // fallback（不应发生）：仅改内存
                 match &cmd {
-                    KVCommand::Write { key, value, .. } => { kv_store.insert(*key, *value); }
+                    KVCommand::Write { key, value, .. } => {
+                        kv_store.insert(*key, *value);
+                        true
+                    }
                     KVCommand::Cas { key, from, to, .. } => {
                         if kv_store.get(key).copied() == Some(*from) {
                             kv_store.insert(*key, *to);
+                            true
+                        } else {
+                            false
                         }
                     }
-                    KVCommand::Read { .. } => {}
+                    KVCommand::Read { .. } => true,
                 }
-            }
+            };
             *applied_idx = next_idx;
 
             // 发送客户端 reply
@@ -500,14 +511,15 @@ fn apply_entries(
                     }
                 }
                 KVCommand::Cas { key, from, to, msg_id, client } => {
-                    // snap_apply 已更新 kv_store；kv[key] == to 说明 CAS 成功
-                    if kv_store.get(&key).copied() == Some(to) {
+                    // cmd_ok = snap_apply 的返回值，直接反映 from 是否匹配
+                    // 避免用 kv_store[key] == to 判断（当 from!=to 且恰好 current==to 时会误判）
+                    let _ = (key, from, to);
+                    if cmd_ok {
                         send_reply(
                             my_node_id_str, &client,
                             "cas_ok", Some(msg_id), *reply_msg_id, None,
                         );
                     } else {
-                        let _ = (from, to);
                         send_error(
                             my_node_id_str, &client,
                             msg_id, *reply_msg_id, 22, "CAS mismatch",
