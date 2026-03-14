@@ -6,144 +6,14 @@ use std::thread;
 use std::time::Duration;
 use std::panic;
 
-use omnipaxos::macros::Entry;           // derive macro，用于 #[derive(Entry)]
-use omnipaxos::storage::Entry as OPEntry; // Storage trait 的泛型约束用这个
-use omnipaxos::storage::{Storage, StorageResult};
-use omnipaxos::ballot_leader_election::Ballot;
-use omnipaxos::util::{LogEntry, NodeId, StopSign}; // StopSign 在 util 里，不是 StopSignEntry
+use omnipaxos::macros::Entry;
+use omnipaxos::util::{LogEntry, NodeId};
 use omnipaxos::{OmniPaxos, OmniPaxosConfig};
 use omnipaxos_storage::persistent_storage::{PersistentStorage, PersistentStorageConfig};
 
 // ==========================================
-// OmniPaxos 0.2.2 / commitlog 空日志 BUG 修复
-// ==========================================
-// 根本原因：
-//   commitlog 在 log 为空时 read_suffix(0) 返回 Err(ErrHelper)
-//   leader.rs:230: self.storage.get_suffix(idx).unwrap_or_else(|e| panic!(...))
-//   → 空 log → Err → panic
-//
-// 修复：SafePersistentStorage 包装器
-//   get_suffix / get_entries 返回 Err 时，
-//   若 from >= log_len（确实无条目）→ 返回 Ok(vec![])
-//   其他真实错误 → 照常传播
-// ==========================================
-pub struct SafePersistentStorage<T: OPEntry> {
-    inner: PersistentStorage<T>,
-}
-
-impl<T: OPEntry> SafePersistentStorage<T> {
-    pub fn new(inner: PersistentStorage<T>) -> Self {
-        Self { inner }
-    }
-}
-
-impl<T: OPEntry> Storage<T> for SafePersistentStorage<T> {
-    fn append_entry(&mut self, entry: T) -> StorageResult<u64> {
-        self.inner.append_entry(entry)
-    }
-
-    fn append_entries(&mut self, entries: Vec<T>) -> StorageResult<u64> {
-        self.inner.append_entries(entries)
-    }
-
-    fn append_on_prefix(&mut self, from_idx: u64, entries: Vec<T>) -> StorageResult<u64> {
-        self.inner.append_on_prefix(from_idx, entries)
-    }
-
-    fn set_promise(&mut self, n_prom: Ballot) -> StorageResult<()> {
-        self.inner.set_promise(n_prom)
-    }
-
-    fn set_decided_idx(&mut self, ld: u64) -> StorageResult<()> {
-        self.inner.set_decided_idx(ld)
-    }
-
-    fn get_decided_idx(&self) -> StorageResult<u64> {
-        self.inner.get_decided_idx()
-    }
-
-    fn set_accepted_round(&mut self, na: Ballot) -> StorageResult<()> {
-        self.inner.set_accepted_round(na)
-    }
-
-    fn get_accepted_round(&self) -> StorageResult<Option<Ballot>> {
-        self.inner.get_accepted_round()
-    }
-
-    // ★ 修复点 1
-    fn get_entries(&self, from: u64, to: u64) -> StorageResult<Vec<T>> {
-        match self.inner.get_entries(from, to) {
-            Err(_) => {
-                let log_len = self.inner.get_log_len().unwrap_or(0);
-                if from >= log_len {
-                    Ok(vec![])
-                } else {
-                    self.inner.get_entries(from, to)
-                }
-            }
-            ok => ok,
-        }
-    }
-
-    fn get_log_len(&self) -> StorageResult<u64> {
-        self.inner.get_log_len()
-    }
-
-    // ★ 修复点 2（核心）：空日志时 Ok(vec![]) 而非 Err → 不再 panic
-    fn get_suffix(&self, from: u64) -> StorageResult<Vec<T>> {
-        match self.inner.get_suffix(from) {
-            Err(_) => {
-                let log_len = self.inner.get_log_len().unwrap_or(0);
-                if from >= log_len {
-                    Ok(vec![])
-                } else {
-                    self.inner.get_suffix(from)
-                }
-            }
-            ok => ok,
-        }
-    }
-
-    fn get_promise(&self) -> StorageResult<Option<Ballot>> {
-        self.inner.get_promise()
-    }
-
-    // StopSign 类型在 omnipaxos::util 里（不是 StopSignEntry）
-    fn set_stopsign(&mut self, s: Option<StopSign>) -> StorageResult<()> {
-        self.inner.set_stopsign(s)
-    }
-
-    fn get_stopsign(&self) -> StorageResult<Option<StopSign>> {
-        self.inner.get_stopsign()
-    }
-
-    fn trim(&mut self, trimmed_idx: Option<u64>) -> StorageResult<()> {
-        self.inner.trim(trimmed_idx)
-    }
-
-    fn set_compacted_idx(&mut self, trimmed_idx: u64) -> StorageResult<()> {
-        self.inner.set_compacted_idx(trimmed_idx)
-    }
-
-    fn get_compacted_idx(&self) -> StorageResult<u64> {
-        self.inner.get_compacted_idx()
-    }
-
-    // T::Snapshot 需要 T: OPEntry（omnipaxos::storage::Entry），不是 derive macro
-    fn set_snapshot(&mut self, snapshot: Option<T::Snapshot>) -> StorageResult<()> {
-        self.inner.set_snapshot(snapshot)
-    }
-
-    fn get_snapshot(&self) -> StorageResult<Option<T::Snapshot>> {
-        self.inner.get_snapshot()
-    }
-}
-
-// ==========================================
 // 1. KV 命令定义
 // ==========================================
-// #[derive(Entry)] 用的是 omnipaxos::macros::Entry（derive macro）
-// Storage<T> 约束用的是 omnipaxos::storage::Entry（trait）—— 两者不同！
 #[derive(Clone, Debug, Serialize, Deserialize, Entry)]
 pub enum KVCommand {
     Read  { key: u64, msg_id: u64, client: String },
@@ -172,6 +42,7 @@ pub struct Message {
 pub struct Body {
     #[serde(rename = "type")]
     pub msg_type: String,
+    // 必须加上 skip_serializing_if，否则返回的 JSON 会带有 null 字段，导致 Maelstrom 协议报错
     #[serde(skip_serializing_if = "Option::is_none")]
     pub msg_id: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -197,16 +68,17 @@ pub struct Body {
 pub enum Event {
     Message(Message),
     Tick,
+    Shutdown, 
 }
 
 // ==========================================
-// 3. 构建 OmniPaxos 实例（SafePersistentStorage）
+// 3. 构建 OmniPaxos 实例
 // ==========================================
 fn build_omnipaxos(
     my_pid: NodeId,
     all_pids: Vec<NodeId>,
     keep_storage: bool,
-) -> (OmniPaxos<KVCommand, SafePersistentStorage<KVCommand>>, bool) {
+) -> (OmniPaxos<KVCommand, PersistentStorage<KVCommand>>, bool) {
     let base_path = format!("storage_node_{}", my_pid);
     let log_path  = format!("{}/logs", base_path);
 
@@ -215,13 +87,13 @@ fn build_omnipaxos(
     }
     let _ = std::fs::create_dir_all(&log_path);
 
-    let make_storage = || -> SafePersistentStorage<KVCommand> {
+    let make_storage = || -> PersistentStorage<KVCommand> {
         let commitlog_opts = commitlog::LogOptions::new(&log_path);
         let sled_opts      = sled::Config::default().path(&base_path);
         let cfg = PersistentStorageConfig::with(
             base_path.clone(), commitlog_opts, sled_opts,
         );
-        SafePersistentStorage::new(PersistentStorage::open(cfg))
+        PersistentStorage::open(cfg)
     };
 
     let mut node_config = OmniPaxosConfig::default();
@@ -264,6 +136,7 @@ fn main() {
                 }
             }
         }
+        let _ = tx_in.send(Event::Shutdown);
     });
 
     let tx_tick = tx.clone();
@@ -278,16 +151,15 @@ fn main() {
     let mut kv_store: HashMap<u64, u64> = HashMap::new();
     let mut applied_idx: u64 = 0;
     let mut reply_msg_id: u64 = 0;
-    let mut omnipaxos: Option<OmniPaxos<KVCommand, SafePersistentStorage<KVCommand>>> = None;
+    let mut omnipaxos: Option<OmniPaxos<KVCommand, PersistentStorage<KVCommand>>> = None;
 
     let mut handle_incoming_panic_count: u32 = 0;
-    const PANIC_REBUILD_THRESHOLD: u32 = 2;
+    const PANIC_REBUILD_THRESHOLD: u32 = 2; 
 
     for event in rx {
         match event {
             Event::Message(msg) => {
                 match msg.body.msg_type.as_str() {
-
                     "init" => {
                         if let (Some(nid), Some(raw_nodes)) =
                             (msg.body.node_id.clone(), msg.body.node_ids.clone())
@@ -321,29 +193,48 @@ fn main() {
                                 let replay = panic::catch_unwind(
                                     panic::AssertUnwindSafe(|| op.read_decided_suffix(0))
                                 );
-                                if let Ok(Some(entries)) = replay {
-                                    for entry in entries {
-                                        if let LogEntry::Decided(cmd) = entry {
-                                            match cmd {
-                                                KVCommand::Write { key, value, .. } => {
-                                                    kv_store.insert(key, value);
-                                                }
-                                                KVCommand::Cas { key, from, to, .. } => {
-                                                    if kv_store.get(&key).copied() == Some(from) {
-                                                        kv_store.insert(key, to);
+                                match replay {
+                                    Ok(Some(entries)) => {
+                                        for entry in entries {
+                                            if let LogEntry::Decided(cmd) = entry {
+                                                match cmd {
+                                                    KVCommand::Write { key, value, .. } => {
+                                                        kv_store.insert(key, value);
                                                     }
+                                                    KVCommand::Cas { key, from, to, .. } => {
+                                                        if kv_store.get(&key).copied() == Some(from) {
+                                                            kv_store.insert(key, to);
+                                                        }
+                                                    }
+                                                    _ => {}
                                                 }
-                                                _ => {}
                                             }
-                                            applied_idx += 1;
                                         }
+                                        applied_idx = op.get_decided_idx();
+                                        eprintln!("✅ Recovery done: {} keys, applied_idx={}",
+                                            kv_store.len(), applied_idx);
+                                        omnipaxos = Some(op);
+                                    }
+                                    Ok(None) => {
+                                        applied_idx = 0;
+                                        omnipaxos = Some(op);
+                                        eprintln!("✅ Recovery: empty log, starting fresh.");
+                                    }
+                                    Err(_) => {
+                                        eprintln!("⚠️ Recovery replay panicked, falling back to fresh start...");
+                                        drop(op); 
+                                        let _ = std::fs::remove_dir_all(format!("storage_node_{}", my_pid));
+                                        let _ = std::fs::create_dir_all(format!("storage_node_{}/logs", my_pid));
+                                        let (fresh_op, _) = build_omnipaxos(my_pid, all_pids_cache.clone(), false);
+                                        kv_store.clear();
+                                        applied_idx = 0;
+                                        omnipaxos = Some(fresh_op);
+                                        eprintln!("✅ Fresh start after replay failure, will re-sync from cluster.");
                                     }
                                 }
-                                eprintln!("✅ Recovery done: {} keys, applied_idx={}",
-                                    kv_store.len(), applied_idx);
+                            } else {
+                                omnipaxos = Some(op);
                             }
-
-                            omnipaxos = Some(op);
 
                             let _ = std::fs::create_dir_all(format!("storage_node_{}", my_pid));
                             let _ = std::fs::write(&marker_path, b"1");
@@ -402,17 +293,16 @@ fn main() {
                                         handle_incoming_panic_count, PANIC_REBUILD_THRESHOLD);
 
                                     if handle_incoming_panic_count >= PANIC_REBUILD_THRESHOLD {
-                                        eprintln!("🔄 Instance corrupted, rebuilding fresh...");
+                                        eprintln!("🔄 Instance corrupted (commitlog ErrHelper), rebuilding fresh...");
+                                        drop(omnipaxos.take());  
                                         let (new_op, _) = build_omnipaxos(
                                             my_pid, all_pids_cache.clone(), false,
                                         );
-                                        let marker = format!("storage_node_{}/.initialized", my_pid);
-                                        let _ = std::fs::remove_file(&marker);
                                         kv_store.clear();
                                         applied_idx = 0;
                                         handle_incoming_panic_count = 0;
                                         omnipaxos = Some(new_op);
-                                        eprintln!("✅ Instance rebuilt.");
+                                        eprintln!("✅ Instance rebuilt fresh (will re-sync from cluster).");
                                     }
                                 }
                             }
@@ -425,11 +315,10 @@ fn main() {
 
             Event::Tick => {
                 if let Some(op) = &mut omnipaxos {
-
                     if panic::catch_unwind(
                         panic::AssertUnwindSafe(|| op.tick())
                     ).is_err() {
-                        eprintln!("⚠️ panic in tick(), continuing...");
+                        eprintln!("⚠️ panic in tick(), continuing to process messages...");
                     }
 
                     let out_msgs: Vec<omnipaxos::messages::Message<KVCommand>> =
@@ -482,6 +371,7 @@ fn main() {
                                             }
                                             KVCommand::Read { key, msg_id, client } => {
                                                 reply_msg_id += 1;
+                                                // 完美修复：确保找不到 Key 时返回标准协议错误
                                                 if let Some(&val) = kv_store.get(&key) {
                                                     send_reply(
                                                         &my_node_id_str, &client,
@@ -522,8 +412,13 @@ fn main() {
                     }
                 }
             }
-        }
-    }
+
+            Event::Shutdown => {
+                eprintln!("🛑 stdin closed, shutting down cleanly (exit 0)...");
+                break;
+            }
+        } 
+    } 
 }
 
 // ==========================================
