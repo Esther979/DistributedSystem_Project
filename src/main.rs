@@ -97,9 +97,6 @@ fn snap_path(pid: NodeId) -> String {
     format!("kv_snap_{}", pid)
 }
 
-fn marker_path(pid: NodeId) -> String {
-    format!("kv_snap_{}/.initialized", pid)
-}
 
 fn open_snap(pid: NodeId) -> sled::Db {
     sled::Config::default()
@@ -284,12 +281,46 @@ fn main() {
                                 .map(|s| parse_node_id(s))
                                 .collect();
 
-                            let marker     = marker_path(my_pid);
-                            let is_restart = std::path::Path::new(&marker).exists();
+                            // ── 崩溃重启检测：时间窗口法 ──────────────────────
+                            //
+                            // 问题背景：
+                            //   marker 文件方案无法区分"当前测试内崩溃重启"与
+                            //   "新一轮测试的首次启动"。新测试启动时若读取了上一轮
+                            //   测试遗留的 kv_snap 数据，会导致 Knossos 认为 key
+                            //   初始值为 nil，但节点已有旧值，触发 CAS 假阳性，
+                            //   产生线性一致性违规报告。
+                            //
+                            // 解决方案：
+                            //   将上次 init 的 Unix 时间戳（秒级）写入文件。
+                            //   再次收到 init 时，若距上次不超过 CRASH_WINDOW_SECS，
+                            //   判定为同一测试内的崩溃重启，否则视为新测试轮次。
+                            //
+                            //   依据：Maelstrom nemesis kill 在数秒内完成重启，
+                            //   而手动/自动重跑测试至少间隔数十秒，两者不重叠。
+                            //
+                            const CRASH_WINDOW_SECS: u64 = 60;
+                            let ts_file = format!("kv_snap_{}/.last_init_ts", my_pid);
 
-                            if is_restart {
+                            let now_secs = std::time::SystemTime::now()
+                                .duration_since(std::time::UNIX_EPOCH)
+                                .unwrap_or_default()
+                                .as_secs();
+
+                            let is_crash_restart = std::fs::read_to_string(&ts_file)
+                                .ok()
+                                .and_then(|s| s.trim().parse::<u64>().ok())
+                                .map(|last_ts| {
+                                    now_secs.saturating_sub(last_ts) < CRASH_WINDOW_SECS
+                                })
+                                .unwrap_or(false);
+
+                            // 无论何种路径，都更新时间戳文件
+                            let _ = std::fs::create_dir_all(snap_path(my_pid));
+                            let _ = std::fs::write(&ts_file, now_secs.to_string());
+
+                            if is_crash_restart {
                                 // ── CRASH-RESTART PATH ────────────────────
-                                // Step 1: restore KV state from kv_snap
+                                // 步骤 1：从 kv_snap 恢复 KV 状态
                                 let db = open_snap(my_pid);
                                 let (kv, snap_idx) = load_snap(&db);
                                 kv_store    = kv;
@@ -297,22 +328,27 @@ fn main() {
                                 snap_db     = Some(db);
 
                                 eprintln!(
-                                    "🔄 [{}] Crash-restart: {} keys restored, \
-                                     kv_snap applied_idx={}",
+                                    "🔄 [{}] Crash-restart ({}s since last init): \
+                                     {} keys restored, kv_snap applied_idx={}",
                                     my_node_id_str,
+                                    now_secs.saturating_sub(
+                                        std::fs::read_to_string(&ts_file)
+                                            .ok()
+                                            .and_then(|s| s.trim().parse().ok())
+                                            .unwrap_or(now_secs)
+                                    ),
                                     kv_store.len(),
                                     applied_idx
                                 );
 
-                                // Step 2: try to restore OmniPaxos from its
-                                // own persistent storage so it can replay any
-                                // decided entries we haven't applied yet.
+                                // 步骤 2：尝试恢复 OmniPaxos 的持久化存储，
+                                // 以便补齐 kv_snap 中尚未 apply 的 decided 条目
                                 let op_result = panic::catch_unwind(
                                     panic::AssertUnwindSafe(|| {
                                         build_omnipaxos(
                                             my_pid,
                                             all_pids_cache.clone(),
-                                            false,   // keep existing paxos storage
+                                            false,   // 保留旧 paxos storage
                                         )
                                     })
                                 );
@@ -325,28 +361,26 @@ fn main() {
                                              (paxos decided_idx={})",
                                             my_node_id_str, d
                                         );
-                                        // Entries (applied_idx, d] exist in the
-                                        // paxos log but not in kv_snap.  We will
-                                        // replay them silently in the tick loop.
+                                        // 区间 (applied_idx, d] 已在 paxos log 中，
+                                        // 但尚未写入 kv_snap。在 tick 循环里静默 apply。
                                         recovery_fence = d;
                                         op
                                     }
                                     Err(_) => {
-                                        // Commitlog corrupted (SIGKILL mid-write).
-                                        // Fall back to a fresh paxos instance.
-                                        // kv_snap state is still valid; the leader
-                                        // will bring us up to date via AcceptSync.
+                                        // commitlog 被 SIGKILL 损坏，回退到空白 paxos。
+                                        // kv_snap 的状态仍然有效；leader 会通过
+                                        // AcceptSync 补齐缺失的条目。
                                         eprintln!(
                                             "⚠️  [{}] Paxos storage corrupt – \
-                                             starting fresh OmniPaxos \
-                                             (kv_snap applied_idx={} is authoritative)",
+                                             fresh OmniPaxos (kv_snap idx={} \
+                                             is authoritative)",
                                             my_node_id_str, applied_idx
                                         );
-                                        recovery_fence = applied_idx; // nothing to replay
+                                        recovery_fence = applied_idx;
                                         build_omnipaxos(
                                             my_pid,
                                             all_pids_cache.clone(),
-                                            true,    // wipe corrupted storage
+                                            true,    // 清空损坏的 storage
                                         )
                                     }
                                 };
@@ -354,8 +388,8 @@ fn main() {
                                 omnipaxos = Some(op);
                             } else {
                                 // ── FRESH-START PATH ──────────────────────
-                                // First time this node runs in this test.
-                                // Wipe any leftover state from a previous run.
+                                // 新测试轮次：彻底清空上一轮遗留的所有状态。
+                                // 这是防止跨测试状态污染（导致线性一致性违规）的关键。
                                 let db = open_snap(my_pid);
                                 let _ = db.clear();
                                 let _ = db.flush();
@@ -367,17 +401,12 @@ fn main() {
                                 omnipaxos = Some(build_omnipaxos(
                                     my_pid,
                                     all_pids_cache.clone(),
-                                    true,   // always fresh paxos storage
+                                    true,   // 清空旧 paxos storage
                                 ));
 
-                                // Write the marker so future inits know this
-                                // is a crash-restart rather than a fresh run.
-                                let _ = std::fs::create_dir_all(snap_path(my_pid));
-                                let _ = std::fs::write(&marker, b"1");
-
                                 eprintln!(
-                                    "🆕 [{}] Fresh start",
-                                    my_node_id_str
+                                    "🆕 [{}] Fresh start (previous init > {}s ago)",
+                                    my_node_id_str, CRASH_WINDOW_SECS
                                 );
                             }
 
