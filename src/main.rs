@@ -21,7 +21,7 @@ pub enum KVCommand {
     Cas   { key: u64, from: u64, to: u64, msg_id: u64, client: String },
 }
 
-// 🌟 核心新增：身份证明文件结构，用于抵御冷重启导致的信息丢失
+// 🌟 核心新增：专属身份证明文件，用于抵御冷重启导致的信息丢失
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Identity {
     pub my_node_id_str: String,
@@ -82,7 +82,7 @@ fn build_omnipaxos(my_pid: NodeId, all_pids: Vec<NodeId>, keep_storage: bool) ->
 
     let make_storage = || {
         let commitlog_opts = commitlog::LogOptions::new(&log_path);
-        // 🌟 核心改进：强化 Sled 的刷盘频率，应对不可预知的物理强杀
+        // 🌟 强化 Sled 刷盘频率，确保数据安全落盘
         let sled_opts = sled::Config::default().path(&base_path).flush_every_ms(Some(10));
         PersistentStorage::open(PersistentStorageConfig::with(base_path.clone(), commitlog_opts, sled_opts))
     };
@@ -91,7 +91,7 @@ fn build_omnipaxos(my_pid: NodeId, all_pids: Vec<NodeId>, keep_storage: bool) ->
     node_config.server_config.pid = my_pid;
     node_config.cluster_config.nodes = all_pids;
     node_config.cluster_config.configuration_id = 1;
-    node_config.server_config.batch_size = 100000; // 禁止物理截断
+    node_config.server_config.batch_size = 100000; // 禁止物理截断，方便实验验证
 
     let op = node_config.build(make_storage()).expect("build failed");
     (op, keep_storage)
@@ -122,72 +122,75 @@ fn main() {
     let mut omnipaxos: Option<OmniPaxos<KVCommand, PersistentStorage<KVCommand>>> = None;
 
     // =========================================================================
-    // 🧱 宇宙级开机自检：检查硬盘中是否存在身份文件（物理冷重启恢复逻辑）
-    // =========================================================================
-    if let Ok(data) = std::fs::read_to_string("identity.json") {
-        if let Ok(id) = serde_json::from_str::<Identity>(&data) {
-            my_node_id_str = id.my_node_id_str;
-            my_pid = id.my_pid;
-            all_pids_cache = id.all_pids;
-            
-            eprintln!("🔄 [Node {}] 检测到物理冷重启！身份已恢复，准备带盘重建...", my_node_id_str);
-            
-            let (op, _) = build_omnipaxos(my_pid, all_pids_cache.clone(), true);
-            let target = op.get_decided_idx();
-            
-            eprintln!("📂 [Node {}] 正在从硬盘重放历史日志，目标进度: {}", my_node_id_str, target);
-            
-            // 全量日志重放，构建内存状态机
-            while applied_idx < target {
-                if let Ok(Some(entries)) = panic::catch_unwind(panic::AssertUnwindSafe(|| op.read_decided_suffix(applied_idx))) {
-                    if entries.is_empty() { break; }
-                    for entry in entries {
-                        if let LogEntry::Decided(cmd) = entry {
-                            match cmd {
-                                KVCommand::Write { key, value, .. } => { kv_store.insert(key, value); }
-                                KVCommand::Cas { key, from, to, .. } => { 
-                                    if kv_store.get(&key).copied() == Some(from) { kv_store.insert(key, to); } 
-                                }
-                                _ => {}
-                            }
-                            applied_idx += 1;
-                        }
-                    }
-                } else { break; }
-            }
-            omnipaxos = Some(op);
-            eprintln!("✅ [Node {}] 物理重塑完成！当前 Key 数: {}, 最终进度: {}", my_node_id_str, kv_store.len(), applied_idx);
-        }
-    }
-
-    // =========================================================================
     // 🔁 事件主循环
     // =========================================================================
     for event in rx {
         match event {
             Event::Message(msg) => {
-                match msg.body.msg_type.as_str() {
-                    "init" => {
-                        // 只有在没有被持久化身份文件唤醒时，才需要处理 init
-                        if omnipaxos.is_none() {
-                            my_node_id_str = msg.body.extra.get("node_id").and_then(|v| v.as_str()).unwrap_or("").to_string();
-                            my_pid = parse_node_id(&my_node_id_str);
-                            all_pids_cache = msg.body.extra.get("node_ids").and_then(|v| v.as_array()).unwrap_or(&vec![]).iter().map(|v| parse_node_id(v.as_str().unwrap())).collect();
-                            
-                            // 🌟 落笔成规：将自己的身份永久刻入硬盘
-                            let id = Identity {
-                                my_node_id_str: my_node_id_str.clone(),
-                                my_pid,
-                                all_pids: all_pids_cache.clone(),
-                            };
-                            let _ = std::fs::write("identity.json", serde_json::to_string(&id).unwrap());
-                            
-                            let (op, _) = build_omnipaxos(my_pid, all_pids_cache.clone(), false);
-                            omnipaxos = Some(op);
-                        }
-                        // 无论如何，向 Maelstrom 确认开机就绪
+                // 🧱 宇宙级物理冷重启侦测与恢复机制
+                if omnipaxos.is_none() {
+                    if msg.body.msg_type == "init" {
+                        // 1. 正常开机：记录身份并写下物理遗书
+                        my_node_id_str = msg.body.extra.get("node_id").and_then(|v| v.as_str()).unwrap_or("").to_string();
+                        my_pid = parse_node_id(&my_node_id_str);
+                        all_pids_cache = msg.body.extra.get("node_ids").and_then(|v| v.as_array()).unwrap_or(&vec![]).iter().map(|v| parse_node_id(v.as_str().unwrap())).collect();
+                        
+                        let id = Identity {
+                            my_node_id_str: my_node_id_str.clone(),
+                            my_pid,
+                            all_pids: all_pids_cache.clone(),
+                        };
+                        // 保存专属的 identity 文件，防止多进程覆盖
+                        let identity_file = format!("identity_{}.json", my_node_id_str);
+                        let _ = std::fs::write(&identity_file, serde_json::to_string(&id).unwrap());
+                        
+                        let (op, _) = build_omnipaxos(my_pid, all_pids_cache.clone(), false);
+                        omnipaxos = Some(op);
                         send_res(&my_node_id_str, &msg.src, "init_ok", msg.body.msg_id.unwrap_or(0), None);
+                        continue;
+                    } else {
+                        // 2. 僵尸复活：收到正常请求但没有被初始化过，必定是刚被强杀并重启！
+                        // 极其巧妙的破局：通过消息的 dest 知道自己是谁
+                        my_node_id_str = msg.dest.clone();
+                        my_pid = parse_node_id(&my_node_id_str);
+                        let identity_file = format!("identity_{}.json", my_node_id_str);
+                        
+                        if let Ok(data) = std::fs::read_to_string(&identity_file) {
+                            if let Ok(id) = serde_json::from_str::<Identity>(&data) {
+                                all_pids_cache = id.all_pids;
+                                eprintln!("🔄 [Node {}] 侦测到强杀冷重启！正在带盘重建...", my_node_id_str);
+                                
+                                let (op, _) = build_omnipaxos(my_pid, all_pids_cache.clone(), true);
+                                let target = op.get_decided_idx();
+                                
+                                // 全量历史日志重放，构建内存状态机
+                                while applied_idx < target {
+                                    if let Ok(Some(entries)) = panic::catch_unwind(panic::AssertUnwindSafe(|| op.read_decided_suffix(applied_idx))) {
+                                        if entries.is_empty() { break; }
+                                        for entry in entries {
+                                            if let LogEntry::Decided(cmd) = entry {
+                                                match cmd {
+                                                    KVCommand::Write { key, value, .. } => { kv_store.insert(key, value); }
+                                                    KVCommand::Cas { key, from, to, .. } => { 
+                                                        if kv_store.get(&key).copied() == Some(from) { kv_store.insert(key, to); } 
+                                                    }
+                                                    _ => {}
+                                                }
+                                                applied_idx += 1;
+                                            }
+                                        }
+                                    } else { break; }
+                                }
+                                omnipaxos = Some(op);
+                                eprintln!("✅ [Node {}] 物理重塑完成！当前 Key 数: {}, 最终进度: {}", my_node_id_str, kv_store.len(), applied_idx);
+                            }
+                        }
+                        // 恢复完成后，让代码继续往下走，处理这个触发它苏醒的请求！
                     }
+                }
+
+                // 正常处理所有业务逻辑
+                match msg.body.msg_type.as_str() {
                     "paxos_net" => {
                         if let (Some(data), Some(op)) = (msg.body.paxos_data, &mut omnipaxos) {
                             if let Ok(p_msg) = bincode::deserialize(&data) { let _ = op.handle_incoming(p_msg); }
@@ -200,7 +203,6 @@ fn main() {
                                 "read" => Some(KVCommand::Read { key: msg.body.key.unwrap_or(0), msg_id: msg.body.msg_id.unwrap_or(0), client }),
                                 "write" => Some(KVCommand::Write { key: msg.body.key.unwrap_or(0), value: msg.body.value.unwrap_or(0), msg_id: msg.body.msg_id.unwrap_or(0), client }),
                                 "cas" => {
-                                    // 完美兼容 Maelstrom 各种边界情况
                                     let from = msg.body.from.unwrap_or(0);
                                     let to = msg.body.to.unwrap_or_else(|| msg.body.extra.get("to").and_then(|v| v.as_u64()).unwrap_or(0));
                                     Some(KVCommand::Cas { key: msg.body.key.unwrap_or(0), from, to, msg_id: msg.body.msg_id.unwrap_or(0), client })
@@ -223,11 +225,11 @@ fn main() {
                         }
                     }
 
-                    // 推进状态机应用
                     let d_idx = op.get_decided_idx();
                     if d_idx > applied_idx {
+                        // 温和处理读取，每次最多消费 50 条，彻底防范 ErrHelper 崩溃
                         if let Ok(Some(entries)) = panic::catch_unwind(panic::AssertUnwindSafe(|| op.read_decided_suffix(applied_idx))) {
-                            for entry in entries {
+                            for entry in entries.into_iter().take(50) {
                                 if let LogEntry::Decided(cmd) = entry {
                                     match cmd {
                                         KVCommand::Write { key, value, msg_id, client } => {
