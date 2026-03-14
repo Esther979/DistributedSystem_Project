@@ -281,9 +281,22 @@ fn main() {
                             let op = build_omnipaxos(my_pid, all_pids_cache.clone());
                             omnipaxos = Some(op);
 
+                            // !! 关键修复 !!
+                            // fresh paxos 实例的 log 从索引 0 开始。
+                            // 新的 decided entry 会在索引 1, 2, 3... 处出现。
+                            // 如果 applied_idx 仍然是 kv_snap 里的旧值（例如 275），
+                            // 则 d_idx(1) > applied_idx(275) 永远为 false，
+                            // 导致新 entry 永远不被 apply，客户端永远超时。
+                            //
+                            // 修复：重置 applied_idx = 0，让新 paxos 从头计数。
+                            // kv_store 已经是正确的当前状态（来自 kv_snap），
+                            // 新 entry 会在此基础上继续 apply，不会重复或丢失。
+                            applied_idx = 0;
+
                             eprintln!(
-                                "✅ OmniPaxos started (fresh paxos state). \
-                                 Will sync from leader if needed."
+                                "✅ OmniPaxos started (fresh paxos state, applied_idx reset to 0). \
+                                 kv_store has {} keys from snapshot.",
+                                kv_store.len()
                             );
 
                             // 写 marker，下次识别为 crash-restart
