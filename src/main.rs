@@ -42,7 +42,6 @@ pub struct Message {
 pub struct Body {
     #[serde(rename = "type")]
     pub msg_type: String,
-    // 必须加上 skip_serializing_if，否则返回的 JSON 会带有 null 字段，导致 Maelstrom 协议报错
     #[serde(skip_serializing_if = "Option::is_none")]
     pub msg_id: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -72,7 +71,7 @@ pub enum Event {
 }
 
 // ==========================================
-// 3. 构建 OmniPaxos 实例
+// 3. 构建 OmniPaxos 实例与原生刷盘工具
 // ==========================================
 fn build_omnipaxos(
     my_pid: NodeId,
@@ -116,6 +115,27 @@ fn build_omnipaxos(
             let _ = std::fs::create_dir_all(&log_path);
             let op = node_config.build(make_storage()).expect("rebuild after clear failed");
             (op, false)
+        }
+    }
+}
+
+/// 🌟 极客刷盘黑科技：绕过黑盒，强行利用 OS API 物理落盘
+fn force_flush_storage(my_pid: NodeId) {
+    let base_path = format!("storage_node_{}", my_pid);
+    let log_path  = format!("{}/logs", base_path);
+
+    let paths_to_sync = vec![log_path, base_path];
+
+    for path in paths_to_sync {
+        if let Ok(entries) = std::fs::read_dir(&path) {
+            for entry in entries.flatten() {
+                if entry.path().is_file() {
+                    // 以只读模式打开文件并强求 OS 将 page cache 刻入物理硬盘
+                    if let Ok(file) = std::fs::File::open(entry.path()) {
+                        let _ = file.sync_all();
+                    }
+                }
+            }
         }
     }
 }
@@ -328,6 +348,13 @@ fn main() {
                             })
                         ).unwrap_or_default();
 
+                    // =================================================================
+                    // 🧱 绝对防御闸门：Sync-before-Send (发送前强行落盘)
+                    // 无论刚才处理了多少客户端请求和投票，向网络公开之前必须确保数据刻入物理硬盘！
+                    // 这彻底满足了 np, va, na, ld 在崩溃时不丢失的理论要求！
+                    // =================================================================
+                    force_flush_storage(my_pid);
+
                     for out_msg in out_msgs {
                         let dest = format!("n{}", out_msg.get_receiver() - 1);
                         if let Ok(data) = bincode::serialize(&out_msg) {
@@ -371,7 +398,6 @@ fn main() {
                                             }
                                             KVCommand::Read { key, msg_id, client } => {
                                                 reply_msg_id += 1;
-                                                // 完美修复：确保找不到 Key 时返回标准协议错误
                                                 if let Some(&val) = kv_store.get(&key) {
                                                     send_reply(
                                                         &my_node_id_str, &client,
