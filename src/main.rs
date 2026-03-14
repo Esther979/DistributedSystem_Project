@@ -22,15 +22,9 @@ pub enum KVCommand {
 }
 
 fn parse_node_id(s: &str) -> NodeId {
-    s.trim_start_matches('n')
-     .parse::<u64>()
-     .map(|id| id + 1)
-     .unwrap_or(1)
+    s.trim_start_matches('n').parse::<u64>().map(|id| id + 1).unwrap_or(1)
 }
 
-// ==========================================
-// 2. Maelstrom 协议结构体
-// ==========================================
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Message {
     pub src:  String,
@@ -71,7 +65,7 @@ pub enum Event {
 }
 
 // ==========================================
-// 3. 构建 OmniPaxos 实例
+// 3. 构建 OmniPaxos 实例 (增加防截断配置)
 // ==========================================
 fn build_omnipaxos(
     my_pid: NodeId,
@@ -89,9 +83,7 @@ fn build_omnipaxos(
     let make_storage = || -> PersistentStorage<KVCommand> {
         let commitlog_opts = commitlog::LogOptions::new(&log_path);
         let sled_opts      = sled::Config::default().path(&base_path);
-        let cfg = PersistentStorageConfig::with(
-            base_path.clone(), commitlog_opts, sled_opts,
-        );
+        let cfg = PersistentStorageConfig::with(base_path.clone(), commitlog_opts, sled_opts);
         PersistentStorage::open(cfg)
     };
 
@@ -99,6 +91,9 @@ fn build_omnipaxos(
     node_config.server_config.pid               = my_pid;
     node_config.cluster_config.nodes            = all_pids.clone();
     node_config.cluster_config.configuration_id = 1;
+    
+    // 🌟 关键点：防止自动截断，保证日志在测试期间绝对完整
+    node_config.server_config.batch_size = 100000; 
 
     let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
         node_config.clone().build(make_storage()).expect("build failed")
@@ -110,29 +105,22 @@ fn build_omnipaxos(
             (op, recovered)
         }
         Err(_) => {
-            eprintln!("⚠️ Storage corrupted on open, clearing and rebuilding fresh...");
             let _ = std::fs::remove_dir_all(&base_path);
             let _ = std::fs::create_dir_all(&log_path);
-            let op = node_config.build(make_storage()).expect("rebuild after clear failed");
+            let op = node_config.build(make_storage()).expect("rebuild failed");
             (op, false)
         }
     }
 }
 
-// ==========================================
-// 4. 主程序
-// ==========================================
 fn main() {
     let (tx, rx) = mpsc::channel();
-
     let tx_in = tx.clone();
     thread::spawn(move || {
         let stdin = io::stdin();
-        for line in stdin.lock().lines() {
-            if let Ok(line) = line {
-                if let Ok(msg) = serde_json::from_str::<Message>(&line) {
-                    let _ = tx_in.send(Event::Message(msg));
-                }
+        for line in stdin.lock().lines().flatten() {
+            if let Ok(msg) = serde_json::from_str::<Message>(&line) {
+                let _ = tx_in.send(Event::Message(msg));
             }
         }
         let _ = tx_in.send(Event::Shutdown);
@@ -160,21 +148,20 @@ fn main() {
             Event::Message(msg) => {
                 match msg.body.msg_type.as_str() {
                     "init" => {
-                        if let (Some(nid), Some(raw_nodes)) =
-                            (msg.body.node_id.clone(), msg.body.node_ids.clone())
-                        {
+                        if let (Some(nid), Some(raw_nodes)) = (msg.body.node_id.clone(), msg.body.node_ids.clone()) {
                             my_node_id_str = nid;
                             my_pid = parse_node_id(&my_node_id_str);
                             all_pids_cache = raw_nodes.iter().map(|s| parse_node_id(s)).collect();
                             let marker_path = format!("storage_node_{}/.initialized", my_pid);
-                            let is_crash_restart = std::path::Path::new(&marker_path).exists();
-
-                            let (op, recovered) = build_omnipaxos(my_pid, all_pids_cache.clone(), is_crash_restart);
+                            let (op, _) = build_omnipaxos(my_pid, all_pids_cache.clone(), std::path::Path::new(&marker_path).exists());
+                            
+                            // 初始化时也执行一次全量恢复，确保存储里的旧数据能加载
                             kv_store.clear();
                             applied_idx = 0;
-
-                            if recovered {
-                                if let Ok(Some(entries)) = panic::catch_unwind(panic::AssertUnwindSafe(|| op.read_decided_suffix(0))) {
+                            let target = op.get_decided_idx();
+                            while applied_idx < target {
+                                if let Ok(Some(entries)) = panic::catch_unwind(panic::AssertUnwindSafe(|| op.read_decided_suffix(applied_idx))) {
+                                    if entries.is_empty() { break; }
                                     for entry in entries {
                                         if let LogEntry::Decided(cmd) = entry {
                                             match cmd {
@@ -187,7 +174,7 @@ fn main() {
                                             applied_idx += 1;
                                         }
                                     }
-                                }
+                                } else { break; }
                             }
                             omnipaxos = Some(op);
                             let _ = std::fs::create_dir_all(format!("storage_node_{}", my_pid));
@@ -196,7 +183,13 @@ fn main() {
                             send_reply(&my_node_id_str, &msg.src, "init_ok", msg.body.msg_id, reply_msg_id, None);
                         }
                     }
-
+                    "paxos_net" => {
+                        if let (Some(data), Some(op)) = (msg.body.paxos_data.clone(), &mut omnipaxos) {
+                            if let Ok(p_msg) = bincode::deserialize(&data) {
+                                let _ = panic::catch_unwind(panic::AssertUnwindSafe(|| op.handle_incoming(p_msg)));
+                            }
+                        }
+                    }
                     "read" | "write" | "cas" => {
                         if let Some(op) = &mut omnipaxos {
                             let client = msg.src.clone();
@@ -211,40 +204,21 @@ fn main() {
                             }
                         }
                     }
-
-                    "paxos_net" => {
-                        if let Some(data) = msg.body.paxos_data.clone() {
-                            if let Ok(p_msg) = bincode::deserialize::<omnipaxos::messages::Message<KVCommand>>(&data) {
-                                if let Some(op) = &mut omnipaxos {
-                                    let _ = panic::catch_unwind(panic::AssertUnwindSafe(|| op.handle_incoming(p_msg)));
-                                }
-                            }
-                        }
-                    }
                     _ => {}
                 }
             }
-
             Event::Tick => {
-                // =========================================================
-                // 💣 核心修正：强化版状态机热重启
-                // =========================================================
                 if !simulated_crash_done && start_time.elapsed().as_secs() > 15 && my_pid == 1 {
-                    eprintln!("💥 [Node n0] 触发模拟断电！内存已清空...");
+                    eprintln!("💥 [Node n0] 模拟宕机！内存清空...");
                     kv_store.clear();
                     applied_idx = 0;
-                    
-                    std::thread::sleep(std::time::Duration::from_secs(2));
-                    
+                    std::thread::sleep(Duration::from_secs(2));
                     if let Some(op) = &mut omnipaxos {
-                        let target_decided = op.get_decided_idx();
-                        eprintln!("🔄 [Node n0] 重启中... 目标恢复 idx: {}", target_decided);
-                        
-                        // 🌟 循环读取，直到追上 target_decided
-                        let mut current_pos = 0;
-                        while applied_idx < target_decided {
-                            if let Ok(Some(entries)) = panic::catch_unwind(panic::AssertUnwindSafe(|| op.read_decided_suffix(current_pos))) {
-                                if entries.is_empty() { break; } // 无更多可读
+                        let target = op.get_decided_idx();
+                        eprintln!("🔄 [Node n0] 重启恢复中，目标 idx: {}", target);
+                        while applied_idx < target {
+                            if let Ok(Some(entries)) = panic::catch_unwind(panic::AssertUnwindSafe(|| op.read_decided_suffix(applied_idx))) {
+                                if entries.is_empty() { break; }
                                 for entry in entries {
                                     if let LogEntry::Decided(cmd) = entry {
                                         match cmd {
@@ -257,26 +231,22 @@ fn main() {
                                         applied_idx += 1;
                                     }
                                 }
-                                current_pos = applied_idx;
                             } else { break; }
                         }
-                        eprintln!("✅ [Node n0] 恢复完成！最终 applied_idx: {}", applied_idx);
+                        eprintln!("✅ [Node n0] 真正的全量复活！恢复 Key 数: {}, applied_idx: {}", kv_store.len(), applied_idx);
                     }
                     simulated_crash_done = true;
                 }
 
                 if let Some(op) = &mut omnipaxos {
                     let _ = panic::catch_unwind(panic::AssertUnwindSafe(|| op.tick()));
-                    let out_msgs = op.outgoing_messages();
-                    for out_msg in out_msgs {
+                    for out_msg in op.outgoing_messages() {
                         let dest = format!("n{}", out_msg.get_receiver() - 1);
                         if let Ok(data) = bincode::serialize(&out_msg) {
                             let net_msg = Message {
-                                src: my_node_id_str.clone(),
-                                dest,
+                                src: my_node_id_str.clone(), dest,
                                 body: Body {
-                                    msg_type: "paxos_net".to_string(),
-                                    msg_id: None, in_reply_to: None, key: None, value: None, from: None, to: None, node_id: None, node_ids: None,
+                                    msg_type: "paxos_net".to_string(), msg_id: None, in_reply_to: None, key: None, value: None, from: None, to: None, node_id: None, node_ids: None,
                                     paxos_data: Some(data), extra: serde_json::Map::new(),
                                 },
                             };
@@ -297,8 +267,9 @@ fn main() {
                                         }
                                         KVCommand::Read { key, msg_id, client } => {
                                             reply_msg_id += 1;
-                                            if let Some(&val) = kv_store.get(&key) {
-                                                send_reply(&my_node_id_str, &client, "read_ok", Some(msg_id), reply_msg_id, Some(val));
+                                            let val = kv_store.get(&key).copied();
+                                            if let Some(v) = val {
+                                                send_reply(&my_node_id_str, &client, "read_ok", Some(msg_id), reply_msg_id, Some(v));
                                             } else {
                                                 send_error(&my_node_id_str, &client, msg_id, reply_msg_id, 20, "key does not exist");
                                             }
@@ -321,8 +292,8 @@ fn main() {
                 }
             }
             Event::Shutdown => break,
-        } 
-    } 
+        }
+    }
 }
 
 fn send_reply(src: &str, dest: &str, msg_type: &str, in_reply_to: Option<u64>, msg_id: u64, value: Option<u64>) {
