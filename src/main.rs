@@ -16,9 +16,11 @@ use omnipaxos_storage::persistent_storage::{PersistentStorage, PersistentStorage
 // ==========================================
 #[derive(Clone, Debug, Serialize, Deserialize, Entry)]
 pub enum KVCommand {
-    Read  { key: u64, msg_id: u64, client: String },
-    Write { key: u64, value: u64, msg_id: u64, client: String },
-    Cas   { key: u64, from: u64, to: u64, msg_id: u64, client: String },
+    // node = 收到这个请求的节点 ID，apply 时只有该节点发 reply
+    // 其他节点只更新状态机，不发 reply，避免 "invalid dest" 报错
+    Read  { key: u64, msg_id: u64, client: String, node: String },
+    Write { key: u64, value: u64, msg_id: u64, client: String, node: String },
+    Cas   { key: u64, from: u64, to: u64, msg_id: u64, client: String, node: String },
 }
 
 fn parse_node_id(s: &str) -> NodeId {
@@ -312,17 +314,19 @@ fn main() {
                     }
 
                     // ── 客户端请求：通过 Paxos 共识处理
+                    // 把当前节点 ID 存入命令，apply 时只有该节点发 reply
                     "read" | "write" | "cas" => {
                         if let Some(op) = &mut omnipaxos {
                             let client = msg.src.clone();
+                            let node   = my_node_id_str.clone();
                             if let Some(m_id) = msg.body.msg_id {
                                 let cmd = match msg.body.msg_type.as_str() {
                                     "read" => msg.body.key.map(|k| KVCommand::Read {
-                                        key: k, msg_id: m_id, client,
+                                        key: k, msg_id: m_id, client, node,
                                     }),
                                     "write" => msg.body.key.and_then(|k| {
                                         msg.body.value.map(|v| KVCommand::Write {
-                                            key: k, value: v, msg_id: m_id, client,
+                                            key: k, value: v, msg_id: m_id, client, node,
                                         })
                                     }),
                                     "cas" => {
@@ -331,7 +335,7 @@ fn main() {
                                         {
                                             Some(KVCommand::Cas {
                                                 key: k, from: f, to: t,
-                                                msg_id: m_id, client,
+                                                msg_id: m_id, client, node,
                                             })
                                         } else { None }
                                     }
@@ -501,7 +505,17 @@ fn apply_entries(
             };
             *applied_idx = next_idx;
 
-            // 发送客户端 reply
+            // 只有"原始接收请求的节点"发 reply，其他节点静默更新状态机
+            let should_reply = match &cmd {
+                KVCommand::Read  { node, .. } => node == my_node_id_str,
+                KVCommand::Write { node, .. } => node == my_node_id_str,
+                KVCommand::Cas   { node, .. } => node == my_node_id_str,
+            };
+
+            if !should_reply {
+                continue; // 其他节点：状态机已更新，不发 reply
+            }
+
             *reply_msg_id += 1;
             match cmd {
                 KVCommand::Write { msg_id, client, .. } => {
@@ -510,7 +524,7 @@ fn apply_entries(
                         "write_ok", Some(msg_id), *reply_msg_id, None,
                     );
                 }
-                KVCommand::Read { key, msg_id, client } => {
+                KVCommand::Read { key, msg_id, client, .. } => {
                     if let Some(&val) = kv_store.get(&key) {
                         send_reply(
                             my_node_id_str, &client,
@@ -523,9 +537,7 @@ fn apply_entries(
                         );
                     }
                 }
-                KVCommand::Cas { key, from, to, msg_id, client } => {
-                    // cmd_ok = snap_apply 的返回值，直接反映 from 是否匹配
-                    // 避免用 kv_store[key] == to 判断（当 from!=to 且恰好 current==to 时会误判）
+                KVCommand::Cas { key, from, to, msg_id, client, .. } => {
                     let _ = (key, from, to);
                     if cmd_ok {
                         send_reply(
