@@ -25,6 +25,9 @@ fn parse_node_id(s: &str) -> NodeId {
     s.trim_start_matches('n').parse::<u64>().map(|id| id + 1).unwrap_or(1)
 }
 
+// ==========================================
+// 2. Maelstrom 协议
+// ==========================================
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Message {
     pub src:  String,
@@ -49,10 +52,6 @@ pub struct Body {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub to: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub node_id: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub node_ids: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub paxos_data: Option<Vec<u8>>,
     #[serde(flatten)]
     pub extra: serde_json::Map<String, serde_json::Value>,
@@ -65,52 +64,26 @@ pub enum Event {
 }
 
 // ==========================================
-// 3. 构建 OmniPaxos 实例 (增加防截断配置)
+// 3. 构建函数 (禁用截断以保全日志)
 // ==========================================
-fn build_omnipaxos(
-    my_pid: NodeId,
-    all_pids: Vec<NodeId>,
-    keep_storage: bool,
-) -> (OmniPaxos<KVCommand, PersistentStorage<KVCommand>>, bool) {
+fn build_omnipaxos(my_pid: NodeId, all_pids: Vec<NodeId>) -> OmniPaxos<KVCommand, PersistentStorage<KVCommand>> {
     let base_path = format!("storage_node_{}", my_pid);
     let log_path  = format!("{}/logs", base_path);
-
-    if !keep_storage {
-        let _ = std::fs::remove_dir_all(&base_path);
-    }
     let _ = std::fs::create_dir_all(&log_path);
 
-    let make_storage = || -> PersistentStorage<KVCommand> {
+    let make_storage = || {
         let commitlog_opts = commitlog::LogOptions::new(&log_path);
-        let sled_opts      = sled::Config::default().path(&base_path);
-        let cfg = PersistentStorageConfig::with(base_path.clone(), commitlog_opts, sled_opts);
-        PersistentStorage::open(cfg)
+        let sled_opts = sled::Config::default().path(&base_path);
+        PersistentStorage::open(PersistentStorageConfig::with(base_path.clone(), commitlog_opts, sled_opts))
     };
 
     let mut node_config = OmniPaxosConfig::default();
-    node_config.server_config.pid               = my_pid;
-    node_config.cluster_config.nodes            = all_pids.clone();
+    node_config.server_config.pid = my_pid;
+    node_config.cluster_config.nodes = all_pids;
     node_config.cluster_config.configuration_id = 1;
-    
-    // 🌟 关键点：防止自动截断，保证日志在测试期间绝对完整
-    node_config.server_config.batch_size = 100000; 
+    node_config.server_config.batch_size = 100000; // 禁止物理截断
 
-    let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
-        node_config.clone().build(make_storage()).expect("build failed")
-    }));
-
-    match result {
-        Ok(op) => {
-            let recovered = keep_storage && op.get_decided_idx() > 0;
-            (op, recovered)
-        }
-        Err(_) => {
-            let _ = std::fs::remove_dir_all(&base_path);
-            let _ = std::fs::create_dir_all(&log_path);
-            let op = node_config.build(make_storage()).expect("rebuild failed");
-            (op, false)
-        }
-    }
+    node_config.build(make_storage()).expect("build failed")
 }
 
 fn main() {
@@ -119,9 +92,7 @@ fn main() {
     thread::spawn(move || {
         let stdin = io::stdin();
         for line in stdin.lock().lines().flatten() {
-            if let Ok(msg) = serde_json::from_str::<Message>(&line) {
-                let _ = tx_in.send(Event::Message(msg));
-            }
+            if let Ok(msg) = serde_json::from_str::<Message>(&line) { let _ = tx_in.send(Event::Message(msg)); }
         }
         let _ = tx_in.send(Event::Shutdown);
     });
@@ -133,14 +104,15 @@ fn main() {
     });
 
     let mut my_node_id_str = String::new();
-    let mut my_pid: NodeId  = 0;
-    let mut all_pids_cache: Vec<NodeId> = Vec::new();
-    let mut kv_store: HashMap<u64, u64> = HashMap::new();
+    let mut my_pid: NodeId = 0;
+    let mut kv_store = HashMap::new();
     let mut applied_idx: u64 = 0;
-    let mut reply_msg_id: u64 = 0;
     let mut omnipaxos: Option<OmniPaxos<KVCommand, PersistentStorage<KVCommand>>> = None;
-
     let start_time = std::time::Instant::now();
+    
+    // 恢复状态机核心变量
+    let mut is_recovering = false;
+    let mut recovery_target = 0;
     let mut simulated_crash_done = false;
 
     for event in rx {
@@ -148,143 +120,100 @@ fn main() {
             Event::Message(msg) => {
                 match msg.body.msg_type.as_str() {
                     "init" => {
-                        if let (Some(nid), Some(raw_nodes)) = (msg.body.node_id.clone(), msg.body.node_ids.clone()) {
-                            my_node_id_str = nid;
-                            my_pid = parse_node_id(&my_node_id_str);
-                            all_pids_cache = raw_nodes.iter().map(|s| parse_node_id(s)).collect();
-                            let marker_path = format!("storage_node_{}/.initialized", my_pid);
-                            let (op, _) = build_omnipaxos(my_pid, all_pids_cache.clone(), std::path::Path::new(&marker_path).exists());
-                            
-                            // 初始化时也执行一次全量恢复，确保存储里的旧数据能加载
-                            kv_store.clear();
-                            applied_idx = 0;
-                            let target = op.get_decided_idx();
-                            while applied_idx < target {
-                                if let Ok(Some(entries)) = panic::catch_unwind(panic::AssertUnwindSafe(|| op.read_decided_suffix(applied_idx))) {
-                                    if entries.is_empty() { break; }
-                                    for entry in entries {
-                                        if let LogEntry::Decided(cmd) = entry {
-                                            match cmd {
-                                                KVCommand::Write { key, value, .. } => { kv_store.insert(key, value); }
-                                                KVCommand::Cas { key, from, to, .. } => {
-                                                    if kv_store.get(&key).copied() == Some(from) { kv_store.insert(key, to); }
-                                                }
-                                                _ => {}
-                                            }
-                                            applied_idx += 1;
-                                        }
-                                    }
-                                } else { break; }
-                            }
-                            omnipaxos = Some(op);
-                            let _ = std::fs::create_dir_all(format!("storage_node_{}", my_pid));
-                            let _ = std::fs::write(&marker_path, b"1");
-                            reply_msg_id += 1;
-                            send_reply(&my_node_id_str, &msg.src, "init_ok", msg.body.msg_id, reply_msg_id, None);
-                        }
+                        my_node_id_str = msg.body.extra.get("node_id").and_then(|v| v.as_str()).unwrap_or("").to_string();
+                        my_pid = parse_node_id(&my_node_id_str);
+                        let all_pids = msg.body.extra.get("node_ids").and_then(|v| v.as_array()).unwrap_or(&vec![]).iter().map(|v| parse_node_id(v.as_str().unwrap())).collect();
+                        omnipaxos = Some(build_omnipaxos(my_pid, all_pids));
+                        
+                        println!("{}", serde_json::to_string(&Message { src: my_node_id_str.clone(), dest: msg.src, body: Body { msg_type: "init_ok".to_string(), msg_id: Some(0), in_reply_to: msg.body.msg_id, key: None, value: None, from: None, to: None, paxos_data: None, extra: serde_json::Map::new() } }).unwrap());
                     }
                     "paxos_net" => {
-                        if let (Some(data), Some(op)) = (msg.body.paxos_data.clone(), &mut omnipaxos) {
-                            if let Ok(p_msg) = bincode::deserialize(&data) {
-                                let _ = panic::catch_unwind(panic::AssertUnwindSafe(|| op.handle_incoming(p_msg)));
-                            }
+                        if let (Some(data), Some(op)) = (msg.body.paxos_data, &mut omnipaxos) {
+                            if let Ok(p_msg) = bincode::deserialize(&data) { let _ = op.handle_incoming(p_msg); }
                         }
                     }
                     "read" | "write" | "cas" => {
                         if let Some(op) = &mut omnipaxos {
                             let client = msg.src.clone();
-                            if let Some(m_id) = msg.body.msg_id {
-                                let cmd = match msg.body.msg_type.as_str() {
-                                    "read" => Some(KVCommand::Read { key: msg.body.key.unwrap_or(0), msg_id: m_id, client }),
-                                    "write" => Some(KVCommand::Write { key: msg.body.key.unwrap_or(0), value: msg.body.value.unwrap_or(0), msg_id: m_id, client }),
-                                    "cas" => Some(KVCommand::Cas { key: msg.body.key.unwrap_or(0), from: msg.body.from.unwrap_or(0), to: msg.body.to.unwrap_or(0), msg_id: m_id, client }),
-                                    _ => None,
-                                };
-                                if let Some(c) = cmd { let _ = op.append(c); }
-                            }
+                            let cmd = match msg.body.msg_type.as_str() {
+                                "read" => Some(KVCommand::Read { key: msg.body.key.unwrap_or(0), msg_id: msg.body.msg_id.unwrap_or(0), client }),
+                                "write" => Some(KVCommand::Write { key: msg.body.key.unwrap_or(0), value: msg.body.value.unwrap_or(0), msg_id: msg.body.msg_id.unwrap_or(0), client }),
+                                "cas" => Some(KVCommand::Cas { key: msg.body.key.unwrap_or(0), from: msg.body.from.unwrap_or(0), to: msg.body.to.unwrap_or(0), msg_id: msg.body.msg_id.unwrap_or(0), client }),
+                                _ => None,
+                            };
+                            if let Some(c) = cmd { let _ = op.append(c); }
                         }
                     }
                     _ => {}
                 }
             }
             Event::Tick => {
+                // 💣 触发模拟断电
                 if !simulated_crash_done && start_time.elapsed().as_secs() > 15 && my_pid == 1 {
-                    eprintln!("💥 [Node n0] 模拟宕机！内存清空...");
+                    eprintln!("💥 [Node n0] RAM清空，开始异步热重启...");
                     kv_store.clear();
                     applied_idx = 0;
-                    std::thread::sleep(Duration::from_secs(2));
-                    if let Some(op) = &mut omnipaxos {
-                        let target = op.get_decided_idx();
-                        eprintln!("🔄 [Node n0] 重启恢复中，目标 idx: {}", target);
-                        while applied_idx < target {
+                    if let Some(op) = &omnipaxos { recovery_target = op.get_decided_idx(); }
+                    is_recovering = true;
+                    simulated_crash_done = true;
+                }
+
+                if let Some(op) = &mut omnipaxos {
+                    // 🌟 异步温和恢复逻辑
+                    if is_recovering {
+                        if applied_idx < recovery_target {
+                            // 每次 Tick 只尝试读取 30 条，有效防止 ErrHelper
                             if let Ok(Some(entries)) = panic::catch_unwind(panic::AssertUnwindSafe(|| op.read_decided_suffix(applied_idx))) {
-                                if entries.is_empty() { break; }
-                                for entry in entries {
+                                for entry in entries.into_iter().take(30) {
                                     if let LogEntry::Decided(cmd) = entry {
                                         match cmd {
                                             KVCommand::Write { key, value, .. } => { kv_store.insert(key, value); }
-                                            KVCommand::Cas { key, from, to, .. } => {
-                                                if kv_store.get(&key).copied() == Some(from) { kv_store.insert(key, to); }
-                                            }
+                                            KVCommand::Cas { key, from, to, .. } => { if kv_store.get(&key) == Some(&from) { kv_store.insert(key, to); } }
                                             _ => {}
                                         }
                                         applied_idx += 1;
                                     }
                                 }
-                            } else { break; }
+                            }
+                        } else {
+                            eprintln!("✅ [Node n0] 全量日志重放完成！idx: {}", applied_idx);
+                            is_recovering = false;
                         }
-                        eprintln!("✅ [Node n0] 真正的全量复活！恢复 Key 数: {}, applied_idx: {}", kv_store.len(), applied_idx);
                     }
-                    simulated_crash_done = true;
-                }
 
-                if let Some(op) = &mut omnipaxos {
-                    let _ = panic::catch_unwind(panic::AssertUnwindSafe(|| op.tick()));
+                    let _ = op.tick();
                     for out_msg in op.outgoing_messages() {
-                        let dest = format!("n{}", out_msg.get_receiver() - 1);
                         if let Ok(data) = bincode::serialize(&out_msg) {
-                            let net_msg = Message {
-                                src: my_node_id_str.clone(), dest,
-                                body: Body {
-                                    msg_type: "paxos_net".to_string(), msg_id: None, in_reply_to: None, key: None, value: None, from: None, to: None, node_id: None, node_ids: None,
-                                    paxos_data: Some(data), extra: serde_json::Map::new(),
-                                },
-                            };
-                            println!("{}", serde_json::to_string(&net_msg).unwrap());
+                            println!("{}", serde_json::to_string(&Message { src: my_node_id_str.clone(), dest: format!("n{}", out_msg.get_receiver() - 1), body: Body { msg_type: "paxos_net".to_string(), msg_id: None, in_reply_to: None, key: None, value: None, from: None, to: None, paxos_data: Some(data), extra: serde_json::Map::new() } }).unwrap());
                         }
                     }
 
-                    let d_idx = op.get_decided_idx();
-                    if d_idx > applied_idx {
-                        if let Ok(Some(entries)) = panic::catch_unwind(panic::AssertUnwindSafe(|| op.read_decided_suffix(applied_idx))) {
-                            for entry in entries {
-                                if let LogEntry::Decided(cmd) = entry {
-                                    match cmd {
-                                        KVCommand::Write { key, value, msg_id, client } => {
-                                            kv_store.insert(key, value);
-                                            reply_msg_id += 1;
-                                            send_reply(&my_node_id_str, &client, "write_ok", Some(msg_id), reply_msg_id, None);
-                                        }
-                                        KVCommand::Read { key, msg_id, client } => {
-                                            reply_msg_id += 1;
-                                            let val = kv_store.get(&key).copied();
-                                            if let Some(v) = val {
-                                                send_reply(&my_node_id_str, &client, "read_ok", Some(msg_id), reply_msg_id, Some(v));
-                                            } else {
-                                                send_error(&my_node_id_str, &client, msg_id, reply_msg_id, 20, "key does not exist");
+                    // 只有在非恢复状态下才处理状态机应用，保证线性一致性
+                    if !is_recovering {
+                        let d_idx = op.get_decided_idx();
+                        if d_idx > applied_idx {
+                            if let Ok(Some(entries)) = panic::catch_unwind(panic::AssertUnwindSafe(|| op.read_decided_suffix(applied_idx))) {
+                                for entry in entries {
+                                    if let LogEntry::Decided(cmd) = entry {
+                                        match cmd {
+                                            KVCommand::Write { key, value, msg_id, client } => {
+                                                kv_store.insert(key, value);
+                                                send_res(&my_node_id_str, &client, "write_ok", msg_id, None);
+                                            }
+                                            KVCommand::Read { key, msg_id, client } => {
+                                                let val = kv_store.get(&key).copied();
+                                                if let Some(v) = val { send_res(&my_node_id_str, &client, "read_ok", msg_id, Some(v)); }
+                                                else { send_err(&my_node_id_str, &client, msg_id, 20, "key does not exist"); }
+                                            }
+                                            KVCommand::Cas { key, from, to, msg_id, client } => {
+                                                if kv_store.get(&key) == Some(&from) {
+                                                    kv_store.insert(key, to);
+                                                    send_res(&my_node_id_str, &client, "cas_ok", msg_id, None);
+                                                } else { send_err(&my_node_id_str, &client, msg_id, 22, "CAS mismatch"); }
                                             }
                                         }
-                                        KVCommand::Cas { key, from, to, msg_id, client } => {
-                                            reply_msg_id += 1;
-                                            if kv_store.get(&key).copied() == Some(from) {
-                                                kv_store.insert(key, to);
-                                                send_reply(&my_node_id_str, &client, "cas_ok", Some(msg_id), reply_msg_id, None);
-                                            } else {
-                                                send_error(&my_node_id_str, &client, msg_id, reply_msg_id, 22, "CAS mismatch");
-                                            }
-                                        }
+                                        applied_idx += 1;
                                     }
-                                    applied_idx += 1;
                                 }
                             }
                         }
@@ -296,25 +225,13 @@ fn main() {
     }
 }
 
-fn send_reply(src: &str, dest: &str, msg_type: &str, in_reply_to: Option<u64>, msg_id: u64, value: Option<u64>) {
-    let msg = Message {
-        src: src.to_string(), dest: dest.to_string(),
-        body: Body {
-            msg_type: msg_type.to_string(), msg_id: Some(msg_id), in_reply_to, key: None, value, from: None, to: None, node_id: None, node_ids: None, paxos_data: None, extra: serde_json::Map::new(),
-        },
-    };
-    println!("{}", serde_json::to_string(&msg).unwrap());
+fn send_res(src: &str, dest: &str, t: &str, in_rep: u64, val: Option<u64>) {
+    println!("{}", serde_json::to_string(&Message { src: src.to_string(), dest: dest.to_string(), body: Body { msg_type: t.to_string(), msg_id: Some(0), in_reply_to: Some(in_rep), key: None, value: val, from: None, to: None, paxos_data: None, extra: serde_json::Map::new() } }).unwrap());
 }
 
-fn send_error(src: &str, dest: &str, in_reply_to: u64, msg_id: u64, code: u32, text: &str) {
+fn send_err(src: &str, dest: &str, in_rep: u64, code: u32, text: &str) {
     let mut extra = serde_json::Map::new();
     extra.insert("code".to_string(), serde_json::json!(code));
     extra.insert("text".to_string(), serde_json::json!(text));
-    let msg = Message {
-        src: src.to_string(), dest: dest.to_string(),
-        body: Body {
-            msg_type: "error".to_string(), msg_id: Some(msg_id), in_reply_to: Some(in_reply_to), key: None, value: None, from: None, to: None, node_id: None, node_ids: None, paxos_data: None, extra,
-        },
-    };
-    println!("{}", serde_json::to_string(&msg).unwrap());
+    println!("{}", serde_json::to_string(&Message { src: src.to_string(), dest: dest.to_string(), body: Body { msg_type: "error".to_string(), msg_id: Some(0), in_reply_to: Some(in_rep), key: None, value: None, from: None, to: None, paxos_data: None, extra } }).unwrap());
 }
