@@ -151,6 +151,12 @@ fn build_omnipaxos(
     };
 
     let mut cfg = OmniPaxosConfig::default();
+    // election_tick_timeout: ticks before starting an election after losing leader heartbeat.
+    // Default is 5. With 5ms ticks → 25ms election trigger. Keep it at 5 for fast recovery.
+    // resend_message_tick_timeout: how often to resend un-acked messages.
+    // Lowering to 5 ticks (25ms) helps re-sync faster after a partition heals.
+    cfg.server_config.election_tick_timeout = 5;
+    cfg.server_config.resend_message_tick_timeout = 5;
     cfg.server_config.pid               = my_pid;
     cfg.cluster_config.nodes            = all_pids.clone();
     cfg.cluster_config.configuration_id = 1;
@@ -203,7 +209,7 @@ fn main() {
 
     let tx_tick = tx.clone();
     thread::spawn(move || loop {
-        thread::sleep(Duration::from_millis(10));
+        thread::sleep(Duration::from_millis(5));
         if tx_tick.send(Event::Tick).is_err() { break; }
     });
 
