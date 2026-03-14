@@ -176,6 +176,10 @@ fn main() {
     let mut handle_incoming_panic_count: u32 = 0;
     const PANIC_REBUILD_THRESHOLD: u32 = 2; 
 
+    // 🌟 新增：记录系统启动时间，用于触发定时宕机炸弹
+    let start_time = std::time::Instant::now();
+    let mut simulated_crash_done = false;
+
     for event in rx {
         match event {
             Event::Message(msg) => {
@@ -334,6 +338,48 @@ fn main() {
             }
 
             Event::Tick => {
+                // =========================================================
+                // 💣 核心魔改：进程内宕机模拟 (针对 Node n0，在第 15 秒触发)
+                // =========================================================
+                if !simulated_crash_done && start_time.elapsed().as_secs() > 15 && my_pid == 1 {
+                    eprintln!("💥 [Node n0] 触发模拟物理断电！内存即将被全部清空...");
+                    force_flush_storage(my_pid); // 临死前最后一次强行落盘，确保持久化完美
+                    
+                    // 1. 彻底销毁内存里的共识引擎和状态机 (模拟 RAM 断电丢失)
+                    drop(omnipaxos.take());
+                    kv_store.clear();
+                    applied_idx = 0;
+                    
+                    eprintln!("💤 [Node n0] 宕机中... (等待 2 秒模拟硬件重启)");
+                    std::thread::sleep(std::time::Duration::from_secs(2));
+                    
+                    eprintln!("🔄 [Node n0] 电力恢复，正在带盘重启...");
+                    // 2. 带盘重建 (keep_storage = true)
+                    let (op, recovered) = build_omnipaxos(my_pid, all_pids_cache.clone(), true);
+                    
+                    if recovered {
+                        eprintln!("📂 [Node n0] 正在从硬盘恢复持久化状态...");
+                        if let Ok(Some(entries)) = panic::catch_unwind(panic::AssertUnwindSafe(|| op.read_decided_suffix(0))) {
+                            for entry in entries {
+                                if let LogEntry::Decided(cmd) = entry {
+                                    match cmd {
+                                        KVCommand::Write { key, value, .. } => { kv_store.insert(key, value); }
+                                        KVCommand::Cas { key, from, to, .. } => {
+                                            if kv_store.get(&key).copied() == Some(from) { kv_store.insert(key, to); }
+                                        }
+                                        _ => {}
+                                    }
+                                }
+                            }
+                            applied_idx = op.get_decided_idx();
+                            eprintln!("✅ [Node n0] 完美复活！从硬盘重放恢复了 {} 个 Key, applied_idx={}", kv_store.len(), applied_idx);
+                        }
+                    }
+                    omnipaxos = Some(op);
+                    simulated_crash_done = true;
+                }
+                // =========================================================
+
                 if let Some(op) = &mut omnipaxos {
                     if panic::catch_unwind(
                         panic::AssertUnwindSafe(|| op.tick())
@@ -350,8 +396,6 @@ fn main() {
 
                     // =================================================================
                     // 🧱 绝对防御闸门：Sync-before-Send (发送前强行落盘)
-                    // 无论刚才处理了多少客户端请求和投票，向网络公开之前必须确保数据刻入物理硬盘！
-                    // 这彻底满足了 np, va, na, ld 在崩溃时不丢失的理论要求！
                     // =================================================================
                     force_flush_storage(my_pid);
 
