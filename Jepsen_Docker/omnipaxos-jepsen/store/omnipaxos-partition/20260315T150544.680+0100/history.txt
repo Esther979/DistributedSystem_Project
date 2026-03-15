@@ -1,0 +1,72 @@
+0	:invoke	:write	0
+0	:ok	:write	0
+1	:invoke	:write	0
+1	:ok	:write	0
+2	:invoke	:cas	[0 3]
+2	:ok	:cas	[0 3]
+3	:invoke	:write	2
+3	:ok	:write	2
+4	:invoke	:write	0
+4	:ok	:write	0
+0	:invoke	:write	4
+0	:ok	:write	4
+0	:invoke	:cas	[4 0]
+0	:ok	:cas	[4 0]
+1	:invoke	:write	1
+1	:ok	:write	1
+2	:invoke	:cas	[3 2]
+2	:fail	:cas	[3 2]	:precondition-failed
+3	:invoke	:write	8
+3	:ok	:write	8
+4	:invoke	:cas	[4 1]
+4	:fail	:cas	[4 1]	:precondition-failed
+0	:invoke	:cas	[3 2]
+0	:fail	:cas	[3 2]	:precondition-failed
+0	:invoke	:write	9
+0	:ok	:write	9
+:nemesis	:info	:start	nil
+2	:invoke	:read	nil
+2	:ok	:read	9
+:nemesis	:info	:start	"paused s2, s3"
+3	:invoke	:write	1
+4	:invoke	:read	nil
+0	:invoke	:read	nil
+1	:invoke	:read	nil
+2	:invoke	:cas	[4 0]
+3	:info	:write	1	:timeout
+8	:invoke	:cas	[2 4]
+4	:info	:read	nil	:timeout
+9	:invoke	:read	nil
+0	:info	:read	nil	:timeout
+5	:invoke	:cas	[2 0]
+1	:info	:read	nil	:timeout
+6	:invoke	:cas	[2 3]
+2	:info	:cas	[4 0]	:timeout
+7	:invoke	:cas	[1 2]
+8	:info	:cas	[2 4]	:timeout
+9	:info	:read	nil	:timeout
+5	:info	:cas	[2 0]	:timeout
+6	:info	:cas	[2 3]	:timeout
+7	:info	:cas	[1 2]	:timeout
+:nemesis	:info	:stop	nil
+:nemesis	:info	:stop	"unpaused s2, s3"
+12	:invoke	:read	nil
+12	:ok	:read	1
+13	:invoke	:write	6
+13	:ok	:write	6
+14	:invoke	:read	nil
+14	:ok	:read	6
+10	:invoke	:write	7
+10	:ok	:write	7
+10	:invoke	:read	nil
+10	:ok	:read	7
+11	:invoke	:write	4
+11	:ok	:write	4
+12	:invoke	:read	nil
+12	:ok	:read	4
+13	:invoke	:read	nil
+13	:ok	:read	4
+14	:invoke	:write	0
+14	:ok	:write	0
+10	:invoke	:read	nil
+10	:ok	:read	0

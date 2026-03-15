@@ -1,0 +1,1980 @@
+2026-03-15 14:00:29,069{GMT}	INFO	[jepsen test runner] jepsen.core: Command line:
+lein run test --no-ssh
+2026-03-15 14:00:29,107{GMT}	INFO	[jepsen test runner] jepsen.core: Running test:
+{:remote
+ #jepsen.control.retry.Remote{:remote #jepsen.control.scp.Remote{:cmd-remote #jepsen.control.sshj.SSHJRemote{:concurrency-limit 6,
+                                                                                                             :conn-spec nil,
+                                                                                                             :client nil,
+                                                                                                             :semaphore nil},
+                                                                 :conn-spec nil},
+                              :conn nil}
+ :concurrency 5
+ :db
+ #object[jepsen.db$reify__11249 "0x2e10f765" "jepsen.db$reify__11249@2e10f765"]
+ :leave-db-running? false
+ :name "omnipaxos-linearizability"
+ :logging-json? false
+ :start-time
+ #object[org.joda.time.DateTime "0x6c04310f" "2026-03-15T14:00:29.038+01:00"]
+ :net
+ #object[jepsen.net$reify__12635
+         "0x5ce7ab6f"
+         "jepsen.net$reify__12635@5ce7ab6f"]
+ :client #omnipaxos_jepsen.client.OmniPaxosClient{:conn nil}
+ :barrier
+ #object[java.util.concurrent.CyclicBarrier
+         "0x28f7cca4"
+         "java.util.concurrent.CyclicBarrier@28f7cca4"]
+ :pure-generators true
+ :ssh
+ {:dummy? true,
+  :username "root",
+  :password "root",
+  :strict-host-key-checking false,
+  :private-key-path nil}
+ :checker
+ #object[jepsen.checker$compose$reify__10552
+         "0x6015c745"
+         "jepsen.checker$compose$reify__10552@6015c745"]
+ :argv ("test" "--no-ssh")
+ :nemesis
+ #unprintable "omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387@2d541e01"
+ :nodes ["localhost"]
+ :test-count 1
+ :generator
+ #object[jepsen.util.Forgettable
+         "0x5e1535e0"
+         ((jepsen.generator.Synchronize
+           {:gen (jepsen.generator.TimeLimit
+                  {:limit 10000000000,
+                   :cutoff nil,
+                   :gen (jepsen.generator.Stagger
+                         {:dt 200000000,
+                          :next-time nil,
+                          :gen (jepsen.generator.Mix
+                                {:i 0,
+                                 :gens [#object[omnipaxos_jepsen.core$r
+                                                "0x6d76aa05"
+                                                "omnipaxos_jepsen.core$r@6d76aa05"]
+                                        #object[omnipaxos_jepsen.core$w
+                                                "0x2403c1c5"
+                                                "omnipaxos_jepsen.core$w@2403c1c5"]
+                                        #object[omnipaxos_jepsen.core$cas
+                                                "0x8b93c88"
+                                                "omnipaxos_jepsen.core$cas@8b93c88"]]})})})})
+          (jepsen.generator.Synchronize
+           {:gen (jepsen.generator.Limit
+                  {:remaining 1, :gen {:type :info, :f :start}})})
+          (jepsen.generator.Synchronize
+           {:gen (jepsen.generator.TimeLimit
+                  {:limit 20000000000,
+                   :cutoff nil,
+                   :gen (jepsen.generator.Stagger
+                         {:dt 200000000,
+                          :next-time nil,
+                          :gen (jepsen.generator.Mix
+                                {:i 0,
+                                 :gens [#object[omnipaxos_jepsen.core$r
+                                                "0x6d76aa05"
+                                                "omnipaxos_jepsen.core$r@6d76aa05"]
+                                        #object[omnipaxos_jepsen.core$w
+                                                "0x2403c1c5"
+                                                "omnipaxos_jepsen.core$w@2403c1c5"]
+                                        #object[omnipaxos_jepsen.core$cas
+                                                "0x8b93c88"
+                                                "omnipaxos_jepsen.core$cas@8b93c88"]]})})})})
+          (jepsen.generator.Synchronize
+           {:gen (jepsen.generator.Limit
+                  {:remaining 1, :gen {:type :info, :f :stop}})})
+          (jepsen.generator.Synchronize
+           {:gen (jepsen.generator.TimeLimit
+                  {:limit 10000000000,
+                   :cutoff nil,
+                   :gen (jepsen.generator.Stagger
+                         {:dt 200000000,
+                          :next-time nil,
+                          :gen (jepsen.generator.Mix
+                                {:i 1,
+                                 :gens [#object[omnipaxos_jepsen.core$r
+                                                "0x6d76aa05"
+                                                "omnipaxos_jepsen.core$r@6d76aa05"]
+                                        #object[omnipaxos_jepsen.core$w
+                                                "0x2403c1c5"
+                                                "omnipaxos_jepsen.core$w@2403c1c5"]
+                                        #object[omnipaxos_jepsen.core$cas
+                                                "0x8b93c88"
+                                                "omnipaxos_jepsen.core$cas@8b93c88"]]})})})}))]
+ :os
+ #object[jepsen.os$reify__13040 "0x628e0403" "jepsen.os$reify__13040@628e0403"]
+ :time-limit 60}
+
+2026-03-15 14:00:30,160{GMT}	INFO	[jepsen test runner] jepsen.db: Tearing down DB
+2026-03-15 14:00:30,161{GMT}	INFO	[jepsen test runner] jepsen.db: Setting up DB
+2026-03-15 14:00:30,162{GMT}	INFO	[jepsen test runner] jepsen.core: Relative time begins now
+2026-03-15 14:00:30,176{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:30,314{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	9
+2026-03-15 14:00:30,322{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	9
+2026-03-15 14:00:30,322{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	nil
+2026-03-15 14:00:30,477{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:00:30,484{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	9
+2026-03-15 14:00:30,567{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:write	2
+2026-03-15 14:00:30,575{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:ok	:write	2
+2026-03-15 14:00:30,714{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 14:00:30,721{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	2
+2026-03-15 14:00:30,907{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:00:30,908{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:30,987{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:30,996{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	2
+2026-03-15 14:00:31,181{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	7
+2026-03-15 14:00:31,190{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	7
+2026-03-15 14:00:31,337{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:00:31,345{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	7
+2026-03-15 14:00:31,488{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:read	nil
+2026-03-15 14:00:31,497{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:ok	:read	7
+2026-03-15 14:00:31,686{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:write	3
+2026-03-15 14:00:31,696{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:write	3
+2026-03-15 14:00:31,728{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:00:31,728{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:31,760{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:31,769{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	3
+2026-03-15 14:00:31,867{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:cas	[1 4]
+2026-03-15 14:00:31,874{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:fail	:cas	[1 4]	:precondition-failed
+2026-03-15 14:00:32,027{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[3 0]
+2026-03-15 14:00:32,036{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:cas	[3 0]
+2026-03-15 14:00:32,177{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:read	nil
+2026-03-15 14:00:32,188{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:ok	:read	0
+2026-03-15 14:00:32,313{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:write	6
+2026-03-15 14:00:32,323{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:write	6
+2026-03-15 14:00:32,333{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:00:32,334{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:32,489{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:32,493{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	6
+2026-03-15 14:00:32,498{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	2
+2026-03-15 14:00:32,503{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	2
+2026-03-15 14:00:32,673{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[0 0]
+2026-03-15 14:00:32,674{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:read	nil
+2026-03-15 14:00:32,683{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:ok	:read	2
+2026-03-15 14:00:32,683{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[0 0]	:precondition-failed
+2026-03-15 14:00:32,809{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:write	6
+2026-03-15 14:00:32,819{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:write	6
+2026-03-15 14:00:32,876{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	2
+2026-03-15 14:00:32,877{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:33,006{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[2 3]
+2026-03-15 14:00:33,017{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[2 3]	:precondition-failed
+2026-03-15 14:00:33,178{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:cas	[0 2]
+2026-03-15 14:00:33,191{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:fail	:cas	[0 2]	:precondition-failed
+2026-03-15 14:00:33,229{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	3
+2026-03-15 14:00:33,237{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	3
+2026-03-15 14:00:33,419{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:read	nil
+2026-03-15 14:00:33,429{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:ok	:read	3
+2026-03-15 14:00:33,448{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[2 2]
+2026-03-15 14:00:33,456{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:fail	:cas	[2 2]	:precondition-failed
+2026-03-15 14:00:33,577{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	3
+2026-03-15 14:00:33,578{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:33,637{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:33,649{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	3
+2026-03-15 14:00:33,672{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	9
+2026-03-15 14:00:33,681{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	9
+2026-03-15 14:00:33,741{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:00:33,750{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	9
+2026-03-15 14:00:33,864{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:write	5
+2026-03-15 14:00:33,872{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:ok	:write	5
+2026-03-15 14:00:33,962{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[0 4]
+2026-03-15 14:00:33,970{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:fail	:cas	[0 4]	:precondition-failed
+2026-03-15 14:00:33,986{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[0 4]
+2026-03-15 14:00:33,987{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:34,169{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[4 4]
+2026-03-15 14:00:34,180{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[4 4]	:precondition-failed
+2026-03-15 14:00:34,245{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	5
+2026-03-15 14:00:34,254{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	5
+2026-03-15 14:00:34,364{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	7
+2026-03-15 14:00:34,373{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	7
+2026-03-15 14:00:34,465{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:cas	[0 4]
+2026-03-15 14:00:34,475{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:fail	:cas	[0 4]	:precondition-failed
+2026-03-15 14:00:34,475{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 14:00:34,485{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	7
+2026-03-15 14:00:34,541{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	6
+2026-03-15 14:00:34,541{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:34,550{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[1 4]
+2026-03-15 14:00:34,558{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[1 4]	:precondition-failed
+2026-03-15 14:00:34,716{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	0
+2026-03-15 14:00:34,724{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	0
+2026-03-15 14:00:34,835{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	2
+2026-03-15 14:00:34,842{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	2
+2026-03-15 14:00:34,875{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:read	nil
+2026-03-15 14:00:34,881{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:ok	:read	2
+2026-03-15 14:00:34,973{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 14:00:34,978{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	2
+2026-03-15 14:00:35,022{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[3 3]
+2026-03-15 14:00:35,023{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:35,131{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:35,141{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	2
+2026-03-15 14:00:35,287{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:00:35,297{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	2
+2026-03-15 14:00:35,302{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	5
+2026-03-15 14:00:35,310{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	5
+2026-03-15 14:00:35,320{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:cas	[0 2]
+2026-03-15 14:00:35,326{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:fail	:cas	[0 2]	:precondition-failed
+2026-03-15 14:00:35,328{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[0 0]
+2026-03-15 14:00:35,333{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:fail	:cas	[0 0]	:precondition-failed
+2026-03-15 14:00:35,440{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	5
+2026-03-15 14:00:35,440{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:35,635{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:write	2
+2026-03-15 14:00:35,644{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:write	2
+2026-03-15 14:00:35,809{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	1
+2026-03-15 14:00:35,818{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	1
+2026-03-15 14:00:35,967{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:00:35,977{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	1
+2026-03-15 14:00:36,081{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:read	nil
+2026-03-15 14:00:36,090{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:ok	:read	1
+2026-03-15 14:00:36,175{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[3 1]
+2026-03-15 14:00:36,181{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:fail	:cas	[3 1]	:precondition-failed
+2026-03-15 14:00:36,332{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[1 1]
+2026-03-15 14:00:36,333{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:36,506{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:write	5
+2026-03-15 14:00:36,515{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:write	5
+2026-03-15 14:00:36,631{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:00:36,641{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	5
+2026-03-15 14:00:36,648{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:00:36,658{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	5
+2026-03-15 14:00:36,844{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:cas	[3 3]
+2026-03-15 14:00:36,853{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:fail	:cas	[3 3]	:precondition-failed
+2026-03-15 14:00:36,985{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[0 2]
+2026-03-15 14:00:36,995{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:fail	:cas	[0 2]	:precondition-failed
+2026-03-15 14:00:37,008{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:00:37,009{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:37,156{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:37,164{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	5
+2026-03-15 14:00:37,167{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:00:37,175{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	5
+2026-03-15 14:00:37,187{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[4 3]
+2026-03-15 14:00:37,193{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[4 3]	:precondition-failed
+2026-03-15 14:00:37,340{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:write	1
+2026-03-15 14:00:37,349{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:ok	:write	1
+2026-03-15 14:00:37,539{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[1 4]
+2026-03-15 14:00:37,549{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:cas	[1 4]
+2026-03-15 14:00:37,614{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	5
+2026-03-15 14:00:37,615{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:37,634{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[2 1]
+2026-03-15 14:00:37,644{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[2 1]	:precondition-failed
+2026-03-15 14:00:37,828{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	9
+2026-03-15 14:00:37,836{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	9
+2026-03-15 14:00:37,996{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:00:38,004{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	9
+2026-03-15 14:00:38,187{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:cas	[0 3]
+2026-03-15 14:00:38,195{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:fail	:cas	[0 3]	:precondition-failed
+2026-03-15 14:00:38,306{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 14:00:38,314{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	9
+2026-03-15 14:00:38,470{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:00:38,471{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:38,508{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[4 2]
+2026-03-15 14:00:38,518{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[4 2]	:precondition-failed
+2026-03-15 14:00:38,710{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	0
+2026-03-15 14:00:38,718{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	0
+2026-03-15 14:00:38,731{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[0 0]
+2026-03-15 14:00:38,739{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:cas	[0 0]
+2026-03-15 14:00:38,913{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:cas	[1 3]
+2026-03-15 14:00:38,921{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:fail	:cas	[1 3]	:precondition-failed
+2026-03-15 14:00:38,979{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 14:00:38,987{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	0
+2026-03-15 14:00:38,988{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[3 1]
+2026-03-15 14:00:38,988{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:39,131{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:39,150{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	0
+2026-03-15 14:00:39,331{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:cas	[0 1]
+2026-03-15 14:00:39,339{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:cas	[0 1]
+2026-03-15 14:00:39,430{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	1
+2026-03-15 14:00:39,438{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	1
+2026-03-15 14:00:39,615{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:write	8
+2026-03-15 14:00:39,623{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:ok	:write	8
+2026-03-15 14:00:39,667{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 14:00:39,676{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	8
+2026-03-15 14:00:39,742{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	9
+2026-03-15 14:00:39,742{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:39,874{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[3 2]
+2026-03-15 14:00:39,882{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[3 2]	:precondition-failed
+2026-03-15 14:00:40,029{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	1
+2026-03-15 14:00:40,036{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	1
+2026-03-15 14:00:40,068{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[4 1]
+2026-03-15 14:00:40,076{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[4 1]	:precondition-failed
+2026-03-15 14:00:40,076{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:info	:start	nil
+2026-03-15 14:00:40,076{GMT}	WARN	[jepsen worker 3] jepsen.generator.interpreter: Process 3 crashed
+java.lang.IllegalArgumentException: No matching clause: :start
+	at omnipaxos_jepsen.client.OmniPaxosClient.invoke_BANG_(client.clj:33)
+	at jepsen.client.Validate.invoke_BANG_(client.clj:83)
+	at jepsen.generator.interpreter.ClientWorker.invoke_BANG_(interpreter.clj:65)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:40,077{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 14:00:40,083{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	1
+2026-03-15 14:00:40,280{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[0 4]
+2026-03-15 14:00:40,280{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:40,469{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:40,474{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:00:40,479{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	1
+2026-03-15 14:00:40,484{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	1
+2026-03-15 14:00:40,514{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[0 1]
+2026-03-15 14:00:40,522{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[0 1]	:precondition-failed
+2026-03-15 14:00:40,651{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[1 4]
+2026-03-15 14:00:40,660{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:cas	[1 4]
+2026-03-15 14:00:40,707{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 14:00:40,715{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	4
+2026-03-15 14:00:40,860{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	9
+2026-03-15 14:00:40,860{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:41,028{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[2 2]
+2026-03-15 14:00:41,036{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[2 2]	:precondition-failed
+2026-03-15 14:00:41,223{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:cas	[4 3]
+2026-03-15 14:00:41,232{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:cas	[4 3]
+2026-03-15 14:00:41,308{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[4 4]
+2026-03-15 14:00:41,317{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[4 4]	:precondition-failed
+2026-03-15 14:00:41,474{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:read	nil
+2026-03-15 14:00:41,486{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:read	3
+2026-03-15 14:00:41,498{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[3 2]
+2026-03-15 14:00:41,503{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:cas	[3 2]
+2026-03-15 14:00:41,656{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[4 0]
+2026-03-15 14:00:41,657{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:41,782{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[3 3]
+2026-03-15 14:00:41,790{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[3 3]	:precondition-failed
+2026-03-15 14:00:41,940{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:cas	[3 3]
+2026-03-15 14:00:41,949{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:fail	:cas	[3 3]	:precondition-failed
+2026-03-15 14:00:42,048{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[2 2]
+2026-03-15 14:00:42,056{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:cas	[2 2]
+2026-03-15 14:00:42,139{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[0 0]
+2026-03-15 14:00:42,150{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:cas	[0 0]	:precondition-failed
+2026-03-15 14:00:42,227{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 14:00:42,232{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	2
+2026-03-15 14:00:42,425{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:00:42,426{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:42,457{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:42,465{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	2
+2026-03-15 14:00:42,519{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:cas	[2 0]
+2026-03-15 14:00:42,526{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:cas	[2 0]
+2026-03-15 14:00:42,531{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	2
+2026-03-15 14:00:42,535{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	2
+2026-03-15 14:00:42,607{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[1 0]
+2026-03-15 14:00:42,616{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:cas	[1 0]	:precondition-failed
+2026-03-15 14:00:42,794{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:write	6
+2026-03-15 14:00:42,801{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:write	6
+2026-03-15 14:00:42,948{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	5
+2026-03-15 14:00:42,948{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:43,050{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:write	0
+2026-03-15 14:00:43,059{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:write	0
+2026-03-15 14:00:43,089{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:cas	[3 3]
+2026-03-15 14:00:43,097{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:fail	:cas	[3 3]	:precondition-failed
+2026-03-15 14:00:43,121{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	3
+2026-03-15 14:00:43,129{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	3
+2026-03-15 14:00:43,166{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:read	nil
+2026-03-15 14:00:43,174{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:read	3
+2026-03-15 14:00:43,343{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:write	1
+2026-03-15 14:00:43,351{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:write	1
+2026-03-15 14:00:43,397{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[1 2]
+2026-03-15 14:00:43,398{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:43,473{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:write	4
+2026-03-15 14:00:43,482{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:write	4
+2026-03-15 14:00:43,578{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:00:43,583{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	4
+2026-03-15 14:00:43,759{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:00:43,768{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	4
+2026-03-15 14:00:43,946{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:read	nil
+2026-03-15 14:00:43,954{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:read	4
+2026-03-15 14:00:44,077{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 14:00:44,086{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	4
+2026-03-15 14:00:44,268{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[1 1]
+2026-03-15 14:00:44,269{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:44,395{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:write	9
+2026-03-15 14:00:44,404{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:write	9
+2026-03-15 14:00:44,575{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	2
+2026-03-15 14:00:44,584{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	2
+2026-03-15 14:00:44,625{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:00:44,634{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	2
+2026-03-15 14:00:44,748{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[3 3]
+2026-03-15 14:00:44,755{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:cas	[3 3]	:precondition-failed
+2026-03-15 14:00:44,795{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[1 3]
+2026-03-15 14:00:44,803{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:fail	:cas	[1 3]	:precondition-failed
+2026-03-15 14:00:44,877{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[4 2]
+2026-03-15 14:00:44,877{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:44,954{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:write	9
+2026-03-15 14:00:44,960{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:write	9
+2026-03-15 14:00:45,110{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:cas	[2 4]
+2026-03-15 14:00:45,119{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:fail	:cas	[2 4]	:precondition-failed
+2026-03-15 14:00:45,305{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[3 2]
+2026-03-15 14:00:45,315{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[3 2]	:precondition-failed
+2026-03-15 14:00:45,408{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[0 3]
+2026-03-15 14:00:45,416{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:cas	[0 3]	:precondition-failed
+2026-03-15 14:00:45,439{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 14:00:45,448{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	9
+2026-03-15 14:00:45,500{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:00:45,500{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:45,659{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:45,667{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	9
+2026-03-15 14:00:45,747{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	3
+2026-03-15 14:00:45,754{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	3
+2026-03-15 14:00:45,874{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[3 4]
+2026-03-15 14:00:45,884{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:cas	[3 4]
+2026-03-15 14:00:46,014{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[0 4]
+2026-03-15 14:00:46,022{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:cas	[0 4]	:precondition-failed
+2026-03-15 14:00:46,119{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 14:00:46,128{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	4
+2026-03-15 14:00:46,206{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:00:46,206{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:46,408{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[1 2]
+2026-03-15 14:00:46,416{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[1 2]	:precondition-failed
+2026-03-15 14:00:46,470{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:00:46,480{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	4
+2026-03-15 14:00:46,606{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:00:46,614{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	4
+2026-03-15 14:00:46,721{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:write	5
+2026-03-15 14:00:46,734{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:write	5
+2026-03-15 14:00:46,744{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 14:00:46,753{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	5
+2026-03-15 14:00:46,780{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:00:46,780{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:46,827{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:write	8
+2026-03-15 14:00:46,835{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:write	8
+2026-03-15 14:00:46,890{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	6
+2026-03-15 14:00:46,899{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	6
+2026-03-15 14:00:46,913{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:00:46,921{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	6
+2026-03-15 14:00:47,044{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:read	nil
+2026-03-15 14:00:47,052{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:read	6
+2026-03-15 14:00:47,202{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[1 0]
+2026-03-15 14:00:47,218{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:fail	:cas	[1 0]	:precondition-failed
+2026-03-15 14:00:47,305{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	2
+2026-03-15 14:00:47,305{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:47,364{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:47,372{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	6
+2026-03-15 14:00:47,452{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:00:47,462{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	6
+2026-03-15 14:00:47,579{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	2
+2026-03-15 14:00:47,589{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	2
+2026-03-15 14:00:47,637{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:read	nil
+2026-03-15 14:00:47,641{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:read	2
+2026-03-15 14:00:47,815{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[1 1]
+2026-03-15 14:00:47,820{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:fail	:cas	[1 1]	:precondition-failed
+2026-03-15 14:00:47,880{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:00:47,881{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:47,993{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:write	4
+2026-03-15 14:00:48,001{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:write	4
+2026-03-15 14:00:48,103{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	2
+2026-03-15 14:00:48,108{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	2
+2026-03-15 14:00:48,297{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	1
+2026-03-15 14:00:48,304{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	1
+2026-03-15 14:00:48,309{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[0 2]
+2026-03-15 14:00:48,317{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:cas	[0 2]	:precondition-failed
+2026-03-15 14:00:48,440{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 14:00:48,448{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	1
+2026-03-15 14:00:48,561{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	4
+2026-03-15 14:00:48,561{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:48,753{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:48,762{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	1
+2026-03-15 14:00:48,789{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:00:48,798{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	1
+2026-03-15 14:00:48,938{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[0 4]
+2026-03-15 14:00:48,948{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[0 4]	:precondition-failed
+2026-03-15 14:00:49,097{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:write	3
+2026-03-15 14:00:49,103{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:write	6
+2026-03-15 14:00:49,107{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:write	3
+2026-03-15 14:00:49,111{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:write	6
+2026-03-15 14:00:49,128{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:00:49,128{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:49,305{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:49,311{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	6
+2026-03-15 14:00:49,476{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	8
+2026-03-15 14:00:49,487{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	8
+2026-03-15 14:00:49,578{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:00:49,586{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	8
+2026-03-15 14:00:49,764{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[3 1]
+2026-03-15 14:00:49,765{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 14:00:49,773{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:cas	[3 1]	:precondition-failed
+2026-03-15 14:00:49,772{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	8
+2026-03-15 14:00:49,808{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[2 1]
+2026-03-15 14:00:49,808{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:49,862{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:49,868{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	8
+2026-03-15 14:00:49,907{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:cas	[0 2]
+2026-03-15 14:00:49,913{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:fail	:cas	[0 2]	:precondition-failed
+2026-03-15 14:00:49,980{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[3 0]
+2026-03-15 14:00:49,986{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[3 0]	:precondition-failed
+2026-03-15 14:00:50,085{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[3 3]
+2026-03-15 14:00:50,093{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:cas	[3 3]	:precondition-failed
+2026-03-15 14:00:50,141{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:write	4
+2026-03-15 14:00:50,150{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:write	4
+2026-03-15 14:00:50,208{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	8
+2026-03-15 14:00:50,208{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:50,362{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:50,370{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	4
+2026-03-15 14:00:50,514{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	4
+2026-03-15 14:00:50,522{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	4
+2026-03-15 14:00:50,622{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:00:50,631{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	4
+2026-03-15 14:00:50,715{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[4 0]
+2026-03-15 14:00:50,723{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:cas	[4 0]
+2026-03-15 14:00:50,785{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 14:00:50,793{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	0
+2026-03-15 14:00:50,981{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	8
+2026-03-15 14:00:50,981{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:51,150{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:51,159{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	0
+2026-03-15 14:00:51,221{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:00:51,234{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	0
+2026-03-15 14:00:51,331{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[4 1]
+2026-03-15 14:00:51,338{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[4 1]	:precondition-failed
+2026-03-15 14:00:51,427{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:write	8
+2026-03-15 14:00:51,435{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:write	8
+2026-03-15 14:00:51,497{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[0 1]
+2026-03-15 14:00:51,505{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:fail	:cas	[0 1]	:precondition-failed
+2026-03-15 14:00:51,681{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[2 0]
+2026-03-15 14:00:51,681{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:51,750{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:51,757{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	8
+2026-03-15 14:00:51,839{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	0
+2026-03-15 14:00:51,845{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	0
+2026-03-15 14:00:51,847{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:00:51,851{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	0
+2026-03-15 14:00:51,963{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:read	nil
+2026-03-15 14:00:51,969{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:read	0
+2026-03-15 14:00:52,093{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[0 2]
+2026-03-15 14:00:52,101{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:cas	[0 2]
+2026-03-15 14:00:52,286{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:00:52,286{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:52,441{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:52,449{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	2
+2026-03-15 14:00:52,580{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:cas	[4 0]
+2026-03-15 14:00:52,585{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:fail	:cas	[4 0]	:precondition-failed
+2026-03-15 14:00:52,719{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	8
+2026-03-15 14:00:52,727{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	8
+2026-03-15 14:00:52,773{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:write	7
+2026-03-15 14:00:52,781{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:write	7
+2026-03-15 14:00:52,962{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:write	7
+2026-03-15 14:00:52,970{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:write	7
+2026-03-15 14:00:53,143{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	5
+2026-03-15 14:00:53,143{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:53,314{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:53,319{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	7
+2026-03-15 14:00:53,495{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	5
+2026-03-15 14:00:53,502{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	5
+2026-03-15 14:00:53,531{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:00:53,538{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	5
+2026-03-15 14:00:53,562{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[1 4]
+2026-03-15 14:00:53,570{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:cas	[1 4]	:precondition-failed
+2026-03-15 14:00:53,583{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[4 2]
+2026-03-15 14:00:53,591{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:fail	:cas	[4 2]	:precondition-failed
+2026-03-15 14:00:53,719{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:00:53,719{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:53,866{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:53,875{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	5
+2026-03-15 14:00:53,925{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:00:53,933{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	5
+2026-03-15 14:00:54,001{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[1 2]
+2026-03-15 14:00:54,009{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[1 2]	:precondition-failed
+2026-03-15 14:00:54,128{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[0 3]
+2026-03-15 14:00:54,136{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:cas	[0 3]	:precondition-failed
+2026-03-15 14:00:54,181{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[3 2]
+2026-03-15 14:00:54,188{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:fail	:cas	[3 2]	:precondition-failed
+2026-03-15 14:00:54,234{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	8
+2026-03-15 14:00:54,234{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:54,325{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:54,333{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	5
+2026-03-15 14:00:54,364{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	6
+2026-03-15 14:00:54,370{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	6
+2026-03-15 14:00:54,558{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[4 1]
+2026-03-15 14:00:54,566{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[4 1]	:precondition-failed
+2026-03-15 14:00:54,617{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[4 4]
+2026-03-15 14:00:54,626{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:cas	[4 4]	:precondition-failed
+2026-03-15 14:00:54,788{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 14:00:54,799{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	6
+2026-03-15 14:00:54,847{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:00:54,847{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:54,859{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[2 4]
+2026-03-15 14:00:54,865{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[2 4]	:precondition-failed
+2026-03-15 14:00:54,923{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:cas	[0 3]
+2026-03-15 14:00:54,927{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:fail	:cas	[0 3]	:precondition-failed
+2026-03-15 14:00:55,051{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[4 4]
+2026-03-15 14:00:55,058{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[4 4]	:precondition-failed
+2026-03-15 14:00:55,063{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:write	9
+2026-03-15 14:00:55,067{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:write	9
+2026-03-15 14:00:55,264{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:write	5
+2026-03-15 14:00:55,271{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:write	5
+2026-03-15 14:00:55,309{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	1
+2026-03-15 14:00:55,309{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:55,455{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[0 4]
+2026-03-15 14:00:55,461{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	5
+2026-03-15 14:00:55,464{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[0 4]	:precondition-failed
+2026-03-15 14:00:55,470{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	5
+2026-03-15 14:00:55,623{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:00:55,631{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	5
+2026-03-15 14:00:55,667{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:write	4
+2026-03-15 14:00:55,667{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:write	5
+2026-03-15 14:00:55,674{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:write	5
+2026-03-15 14:00:55,674{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:write	4
+2026-03-15 14:00:55,810{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[4 3]
+2026-03-15 14:00:55,811{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:55,904{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:55,913{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	4
+2026-03-15 14:00:56,050{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:00:56,058{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	4
+2026-03-15 14:00:56,130{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[2 3]
+2026-03-15 14:00:56,138{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[2 3]	:precondition-failed
+2026-03-15 14:00:56,206{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:write	4
+2026-03-15 14:00:56,211{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:write	4
+2026-03-15 14:00:56,396{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 14:00:56,404{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	4
+2026-03-15 14:00:56,562{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[3 4]
+2026-03-15 14:00:56,563{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:56,686{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:56,693{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	4
+2026-03-15 14:00:56,738{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	5
+2026-03-15 14:00:56,746{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	5
+2026-03-15 14:00:56,924{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	6
+2026-03-15 14:00:56,934{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	6
+2026-03-15 14:00:56,964{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:write	9
+2026-03-15 14:00:56,972{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:write	9
+2026-03-15 14:00:57,070{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[2 0]
+2026-03-15 14:00:57,075{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:fail	:cas	[2 0]	:precondition-failed
+2026-03-15 14:00:57,100{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:00:57,100{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:57,239{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[0 2]
+2026-03-15 14:00:57,248{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[0 2]	:precondition-failed
+2026-03-15 14:00:57,439{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:00:57,448{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	9
+2026-03-15 14:00:57,497{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[3 3]
+2026-03-15 14:00:57,505{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[3 3]	:precondition-failed
+2026-03-15 14:00:57,640{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:read	nil
+2026-03-15 14:00:57,648{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:read	9
+2026-03-15 14:00:57,758{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[0 1]
+2026-03-15 14:00:57,765{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:fail	:cas	[0 1]	:precondition-failed
+2026-03-15 14:00:57,839{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	1
+2026-03-15 14:00:57,839{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:57,936{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:57,944{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	9
+2026-03-15 14:00:58,105{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:00:58,114{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	9
+2026-03-15 14:00:58,205{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[3 2]
+2026-03-15 14:00:58,213{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[3 2]	:precondition-failed
+2026-03-15 14:00:58,323{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:write	5
+2026-03-15 14:00:58,331{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:write	5
+2026-03-15 14:00:58,338{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[4 0]
+2026-03-15 14:00:58,346{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:fail	:cas	[4 0]	:precondition-failed
+2026-03-15 14:00:58,456{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[4 3]
+2026-03-15 14:00:58,457{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:58,628{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:write	5
+2026-03-15 14:00:58,636{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:write	5
+2026-03-15 14:00:58,678{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	6
+2026-03-15 14:00:58,685{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	6
+2026-03-15 14:00:58,707{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	8
+2026-03-15 14:00:58,715{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	8
+2026-03-15 14:00:58,762{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:write	3
+2026-03-15 14:00:58,769{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:write	3
+2026-03-15 14:00:58,939{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[1 0]
+2026-03-15 14:00:58,947{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:fail	:cas	[1 0]	:precondition-failed
+2026-03-15 14:00:59,035{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[1 3]
+2026-03-15 14:00:59,036{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:59,146{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:00:59,154{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	3
+2026-03-15 14:00:59,306{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:cas	[4 4]
+2026-03-15 14:00:59,313{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:fail	:cas	[4 4]	:precondition-failed
+2026-03-15 14:00:59,396{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	3
+2026-03-15 14:00:59,403{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	3
+2026-03-15 14:00:59,520{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[2 4]
+2026-03-15 14:00:59,528{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:cas	[2 4]	:precondition-failed
+2026-03-15 14:00:59,555{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:write	8
+2026-03-15 14:00:59,562{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:write	8
+2026-03-15 14:00:59,749{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[4 4]
+2026-03-15 14:00:59,749{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:00:59,809{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[4 3]
+2026-03-15 14:00:59,817{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[4 3]	:precondition-failed
+2026-03-15 14:00:59,972{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:00:59,977{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	8
+2026-03-15 14:01:00,056{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:01:00,063{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	8
+2026-03-15 14:01:00,063{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:read	nil
+2026-03-15 14:01:00,070{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:read	8
+2026-03-15 14:01:00,070{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:info	:stop	nil
+2026-03-15 14:01:00,071{GMT}	WARN	[jepsen worker 4] jepsen.generator.interpreter: Process 4 crashed
+java.lang.IllegalArgumentException: No matching clause: :stop
+	at omnipaxos_jepsen.client.OmniPaxosClient.invoke_BANG_(client.clj:33)
+	at jepsen.client.Validate.invoke_BANG_(client.clj:83)
+	at jepsen.generator.interpreter.ClientWorker.invoke_BANG_(interpreter.clj:65)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:00,071{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	7
+2026-03-15 14:01:00,071{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:00,160{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[0 4]
+2026-03-15 14:01:00,167{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[0 4]	:precondition-failed
+2026-03-15 14:01:00,204{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	9
+2026-03-15 14:01:00,213{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	9
+2026-03-15 14:01:00,374{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[1 4]
+2026-03-15 14:01:00,383{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[1 4]	:precondition-failed
+2026-03-15 14:01:00,519{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:read	nil
+2026-03-15 14:01:00,528{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:read	9
+2026-03-15 14:01:00,595{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:write	1
+2026-03-15 14:01:00,603{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:ok	:write	1
+2026-03-15 14:01:00,607{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[1 4]
+2026-03-15 14:01:00,607{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:00,680{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:01:00,688{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	1
+2026-03-15 14:01:00,788{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:cas	[0 3]
+2026-03-15 14:01:00,796{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:fail	:cas	[0 3]	:precondition-failed
+2026-03-15 14:01:00,903{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	2
+2026-03-15 14:01:00,910{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	2
+2026-03-15 14:01:01,077{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:write	7
+2026-03-15 14:01:01,085{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:write	7
+2026-03-15 14:01:01,230{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:read	nil
+2026-03-15 14:01:01,237{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:ok	:read	7
+2026-03-15 14:01:01,313{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:01:01,314{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:01,427{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:write	4
+2026-03-15 14:01:01,434{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:write	4
+2026-03-15 14:01:01,525{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:01:01,532{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	4
+2026-03-15 14:01:01,634{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	7
+2026-03-15 14:01:01,642{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	7
+2026-03-15 14:01:01,722{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:read	nil
+2026-03-15 14:01:01,737{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:read	7
+2026-03-15 14:01:01,777{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:cas	[1 3]
+2026-03-15 14:01:01,785{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:fail	:cas	[1 3]	:precondition-failed
+2026-03-15 14:01:01,977{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[3 2]
+2026-03-15 14:01:01,978{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:02,130{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[4 3]
+2026-03-15 14:01:02,135{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:cas	[2 0]
+2026-03-15 14:01:02,139{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[4 3]	:precondition-failed
+2026-03-15 14:01:02,146{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:fail	:cas	[2 0]	:precondition-failed
+2026-03-15 14:01:02,293{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:01:02,301{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	7
+2026-03-15 14:01:02,384{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:read	nil
+2026-03-15 14:01:02,393{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:read	7
+2026-03-15 14:01:02,422{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:read	nil
+2026-03-15 14:01:02,430{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:ok	:read	7
+2026-03-15 14:01:02,541{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[3 4]
+2026-03-15 14:01:02,542{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:02,738{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[0 1]
+2026-03-15 14:01:02,744{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[0 1]	:precondition-failed
+2026-03-15 14:01:02,855{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	0
+2026-03-15 14:01:02,862{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	0
+2026-03-15 14:01:02,886{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	7
+2026-03-15 14:01:02,894{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	7
+2026-03-15 14:01:02,909{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:write	8
+2026-03-15 14:01:02,918{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:write	8
+2026-03-15 14:01:02,989{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:write	1
+2026-03-15 14:01:02,998{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:ok	:write	1
+2026-03-15 14:01:03,080{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[1 1]
+2026-03-15 14:01:03,081{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:03,176{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:01:03,184{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	1
+2026-03-15 14:01:03,191{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	5
+2026-03-15 14:01:03,199{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	5
+2026-03-15 14:01:03,223{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[4 0]
+2026-03-15 14:01:03,231{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[4 0]	:precondition-failed
+2026-03-15 14:01:03,418{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:write	0
+2026-03-15 14:01:03,426{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:write	0
+2026-03-15 14:01:03,559{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:write	2
+2026-03-15 14:01:03,566{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:ok	:write	2
+2026-03-15 14:01:03,622{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	6
+2026-03-15 14:01:03,623{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:03,772{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:01:03,780{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	2
+2026-03-15 14:01:03,848{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:01:03,849{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:01:03,855{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	2
+2026-03-15 14:01:03,855{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	2
+2026-03-15 14:01:03,958{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[1 3]
+2026-03-15 14:01:03,962{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:cas	[1 3]	:precondition-failed
+2026-03-15 14:01:03,972{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:write	2
+2026-03-15 14:01:03,977{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:ok	:write	2
+2026-03-15 14:01:04,094{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:cas	[3 2]
+2026-03-15 14:01:04,094{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :cas
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:04,247{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[0 0]
+2026-03-15 14:01:04,254{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[0 0]	:precondition-failed
+2026-03-15 14:01:04,443{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:01:04,451{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	2
+2026-03-15 14:01:04,535{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	5
+2026-03-15 14:01:04,543{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	5
+2026-03-15 14:01:04,736{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[1 1]
+2026-03-15 14:01:04,744{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:cas	[1 1]	:precondition-failed
+2026-03-15 14:01:04,802{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:write	7
+2026-03-15 14:01:04,811{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:ok	:write	7
+2026-03-15 14:01:04,914{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:01:04,914{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:05,113{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[1 1]
+2026-03-15 14:01:05,121{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[1 1]	:precondition-failed
+2026-03-15 14:01:05,230{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:01:05,238{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	7
+2026-03-15 14:01:05,262{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	4
+2026-03-15 14:01:05,269{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	4
+2026-03-15 14:01:05,424{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:write	1
+2026-03-15 14:01:05,431{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:write	1
+2026-03-15 14:01:05,594{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:cas	[2 2]
+2026-03-15 14:01:05,602{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:fail	:cas	[2 2]	:precondition-failed
+2026-03-15 14:01:05,659{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	0
+2026-03-15 14:01:05,660{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:05,850{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[4 0]
+2026-03-15 14:01:05,858{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[4 0]	:precondition-failed
+2026-03-15 14:01:06,013{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	2
+2026-03-15 14:01:06,021{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	2
+2026-03-15 14:01:06,120{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[1 3]
+2026-03-15 14:01:06,128{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[1 3]	:precondition-failed
+2026-03-15 14:01:06,190{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:write	4
+2026-03-15 14:01:06,198{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:write	4
+2026-03-15 14:01:06,296{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:read	nil
+2026-03-15 14:01:06,298{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	7
+2026-03-15 14:01:06,298{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:06,303{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:ok	:read	4
+2026-03-15 14:01:06,473{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[4 3]
+2026-03-15 14:01:06,483{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:cas	[4 3]
+2026-03-15 14:01:06,530{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	0
+2026-03-15 14:01:06,538{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	0
+2026-03-15 14:01:06,695{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[1 3]
+2026-03-15 14:01:06,702{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[1 3]	:precondition-failed
+2026-03-15 14:01:06,736{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[0 4]
+2026-03-15 14:01:06,744{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:cas	[0 4]
+2026-03-15 14:01:06,921{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:cas	[4 3]
+2026-03-15 14:01:06,929{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:ok	:cas	[4 3]
+2026-03-15 14:01:07,096{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:01:07,096{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:07,206{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 14:01:07,213{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	3
+2026-03-15 14:01:07,323{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:cas	[2 0]
+2026-03-15 14:01:07,331{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:fail	:cas	[2 0]	:precondition-failed
+2026-03-15 14:01:07,398{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[2 3]
+2026-03-15 14:01:07,405{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[2 3]	:precondition-failed
+2026-03-15 14:01:07,589{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:write	1
+2026-03-15 14:01:07,597{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:write	1
+2026-03-15 14:01:07,774{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:read	nil
+2026-03-15 14:01:07,782{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:ok	:read	1
+2026-03-15 14:01:07,839{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:01:07,839{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:07,857{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[2 2]
+2026-03-15 14:01:07,863{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[2 2]	:precondition-failed
+2026-03-15 14:01:07,973{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:cas	[4 0]
+2026-03-15 14:01:07,980{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:fail	:cas	[4 0]	:precondition-failed
+2026-03-15 14:01:08,173{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	9
+2026-03-15 14:01:08,179{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	9
+2026-03-15 14:01:08,216{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:read	nil
+2026-03-15 14:01:08,221{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:read	9
+2026-03-15 14:01:08,388{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:cas	[0 4]
+2026-03-15 14:01:08,396{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:fail	:cas	[0 4]	:precondition-failed
+2026-03-15 14:01:08,397{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	8
+2026-03-15 14:01:08,397{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:08,559{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:write	6
+2026-03-15 14:01:08,567{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:write	6
+2026-03-15 14:01:08,695{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 14:01:08,703{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	6
+2026-03-15 14:01:08,805{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[3 2]
+2026-03-15 14:01:08,814{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[3 2]	:precondition-failed
+2026-03-15 14:01:08,834{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:write	6
+2026-03-15 14:01:08,841{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:ok	:write	6
+2026-03-15 14:01:08,933{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:cas	[2 3]
+2026-03-15 14:01:08,939{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:fail	:cas	[2 3]	:precondition-failed
+2026-03-15 14:01:09,068{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:read	nil
+2026-03-15 14:01:09,068{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :read
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:09,234{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[0 3]
+2026-03-15 14:01:09,239{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[0 3]	:precondition-failed
+2026-03-15 14:01:09,381{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	7
+2026-03-15 14:01:09,389{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	7
+2026-03-15 14:01:09,547{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:read	nil
+2026-03-15 14:01:09,554{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:read	7
+2026-03-15 14:01:09,570{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[1 0]
+2026-03-15 14:01:09,578{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:cas	[1 0]	:precondition-failed
+2026-03-15 14:01:09,713{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:write	5
+2026-03-15 14:01:09,720{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:ok	:write	5
+2026-03-15 14:01:09,777{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:invoke	:write	8
+2026-03-15 14:01:09,778{GMT}	WARN	[jepsen worker nemesis] jepsen.generator.interpreter: Process :nemesis crashed
+java.lang.IllegalArgumentException: No matching clause: :write
+	at omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387.invoke_BANG_(nemesis.clj:11)
+	at jepsen.nemesis.Validate.invoke_BANG_(nemesis.clj:63)
+	at jepsen.generator.interpreter.NemesisWorker.invoke_BANG_(interpreter.clj:77)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147.invoke(interpreter.clj:140)
+	at jepsen.generator.interpreter$spawn_worker$fn__13146.invoke(interpreter.clj:123)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:09,824{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[4 1]
+2026-03-15 14:01:09,832{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[4 1]	:precondition-failed
+2026-03-15 14:01:09,969{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	9
+2026-03-15 14:01:09,976{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	9
+2026-03-15 14:01:10,055{GMT}	INFO	[jepsen test runner] jepsen.core: Run complete, writing
+2026-03-15 14:01:10,104{GMT}	INFO	[jepsen test runner] jepsen.core: Analyzing...
+2026-03-15 14:01:10,110{GMT}	WARN	[clojure-agent-send-off-pool-5] jepsen.checker: Error while checking history:
+java.lang.RuntimeException: Process :nemesis already running #knossos.op.Op{:process :nemesis, :type :invoke, :f :read, :value nil, :index 10, :time 744496250}, yet attempted to invoke #knossos.op.Op{:process :nemesis, :type :invoke, :f :read, :value nil, :index 22, :time 1560937583} concurrently
+	at knossos.history$complete_fold_op.invokeStatic(history.clj:190)
+	at knossos.history$complete_fold_op.invoke(history.clj:174)
+	at clojure.lang.PersistentVector.reduce(PersistentVector.java:343)
+	at clojure.core$reduce.invokeStatic(core.clj:6885)
+	at clojure.core$reduce.invoke(core.clj:6868)
+	at knossos.history$complete.invokeStatic(history.clj:255)
+	at knossos.history$complete.invoke(history.clj:235)
+	at knossos.history$preprocess.invokeStatic(history.clj:370)
+	at knossos.history$preprocess.invoke(history.clj:351)
+	at knossos.linear$start_analysis.invokeStatic(linear.clj:259)
+	at knossos.linear$start_analysis.invoke(linear.clj:256)
+	at knossos.linear$analysis.invokeStatic(linear.clj:314)
+	at knossos.linear$analysis.invoke(linear.clj:304)
+	at knossos.linear$analysis.invokeStatic(linear.clj:312)
+	at knossos.linear$analysis.invoke(linear.clj:304)
+	at jepsen.checker$linearizable$reify__10597.check(checker.clj:216)
+	at jepsen.checker$check_safe.invokeStatic(checker.clj:86)
+	at jepsen.checker$check_safe.invoke(checker.clj:79)
+	at jepsen.checker$compose$reify__10552$fn__10554.invoke(checker.clj:102)
+	at clojure.core$pmap$fn__8552$fn__8553.invoke(core.clj:7089)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:10,128{GMT}	WARN	[clojure-agent-send-off-pool-3] jepsen.checker: Error while checking history:
+clojure.lang.ExceptionInfo: Assert failed:
+{:type :jepsen.history/double-complete,
+ :op
+ {:process 3,
+  :type :info,
+  :f :start,
+  :value nil,
+  :exception
+  {:via
+   [{:type java.lang.IllegalArgumentException,
+     :message "No matching clause: :start",
+     :at
+     [omnipaxos_jepsen.client.OmniPaxosClient
+      invoke_BANG_
+      "client.clj"
+      33]}],
+   :trace
+   [[omnipaxos_jepsen.client.OmniPaxosClient
+     invoke_BANG_
+     "client.clj"
+     33]
+    [jepsen.client.Validate invoke_BANG_ "client.clj" 83]
+    [jepsen.generator.interpreter.ClientWorker
+     invoke_BANG_
+     "interpreter.clj"
+     65]
+    [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147
+     invoke
+     "interpreter.clj"
+     140]
+    [jepsen.generator.interpreter$spawn_worker$fn__13146
+     invoke
+     "interpreter.clj"
+     123]
+    [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047]
+    [clojure.lang.AFn call "AFn.java" 18]
+    [java.util.concurrent.FutureTask run "FutureTask.java" 317]
+    [java.util.concurrent.ThreadPoolExecutor
+     runWorker
+     "ThreadPoolExecutor.java"
+     1144]
+    [java.util.concurrent.ThreadPoolExecutor$Worker
+     run
+     "ThreadPoolExecutor.java"
+     642]
+    [java.lang.Thread run "Thread.java" 1583]],
+   :cause "No matching clause: :start"},
+  :error "indeterminate: No matching clause: :start",
+  :index 187,
+  :time 9915608292},
+ :completed
+ {:process 3,
+  :type :info,
+  :f :start,
+  :value nil,
+  :index 186,
+  :time 9914855458}}
+
+	at jepsen.history$reducer__3112.invokeStatic(history.clj:457)
+	at jepsen.history$reducer__3112.invoke(history.clj:434)
+	at jepsen.history.fold$fuse$reducer__2642.invoke(fold.clj:428)
+	at clojure.lang.PersistentVector.reduce(PersistentVector.java:343)
+	at clojure.core$reduce.invokeStatic(core.clj:6885)
+	at clojure.core$reduce.invoke(core.clj:6868)
+	at jepsen.history.fold$make_concurrent_reduce_task$task__2686.invoke(fold.clj:591)
+	at jepsen.history.task.Task.run(task.clj:282)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:10,128{GMT}	WARN	[clojure-agent-send-off-pool-4] jepsen.checker: Error while checking history:
+clojure.lang.ExceptionInfo: Assert failed:
+{:type :jepsen.history/double-complete,
+ :op
+ {:process 3,
+  :type :info,
+  :f :start,
+  :value nil,
+  :exception
+  {:via
+   [{:type java.lang.IllegalArgumentException,
+     :message "No matching clause: :start",
+     :at
+     [omnipaxos_jepsen.client.OmniPaxosClient
+      invoke_BANG_
+      "client.clj"
+      33]}],
+   :trace
+   [[omnipaxos_jepsen.client.OmniPaxosClient
+     invoke_BANG_
+     "client.clj"
+     33]
+    [jepsen.client.Validate invoke_BANG_ "client.clj" 83]
+    [jepsen.generator.interpreter.ClientWorker
+     invoke_BANG_
+     "interpreter.clj"
+     65]
+    [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147
+     invoke
+     "interpreter.clj"
+     140]
+    [jepsen.generator.interpreter$spawn_worker$fn__13146
+     invoke
+     "interpreter.clj"
+     123]
+    [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047]
+    [clojure.lang.AFn call "AFn.java" 18]
+    [java.util.concurrent.FutureTask run "FutureTask.java" 317]
+    [java.util.concurrent.ThreadPoolExecutor
+     runWorker
+     "ThreadPoolExecutor.java"
+     1144]
+    [java.util.concurrent.ThreadPoolExecutor$Worker
+     run
+     "ThreadPoolExecutor.java"
+     642]
+    [java.lang.Thread run "Thread.java" 1583]],
+   :cause "No matching clause: :start"},
+  :error "indeterminate: No matching clause: :start",
+  :index 187,
+  :time 9915608292},
+ :completed
+ {:process 3,
+  :type :info,
+  :f :start,
+  :value nil,
+  :index 186,
+  :time 9914855458}}
+
+	at jepsen.history$reducer__3112.invokeStatic(history.clj:457)
+	at jepsen.history$reducer__3112.invoke(history.clj:434)
+	at jepsen.history.fold$fuse$reducer__2642.invoke(fold.clj:428)
+	at clojure.lang.PersistentVector.reduce(PersistentVector.java:343)
+	at clojure.core$reduce.invokeStatic(core.clj:6885)
+	at clojure.core$reduce.invoke(core.clj:6868)
+	at jepsen.history.fold$make_concurrent_reduce_task$task__2686.invoke(fold.clj:591)
+	at jepsen.history.task.Task.run(task.clj:282)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:10,128{GMT}	WARN	[clojure-agent-send-off-pool-6] jepsen.checker: Error while checking history:
+clojure.lang.ExceptionInfo: Assert failed:
+{:type :jepsen.history/double-complete,
+ :op
+ {:process 3,
+  :type :info,
+  :f :start,
+  :value nil,
+  :exception
+  {:via
+   [{:type java.lang.IllegalArgumentException,
+     :message "No matching clause: :start",
+     :at
+     [omnipaxos_jepsen.client.OmniPaxosClient
+      invoke_BANG_
+      "client.clj"
+      33]}],
+   :trace
+   [[omnipaxos_jepsen.client.OmniPaxosClient
+     invoke_BANG_
+     "client.clj"
+     33]
+    [jepsen.client.Validate invoke_BANG_ "client.clj" 83]
+    [jepsen.generator.interpreter.ClientWorker
+     invoke_BANG_
+     "interpreter.clj"
+     65]
+    [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147
+     invoke
+     "interpreter.clj"
+     140]
+    [jepsen.generator.interpreter$spawn_worker$fn__13146
+     invoke
+     "interpreter.clj"
+     123]
+    [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047]
+    [clojure.lang.AFn call "AFn.java" 18]
+    [java.util.concurrent.FutureTask run "FutureTask.java" 317]
+    [java.util.concurrent.ThreadPoolExecutor
+     runWorker
+     "ThreadPoolExecutor.java"
+     1144]
+    [java.util.concurrent.ThreadPoolExecutor$Worker
+     run
+     "ThreadPoolExecutor.java"
+     642]
+    [java.lang.Thread run "Thread.java" 1583]],
+   :cause "No matching clause: :start"},
+  :error "indeterminate: No matching clause: :start",
+  :index 187,
+  :time 9915608292},
+ :completed
+ {:process 3,
+  :type :info,
+  :f :start,
+  :value nil,
+  :index 186,
+  :time 9914855458}}
+
+	at jepsen.history$reducer__3112.invokeStatic(history.clj:457)
+	at jepsen.history$reducer__3112.invoke(history.clj:434)
+	at jepsen.history.fold$fuse$reducer__2642.invoke(fold.clj:428)
+	at clojure.lang.PersistentVector.reduce(PersistentVector.java:343)
+	at clojure.core$reduce.invokeStatic(core.clj:6885)
+	at clojure.core$reduce.invoke(core.clj:6868)
+	at jepsen.history.fold$make_concurrent_reduce_task$task__2686.invoke(fold.clj:591)
+	at jepsen.history.task.Task.run(task.clj:282)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:10,128{GMT}	WARN	[clojure-agent-send-off-pool-1] jepsen.checker: Error while checking history:
+clojure.lang.ExceptionInfo: Assert failed:
+{:type :jepsen.history/double-complete,
+ :op
+ {:process 3,
+  :type :info,
+  :f :start,
+  :value nil,
+  :exception
+  {:via
+   [{:type java.lang.IllegalArgumentException,
+     :message "No matching clause: :start",
+     :at
+     [omnipaxos_jepsen.client.OmniPaxosClient
+      invoke_BANG_
+      "client.clj"
+      33]}],
+   :trace
+   [[omnipaxos_jepsen.client.OmniPaxosClient
+     invoke_BANG_
+     "client.clj"
+     33]
+    [jepsen.client.Validate invoke_BANG_ "client.clj" 83]
+    [jepsen.generator.interpreter.ClientWorker
+     invoke_BANG_
+     "interpreter.clj"
+     65]
+    [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147
+     invoke
+     "interpreter.clj"
+     140]
+    [jepsen.generator.interpreter$spawn_worker$fn__13146
+     invoke
+     "interpreter.clj"
+     123]
+    [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047]
+    [clojure.lang.AFn call "AFn.java" 18]
+    [java.util.concurrent.FutureTask run "FutureTask.java" 317]
+    [java.util.concurrent.ThreadPoolExecutor
+     runWorker
+     "ThreadPoolExecutor.java"
+     1144]
+    [java.util.concurrent.ThreadPoolExecutor$Worker
+     run
+     "ThreadPoolExecutor.java"
+     642]
+    [java.lang.Thread run "Thread.java" 1583]],
+   :cause "No matching clause: :start"},
+  :error "indeterminate: No matching clause: :start",
+  :index 187,
+  :time 9915608292},
+ :completed
+ {:process 3,
+  :type :info,
+  :f :start,
+  :value nil,
+  :index 186,
+  :time 9914855458}}
+
+	at jepsen.history$reducer__3112.invokeStatic(history.clj:457)
+	at jepsen.history$reducer__3112.invoke(history.clj:434)
+	at jepsen.history.fold$fuse$reducer__2642.invoke(fold.clj:428)
+	at clojure.lang.PersistentVector.reduce(PersistentVector.java:343)
+	at clojure.core$reduce.invokeStatic(core.clj:6885)
+	at clojure.core$reduce.invoke(core.clj:6868)
+	at jepsen.history.fold$make_concurrent_reduce_task$task__2686.invoke(fold.clj:591)
+	at jepsen.history.task.Task.run(task.clj:282)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-15 14:01:10,129{GMT}	INFO	[jepsen test runner] jepsen.core: Analysis complete
+2026-03-15 14:01:10,137{GMT}	INFO	[jepsen results] jepsen.store: Wrote /Users/esther/coding/Rust/DistributedSystem_Project/Jepsen/omnipaxos-jepsen/store/omnipaxos-linearizability/20260315T140029.038+0100/results.edn
+2026-03-15 14:01:10,152{GMT}	INFO	[jepsen test runner] jepsen.core: {:linearizable {:valid? :unknown,
+                :error "java.lang.RuntimeException: Process :nemesis already running #knossos.op.Op{:process :nemesis, :type :invoke, :f :read, :value nil, :index 10, :time 744496250}, yet attempted to invoke #knossos.op.Op{:process :nemesis, :type :invoke, :f :read, :value nil, :index 22, :time 1560937583} concurrently\n at knossos.history$complete_fold_op.invokeStatic (history.clj:190)\n    knossos.history$complete_fold_op.invoke (history.clj:174)\n    clojure.lang.PersistentVector.reduce (PersistentVector.java:343)\n    clojure.core$reduce.invokeStatic (core.clj:6885)\n    clojure.core$reduce.invoke (core.clj:6868)\n    knossos.history$complete.invokeStatic (history.clj:255)\n    knossos.history$complete.invoke (history.clj:235)\n    knossos.history$preprocess.invokeStatic (history.clj:370)\n    knossos.history$preprocess.invoke (history.clj:351)\n    knossos.linear$start_analysis.invokeStatic (linear.clj:259)\n    knossos.linear$start_analysis.invoke (linear.clj:256)\n    knossos.linear$analysis.invokeStatic (linear.clj:314)\n    knossos.linear$analysis.invoke (linear.clj:304)\n    knossos.linear$analysis.invokeStatic (linear.clj:312)\n    knossos.linear$analysis.invoke (linear.clj:304)\n    jepsen.checker$linearizable$reify__10597.check (checker.clj:216)\n    jepsen.checker$check_safe.invokeStatic (checker.clj:86)\n    jepsen.checker$check_safe.invoke (checker.clj:79)\n    jepsen.checker$compose$reify__10552$fn__10554.invoke (checker.clj:102)\n    clojure.core$pmap$fn__8552$fn__8553.invoke (core.clj:7089)\n    clojure.core$binding_conveyor_fn$fn__5823.invoke (core.clj:2047)\n    clojure.lang.AFn.call (AFn.java:18)\n    java.util.concurrent.FutureTask.run (FutureTask.java:317)\n    java.util.concurrent.ThreadPoolExecutor.runWorker (ThreadPoolExecutor.java:1144)\n    java.util.concurrent.ThreadPoolExecutor$Worker.run (ThreadPoolExecutor.java:642)\n    java.lang.Thread.run (Thread.java:1583)\n"},
+ :timeline {:valid? :unknown,
+            :error "clojure.lang.ExceptionInfo: Assert failed:\n{:type :jepsen.history/double-complete,\n :op\n {:process 3,\n  :type :info,\n  :f :start,\n  :value nil,\n  :exception\n  {:via\n   [{:type java.lang.IllegalArgumentException,\n     :message \"No matching clause: :start\",\n     :at\n     [omnipaxos_jepsen.client.OmniPaxosClient\n      invoke_BANG_\n      \"client.clj\"\n      33]}],\n   :trace\n   [[omnipaxos_jepsen.client.OmniPaxosClient\n     invoke_BANG_\n     \"client.clj\"\n     33]\n    [jepsen.client.Validate invoke_BANG_ \"client.clj\" 83]\n    [jepsen.generator.interpreter.ClientWorker\n     invoke_BANG_\n     \"interpreter.clj\"\n     65]\n    [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147\n     invoke\n     \"interpreter.clj\"\n     140]\n    [jepsen.generator.interpreter$spawn_worker$fn__13146\n     invoke\n     \"interpreter.clj\"\n     123]\n    [clojure.core$binding_conveyor_fn$fn__5823 invoke \"core.clj\" 2047]\n    [clojure.lang.AFn call \"AFn.java\" 18]\n    [java.util.concurrent.FutureTask run \"FutureTask.java\" 317]\n    [java.util.concurrent.ThreadPoolExecutor\n     runWorker\n     \"ThreadPoolExecutor.java\"\n     1144]\n    [java.util.concurrent.ThreadPoolExecutor$Worker\n     run\n     \"ThreadPoolExecutor.java\"\n     642]\n    [java.lang.Thread run \"Thread.java\" 1583]],\n   :cause \"No matching clause: :start\"},\n  :error \"indeterminate: No matching clause: :start\",\n  :index 187,\n  :time 9915608292},\n :completed\n {:process 3,\n  :type :info,\n  :f :start,\n  :value nil,\n  :index 186,\n  :time 9914855458}}\n\n{:type :jepsen.history/double-complete, :op {:index 187, :time 9915608292, :type :info, :process 3, :f :start, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message \"No matching clause: :start\", :at [omnipaxos_jepsen.client.OmniPaxosClient invoke_BANG_ \"client.clj\" 33]}], :trace [[omnipaxos_jepsen.client.OmniPaxosClient invoke_BANG_ \"client.clj\" 33] [jepsen.client.Validate invoke_BANG_ \"client.clj\" 83] [jepsen.generator.interpreter.ClientWorker invoke_BANG_ \"interpreter.clj\" 65] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke \"interpreter.clj\" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke \"interpreter.clj\" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke \"core.clj\" 2047] [clojure.lang.AFn call \"AFn.java\" 18] [java.util.concurrent.FutureTask run \"FutureTask.java\" 317] [java.util.concurrent.ThreadPoolExecutor runWorker \"ThreadPoolExecutor.java\" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run \"ThreadPoolExecutor.java\" 642] [java.lang.Thread run \"Thread.java\" 1583]], :cause \"No matching clause: :start\"}, :error \"indeterminate: No matching clause: :start\"}, :completed {:index 186, :time 9914855458, :type :info, :process 3, :f :start, :value nil}}\n at jepsen.history$reducer__3112.invokeStatic (history.clj:457)\n    jepsen.history/reducer (history.clj:434)\n    jepsen.history.fold$fuse$reducer__2642.invoke (fold.clj:428)\n    clojure.lang.PersistentVector.reduce (PersistentVector.java:343)\n    clojure.core$reduce.invokeStatic (core.clj:6885)\n    clojure.core$reduce.invoke (core.clj:6868)\n    jepsen.history.fold$make_concurrent_reduce_task$task__2686.invoke (fold.clj:591)\n    jepsen.history.task.Task.run (task.clj:282)\n    java.util.concurrent.ThreadPoolExecutor.runWorker (ThreadPoolExecutor.java:1144)\n    java.util.concurrent.ThreadPoolExecutor$Worker.run (ThreadPoolExecutor.java:642)\n    java.lang.Thread.run (Thread.java:1583)\n"},
+ :stats {:valid? :unknown,
+         :error "clojure.lang.ExceptionInfo: Assert failed:\n{:type :jepsen.history/double-complete,\n :op\n {:process 3,\n  :type :info,\n  :f :start,\n  :value nil,\n  :exception\n  {:via\n   [{:type java.lang.IllegalArgumentException,\n     :message \"No matching clause: :start\",\n     :at\n     [omnipaxos_jepsen.client.OmniPaxosClient\n      invoke_BANG_\n      \"client.clj\"\n      33]}],\n   :trace\n   [[omnipaxos_jepsen.client.OmniPaxosClient\n     invoke_BANG_\n     \"client.clj\"\n     33]\n    [jepsen.client.Validate invoke_BANG_ \"client.clj\" 83]\n    [jepsen.generator.interpreter.ClientWorker\n     invoke_BANG_\n     \"interpreter.clj\"\n     65]\n    [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147\n     invoke\n     \"interpreter.clj\"\n     140]\n    [jepsen.generator.interpreter$spawn_worker$fn__13146\n     invoke\n     \"interpreter.clj\"\n     123]\n    [clojure.core$binding_conveyor_fn$fn__5823 invoke \"core.clj\" 2047]\n    [clojure.lang.AFn call \"AFn.java\" 18]\n    [java.util.concurrent.FutureTask run \"FutureTask.java\" 317]\n    [java.util.concurrent.ThreadPoolExecutor\n     runWorker\n     \"ThreadPoolExecutor.java\"\n     1144]\n    [java.util.concurrent.ThreadPoolExecutor$Worker\n     run\n     \"ThreadPoolExecutor.java\"\n     642]\n    [java.lang.Thread run \"Thread.java\" 1583]],\n   :cause \"No matching clause: :start\"},\n  :error \"indeterminate: No matching clause: :start\",\n  :index 187,\n  :time 9915608292},\n :completed\n {:process 3,\n  :type :info,\n  :f :start,\n  :value nil,\n  :index 186,\n  :time 9914855458}}\n\n{:type :jepsen.history/double-complete, :op {:index 187, :time 9915608292, :type :info, :process 3, :f :start, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message \"No matching clause: :start\", :at [omnipaxos_jepsen.client.OmniPaxosClient invoke_BANG_ \"client.clj\" 33]}], :trace [[omnipaxos_jepsen.client.OmniPaxosClient invoke_BANG_ \"client.clj\" 33] [jepsen.client.Validate invoke_BANG_ \"client.clj\" 83] [jepsen.generator.interpreter.ClientWorker invoke_BANG_ \"interpreter.clj\" 65] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke \"interpreter.clj\" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke \"interpreter.clj\" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke \"core.clj\" 2047] [clojure.lang.AFn call \"AFn.java\" 18] [java.util.concurrent.FutureTask run \"FutureTask.java\" 317] [java.util.concurrent.ThreadPoolExecutor runWorker \"ThreadPoolExecutor.java\" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run \"ThreadPoolExecutor.java\" 642] [java.lang.Thread run \"Thread.java\" 1583]], :cause \"No matching clause: :start\"}, :error \"indeterminate: No matching clause: :start\"}, :completed {:index 186, :time 9914855458, :type :info, :process 3, :f :start, :value nil}}\n at jepsen.history$reducer__3112.invokeStatic (history.clj:457)\n    jepsen.history/reducer (history.clj:434)\n    jepsen.history.fold$fuse$reducer__2642.invoke (fold.clj:428)\n    clojure.lang.PersistentVector.reduce (PersistentVector.java:343)\n    clojure.core$reduce.invokeStatic (core.clj:6885)\n    clojure.core$reduce.invoke (core.clj:6868)\n    jepsen.history.fold$make_concurrent_reduce_task$task__2686.invoke (fold.clj:591)\n    jepsen.history.task.Task.run (task.clj:282)\n    java.util.concurrent.ThreadPoolExecutor.runWorker (ThreadPoolExecutor.java:1144)\n    java.util.concurrent.ThreadPoolExecutor$Worker.run (ThreadPoolExecutor.java:642)\n    java.lang.Thread.run (Thread.java:1583)\n"},
+ :perf {:latency-graph {:valid? :unknown,
+                        :error "clojure.lang.ExceptionInfo: Assert failed:\n{:type :jepsen.history/double-complete,\n :op\n {:process 3,\n  :type :info,\n  :f :start,\n  :value nil,\n  :exception\n  {:via\n   [{:type java.lang.IllegalArgumentException,\n     :message \"No matching clause: :start\",\n     :at\n     [omnipaxos_jepsen.client.OmniPaxosClient\n      invoke_BANG_\n      \"client.clj\"\n      33]}],\n   :trace\n   [[omnipaxos_jepsen.client.OmniPaxosClient\n     invoke_BANG_\n     \"client.clj\"\n     33]\n    [jepsen.client.Validate invoke_BANG_ \"client.clj\" 83]\n    [jepsen.generator.interpreter.ClientWorker\n     invoke_BANG_\n     \"interpreter.clj\"\n     65]\n    [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147\n     invoke\n     \"interpreter.clj\"\n     140]\n    [jepsen.generator.interpreter$spawn_worker$fn__13146\n     invoke\n     \"interpreter.clj\"\n     123]\n    [clojure.core$binding_conveyor_fn$fn__5823 invoke \"core.clj\" 2047]\n    [clojure.lang.AFn call \"AFn.java\" 18]\n    [java.util.concurrent.FutureTask run \"FutureTask.java\" 317]\n    [java.util.concurrent.ThreadPoolExecutor\n     runWorker\n     \"ThreadPoolExecutor.java\"\n     1144]\n    [java.util.concurrent.ThreadPoolExecutor$Worker\n     run\n     \"ThreadPoolExecutor.java\"\n     642]\n    [java.lang.Thread run \"Thread.java\" 1583]],\n   :cause \"No matching clause: :start\"},\n  :error \"indeterminate: No matching clause: :start\",\n  :index 187,\n  :time 9915608292},\n :completed\n {:process 3,\n  :type :info,\n  :f :start,\n  :value nil,\n  :index 186,\n  :time 9914855458}}\n\n{:type :jepsen.history/double-complete, :op {:index 187, :time 9915608292, :type :info, :process 3, :f :start, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message \"No matching clause: :start\", :at [omnipaxos_jepsen.client.OmniPaxosClient invoke_BANG_ \"client.clj\" 33]}], :trace [[omnipaxos_jepsen.client.OmniPaxosClient invoke_BANG_ \"client.clj\" 33] [jepsen.client.Validate invoke_BANG_ \"client.clj\" 83] [jepsen.generator.interpreter.ClientWorker invoke_BANG_ \"interpreter.clj\" 65] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke \"interpreter.clj\" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke \"interpreter.clj\" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke \"core.clj\" 2047] [clojure.lang.AFn call \"AFn.java\" 18] [java.util.concurrent.FutureTask run \"FutureTask.java\" 317] [java.util.concurrent.ThreadPoolExecutor runWorker \"ThreadPoolExecutor.java\" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run \"ThreadPoolExecutor.java\" 642] [java.lang.Thread run \"Thread.java\" 1583]], :cause \"No matching clause: :start\"}, :error \"indeterminate: No matching clause: :start\"}, :completed {:index 186, :time 9914855458, :type :info, :process 3, :f :start, :value nil}}\n at jepsen.history$reducer__3112.invokeStatic (history.clj:457)\n    jepsen.history/reducer (history.clj:434)\n    jepsen.history.fold$fuse$reducer__2642.invoke (fold.clj:428)\n    clojure.lang.PersistentVector.reduce (PersistentVector.java:343)\n    clojure.core$reduce.invokeStatic (core.clj:6885)\n    clojure.core$reduce.invoke (core.clj:6868)\n    jepsen.history.fold$make_concurrent_reduce_task$task__2686.invoke (fold.clj:591)\n    jepsen.history.task.Task.run (task.clj:282)\n    java.util.concurrent.ThreadPoolExecutor.runWorker (ThreadPoolExecutor.java:1144)\n    java.util.concurrent.ThreadPoolExecutor$Worker.run (ThreadPoolExecutor.java:642)\n    java.lang.Thread.run (Thread.java:1583)\n"},
+        :rate-graph {:valid? :unknown,
+                     :error "clojure.lang.ExceptionInfo: Assert failed:\n{:type :jepsen.history/double-complete,\n :op\n {:process 3,\n  :type :info,\n  :f :start,\n  :value nil,\n  :exception\n  {:via\n   [{:type java.lang.IllegalArgumentException,\n     :message \"No matching clause: :start\",\n     :at\n     [omnipaxos_jepsen.client.OmniPaxosClient\n      invoke_BANG_\n      \"client.clj\"\n      33]}],\n   :trace\n   [[omnipaxos_jepsen.client.OmniPaxosClient\n     invoke_BANG_\n     \"client.clj\"\n     33]\n    [jepsen.client.Validate invoke_BANG_ \"client.clj\" 83]\n    [jepsen.generator.interpreter.ClientWorker\n     invoke_BANG_\n     \"interpreter.clj\"\n     65]\n    [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147\n     invoke\n     \"interpreter.clj\"\n     140]\n    [jepsen.generator.interpreter$spawn_worker$fn__13146\n     invoke\n     \"interpreter.clj\"\n     123]\n    [clojure.core$binding_conveyor_fn$fn__5823 invoke \"core.clj\" 2047]\n    [clojure.lang.AFn call \"AFn.java\" 18]\n    [java.util.concurrent.FutureTask run \"FutureTask.java\" 317]\n    [java.util.concurrent.ThreadPoolExecutor\n     runWorker\n     \"ThreadPoolExecutor.java\"\n     1144]\n    [java.util.concurrent.ThreadPoolExecutor$Worker\n     run\n     \"ThreadPoolExecutor.java\"\n     642]\n    [java.lang.Thread run \"Thread.java\" 1583]],\n   :cause \"No matching clause: :start\"},\n  :error \"indeterminate: No matching clause: :start\",\n  :index 187,\n  :time 9915608292},\n :completed\n {:process 3,\n  :type :info,\n  :f :start,\n  :value nil,\n  :index 186,\n  :time 9914855458}}\n\n{:type :jepsen.history/double-complete, :op {:index 187, :time 9915608292, :type :info, :process 3, :f :start, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message \"No matching clause: :start\", :at [omnipaxos_jepsen.client.OmniPaxosClient invoke_BANG_ \"client.clj\" 33]}], :trace [[omnipaxos_jepsen.client.OmniPaxosClient invoke_BANG_ \"client.clj\" 33] [jepsen.client.Validate invoke_BANG_ \"client.clj\" 83] [jepsen.generator.interpreter.ClientWorker invoke_BANG_ \"interpreter.clj\" 65] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke \"interpreter.clj\" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke \"interpreter.clj\" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke \"core.clj\" 2047] [clojure.lang.AFn call \"AFn.java\" 18] [java.util.concurrent.FutureTask run \"FutureTask.java\" 317] [java.util.concurrent.ThreadPoolExecutor runWorker \"ThreadPoolExecutor.java\" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run \"ThreadPoolExecutor.java\" 642] [java.lang.Thread run \"Thread.java\" 1583]], :cause \"No matching clause: :start\"}, :error \"indeterminate: No matching clause: :start\"}, :completed {:index 186, :time 9914855458, :type :info, :process 3, :f :start, :value nil}}\n at jepsen.history$reducer__3112.invokeStatic (history.clj:457)\n    jepsen.history/reducer (history.clj:434)\n    jepsen.history.fold$fuse$reducer__2642.invoke (fold.clj:428)\n    clojure.lang.PersistentVector.reduce (PersistentVector.java:343)\n    clojure.core$reduce.invokeStatic (core.clj:6885)\n    clojure.core$reduce.invoke (core.clj:6868)\n    jepsen.history.fold$make_concurrent_reduce_task$task__2686.invoke (fold.clj:591)\n    jepsen.history.task.Task.run (task.clj:282)\n    java.util.concurrent.ThreadPoolExecutor.runWorker (ThreadPoolExecutor.java:1144)\n    java.util.concurrent.ThreadPoolExecutor$Worker.run (ThreadPoolExecutor.java:642)\n    java.lang.Thread.run (Thread.java:1583)\n"},
+        :valid? :unknown},
+ :valid? :unknown}
+
+
+Errors occurred during analysis, but no anomalies found. ಠ~ಠ

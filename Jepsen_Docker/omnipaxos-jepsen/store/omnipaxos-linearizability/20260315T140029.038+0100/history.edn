@@ -1,0 +1,760 @@
+{:index 0, :time 12890125, :type :invoke, :process 0, :f :read, :value nil}
+{:index 1, :time 151887208, :type :invoke, :process 1, :f :write, :value 9}
+{:index 2, :time 160924083, :type :ok, :process 1, :f :write, :value 9}
+{:index 3, :time 160985042, :type :ok, :process 0, :f :read, :value nil}
+{:index 4, :time 315422292, :type :invoke, :process 2, :f :read, :value nil}
+{:index 5, :time 322927583, :type :ok, :process 2, :f :read, :value 9}
+{:index 6, :time 405695250, :type :invoke, :process 3, :f :write, :value 2}
+{:index 7, :time 414149583, :type :ok, :process 3, :f :write, :value 2}
+{:index 8, :time 552187167, :type :invoke, :process 4, :f :read, :value nil}
+{:index 9, :time 559219917, :type :ok, :process 4, :f :read, :value 2}
+{:index 10, :time 744496250, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 11, :time 751912583, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 12, :time 825014042, :type :invoke, :process 0, :f :read, :value nil}
+{:index 13, :time 834974042, :type :ok, :process 0, :f :read, :value 2}
+{:index 14, :time 1018839625, :type :invoke, :process 1, :f :write, :value 7}
+{:index 15, :time 1028543250, :type :ok, :process 1, :f :write, :value 7}
+{:index 16, :time 1174809125, :type :invoke, :process 2, :f :read, :value nil}
+{:index 17, :time 1183319417, :type :ok, :process 2, :f :read, :value 7}
+{:index 18, :time 1325836125, :type :invoke, :process 3, :f :read, :value nil}
+{:index 19, :time 1336095792, :type :ok, :process 3, :f :read, :value 7}
+{:index 20, :time 1524365208, :type :invoke, :process 4, :f :write, :value 3}
+{:index 21, :time 1534630167, :type :ok, :process 4, :f :write, :value 3}
+{:index 22, :time 1560937583, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 23, :time 1567566625, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 24, :time 1598465625, :type :invoke, :process 0, :f :read, :value nil}
+{:index 25, :time 1607799042, :type :ok, :process 0, :f :read, :value 3}
+{:index 26, :time 1704961042, :type :invoke, :process 1, :f :cas, :value [1 4]}
+{:index 27, :time 1712356125, :type :fail, :process 1, :f :cas, :value [1 4], :error :precondition-failed}
+{:index 28, :time 1865208792, :type :invoke, :process 2, :f :cas, :value [3 0]}
+{:index 29, :time 1874439542, :type :ok, :process 2, :f :cas, :value [3 0]}
+{:index 30, :time 2015253375, :type :invoke, :process 3, :f :read, :value nil}
+{:index 31, :time 2026795625, :type :ok, :process 3, :f :read, :value 0}
+{:index 32, :time 2150975500, :type :invoke, :process 4, :f :write, :value 6}
+{:index 33, :time 2161527583, :type :ok, :process 4, :f :write, :value 6}
+{:index 34, :time 2171435250, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 35, :time 2173221708, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 36, :time 2327466875, :type :invoke, :process 0, :f :read, :value nil}
+{:index 37, :time 2332197000, :type :ok, :process 0, :f :read, :value 6}
+{:index 38, :time 2336190000, :type :invoke, :process 1, :f :write, :value 2}
+{:index 39, :time 2341320833, :type :ok, :process 1, :f :write, :value 2}
+{:index 40, :time 2511272875, :type :invoke, :process 2, :f :cas, :value [0 0]}
+{:index 41, :time 2511857542, :type :invoke, :process 3, :f :read, :value nil}
+{:index 42, :time 2522547833, :type :fail, :process 2, :f :cas, :value [0 0], :error :precondition-failed}
+{:index 43, :time 2522660208, :type :ok, :process 3, :f :read, :value 2}
+{:index 44, :time 2647156625, :type :invoke, :process 4, :f :write, :value 6}
+{:index 45, :time 2657270208, :type :ok, :process 4, :f :write, :value 6}
+{:index 46, :time 2714337708, :type :invoke, :process :nemesis, :f :write, :value 2}
+{:index 47, :time 2716174875, :type :info, :process :nemesis, :f :write, :value 2, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 48, :time 2844308500, :type :invoke, :process 0, :f :cas, :value [2 3]}
+{:index 49, :time 2855261750, :type :fail, :process 0, :f :cas, :value [2 3], :error :precondition-failed}
+{:index 50, :time 3015454958, :type :invoke, :process 1, :f :cas, :value [0 2]}
+{:index 51, :time 3029466625, :type :fail, :process 1, :f :cas, :value [0 2], :error :precondition-failed}
+{:index 52, :time 3066808042, :type :invoke, :process 2, :f :write, :value 3}
+{:index 53, :time 3075898000, :type :ok, :process 2, :f :write, :value 3}
+{:index 54, :time 3257580583, :type :invoke, :process 3, :f :read, :value nil}
+{:index 55, :time 3267822750, :type :ok, :process 3, :f :read, :value 3}
+{:index 56, :time 3286213542, :type :invoke, :process 4, :f :cas, :value [2 2]}
+{:index 57, :time 3294499042, :type :fail, :process 4, :f :cas, :value [2 2], :error :precondition-failed}
+{:index 58, :time 3415449958, :type :invoke, :process :nemesis, :f :write, :value 3}
+{:index 59, :time 3417283833, :type :info, :process :nemesis, :f :write, :value 3, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 60, :time 3475518542, :type :invoke, :process 0, :f :read, :value nil}
+{:index 61, :time 3487279083, :type :ok, :process 0, :f :read, :value 3}
+{:index 62, :time 3510693375, :type :invoke, :process 1, :f :write, :value 9}
+{:index 63, :time 3519619292, :type :ok, :process 1, :f :write, :value 9}
+{:index 64, :time 3578904042, :type :invoke, :process 2, :f :read, :value nil}
+{:index 65, :time 3588625792, :type :ok, :process 2, :f :read, :value 9}
+{:index 66, :time 3701837292, :type :invoke, :process 3, :f :write, :value 5}
+{:index 67, :time 3711107125, :type :ok, :process 3, :f :write, :value 5}
+{:index 68, :time 3799960375, :type :invoke, :process 4, :f :cas, :value [0 4]}
+{:index 69, :time 3809003208, :type :fail, :process 4, :f :cas, :value [0 4], :error :precondition-failed}
+{:index 70, :time 3824477167, :type :invoke, :process :nemesis, :f :cas, :value [0 4]}
+{:index 71, :time 3826008917, :type :info, :process :nemesis, :f :cas, :value [0 4], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 72, :time 4007500792, :type :invoke, :process 0, :f :cas, :value [4 4]}
+{:index 73, :time 4018867000, :type :fail, :process 0, :f :cas, :value [4 4], :error :precondition-failed}
+{:index 74, :time 4083561000, :type :invoke, :process 1, :f :write, :value 5}
+{:index 75, :time 4092566000, :type :ok, :process 1, :f :write, :value 5}
+{:index 76, :time 4201945917, :type :invoke, :process 2, :f :write, :value 7}
+{:index 77, :time 4211483292, :type :ok, :process 2, :f :write, :value 7}
+{:index 78, :time 4302947250, :type :invoke, :process 3, :f :cas, :value [0 4]}
+{:index 79, :time 4313403833, :type :fail, :process 3, :f :cas, :value [0 4], :error :precondition-failed}
+{:index 80, :time 4313538292, :type :invoke, :process 4, :f :read, :value nil}
+{:index 81, :time 4323946208, :type :ok, :process 4, :f :read, :value 7}
+{:index 82, :time 4378961542, :type :invoke, :process :nemesis, :f :write, :value 6}
+{:index 83, :time 4380710250, :type :info, :process :nemesis, :f :write, :value 6, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 84, :time 4388738792, :type :invoke, :process 0, :f :cas, :value [1 4]}
+{:index 85, :time 4396765042, :type :fail, :process 0, :f :cas, :value [1 4], :error :precondition-failed}
+{:index 86, :time 4553649292, :type :invoke, :process 1, :f :write, :value 0}
+{:index 87, :time 4562821542, :type :ok, :process 1, :f :write, :value 0}
+{:index 88, :time 4673082125, :type :invoke, :process 2, :f :write, :value 2}
+{:index 89, :time 4680728292, :type :ok, :process 2, :f :write, :value 2}
+{:index 90, :time 4713217708, :type :invoke, :process 3, :f :read, :value nil}
+{:index 91, :time 4720030917, :type :ok, :process 3, :f :read, :value 2}
+{:index 92, :time 4811567417, :type :invoke, :process 4, :f :read, :value nil}
+{:index 93, :time 4817180583, :type :ok, :process 4, :f :read, :value 2}
+{:index 94, :time 4860465167, :type :invoke, :process :nemesis, :f :cas, :value [3 3]}
+{:index 95, :time 4862121417, :type :info, :process :nemesis, :f :cas, :value [3 3], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 96, :time 4969629208, :type :invoke, :process 0, :f :read, :value nil}
+{:index 97, :time 4980007917, :type :ok, :process 0, :f :read, :value 2}
+{:index 98, :time 5125639167, :type :invoke, :process 1, :f :read, :value nil}
+{:index 99, :time 5135688333, :type :ok, :process 1, :f :read, :value 2}
+{:index 100, :time 5140166750, :type :invoke, :process 2, :f :write, :value 5}
+{:index 101, :time 5148987417, :type :ok, :process 2, :f :write, :value 5}
+{:index 102, :time 5158550458, :type :invoke, :process 3, :f :cas, :value [0 2]}
+{:index 103, :time 5164542292, :type :fail, :process 3, :f :cas, :value [0 2], :error :precondition-failed}
+{:index 104, :time 5166187042, :type :invoke, :process 4, :f :cas, :value [0 0]}
+{:index 105, :time 5171363583, :type :fail, :process 4, :f :cas, :value [0 0], :error :precondition-failed}
+{:index 106, :time 5278276208, :type :invoke, :process :nemesis, :f :write, :value 5}
+{:index 107, :time 5279084333, :type :info, :process :nemesis, :f :write, :value 5, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 108, :time 5473455625, :type :invoke, :process 0, :f :write, :value 2}
+{:index 109, :time 5482380792, :type :ok, :process 0, :f :write, :value 2}
+{:index 110, :time 5647197292, :type :invoke, :process 1, :f :write, :value 1}
+{:index 111, :time 5656744625, :type :ok, :process 1, :f :write, :value 1}
+{:index 112, :time 5805525708, :type :invoke, :process 2, :f :read, :value nil}
+{:index 113, :time 5815619000, :type :ok, :process 2, :f :read, :value 1}
+{:index 114, :time 5919573042, :type :invoke, :process 3, :f :read, :value nil}
+{:index 115, :time 5930587708, :type :ok, :process 3, :f :read, :value 1}
+{:index 116, :time 6014025625, :type :invoke, :process 4, :f :cas, :value [3 1]}
+{:index 117, :time 6019537000, :type :fail, :process 4, :f :cas, :value [3 1], :error :precondition-failed}
+{:index 118, :time 6170511250, :type :invoke, :process :nemesis, :f :cas, :value [1 1]}
+{:index 119, :time 6172348542, :type :info, :process :nemesis, :f :cas, :value [1 1], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 120, :time 6344367167, :type :invoke, :process 0, :f :write, :value 5}
+{:index 121, :time 6354228833, :type :ok, :process 0, :f :write, :value 5}
+{:index 122, :time 6469537875, :type :invoke, :process 1, :f :read, :value nil}
+{:index 123, :time 6479318417, :type :ok, :process 1, :f :read, :value 5}
+{:index 124, :time 6486218208, :type :invoke, :process 2, :f :read, :value nil}
+{:index 125, :time 6496715042, :type :ok, :process 2, :f :read, :value 5}
+{:index 126, :time 6682538042, :type :invoke, :process 3, :f :cas, :value [3 3]}
+{:index 127, :time 6691326292, :type :fail, :process 3, :f :cas, :value [3 3], :error :precondition-failed}
+{:index 128, :time 6823712667, :type :invoke, :process 4, :f :cas, :value [0 2]}
+{:index 129, :time 6833583125, :type :fail, :process 4, :f :cas, :value [0 2], :error :precondition-failed}
+{:index 130, :time 6846781208, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 131, :time 6848319167, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 132, :time 6994028167, :type :invoke, :process 0, :f :read, :value nil}
+{:index 133, :time 7003193292, :type :ok, :process 0, :f :read, :value 5}
+{:index 134, :time 7005668292, :type :invoke, :process 1, :f :read, :value nil}
+{:index 135, :time 7013882375, :type :ok, :process 1, :f :read, :value 5}
+{:index 136, :time 7025203208, :type :invoke, :process 2, :f :cas, :value [4 3]}
+{:index 137, :time 7032308500, :type :fail, :process 2, :f :cas, :value [4 3], :error :precondition-failed}
+{:index 138, :time 7178327625, :type :invoke, :process 3, :f :write, :value 1}
+{:index 139, :time 7188159958, :type :ok, :process 3, :f :write, :value 1}
+{:index 140, :time 7377604375, :type :invoke, :process 4, :f :cas, :value [1 4]}
+{:index 141, :time 7389433333, :type :ok, :process 4, :f :cas, :value [1 4]}
+{:index 142, :time 7452869333, :type :invoke, :process :nemesis, :f :write, :value 5}
+{:index 143, :time 7454630292, :type :info, :process :nemesis, :f :write, :value 5, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 144, :time 7472831667, :type :invoke, :process 0, :f :cas, :value [2 1]}
+{:index 145, :time 7482797417, :type :fail, :process 0, :f :cas, :value [2 1], :error :precondition-failed}
+{:index 146, :time 7666010042, :type :invoke, :process 1, :f :write, :value 9}
+{:index 147, :time 7675133125, :type :ok, :process 1, :f :write, :value 9}
+{:index 148, :time 7833942375, :type :invoke, :process 2, :f :read, :value nil}
+{:index 149, :time 7842949583, :type :ok, :process 2, :f :read, :value 9}
+{:index 150, :time 8024936750, :type :invoke, :process 3, :f :cas, :value [0 3]}
+{:index 151, :time 8033610292, :type :fail, :process 3, :f :cas, :value [0 3], :error :precondition-failed}
+{:index 152, :time 8144180333, :type :invoke, :process 4, :f :read, :value nil}
+{:index 153, :time 8153466458, :type :ok, :process 4, :f :read, :value 9}
+{:index 154, :time 8308434750, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 155, :time 8310697667, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 156, :time 8346010542, :type :invoke, :process 0, :f :cas, :value [4 2]}
+{:index 157, :time 8357082625, :type :fail, :process 0, :f :cas, :value [4 2], :error :precondition-failed}
+{:index 158, :time 8548229333, :type :invoke, :process 1, :f :write, :value 0}
+{:index 159, :time 8557120000, :type :ok, :process 1, :f :write, :value 0}
+{:index 160, :time 8569528958, :type :invoke, :process 2, :f :cas, :value [0 0]}
+{:index 161, :time 8577924500, :type :ok, :process 2, :f :cas, :value [0 0]}
+{:index 162, :time 8751383542, :type :invoke, :process 3, :f :cas, :value [1 3]}
+{:index 163, :time 8759801958, :type :fail, :process 3, :f :cas, :value [1 3], :error :precondition-failed}
+{:index 164, :time 8816954333, :type :invoke, :process 4, :f :read, :value nil}
+{:index 165, :time 8826080958, :type :ok, :process 4, :f :read, :value 0}
+{:index 166, :time 8826169917, :type :invoke, :process :nemesis, :f :cas, :value [3 1]}
+{:index 167, :time 8827133792, :type :info, :process :nemesis, :f :cas, :value [3 1], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 168, :time 8969548583, :type :invoke, :process 0, :f :read, :value nil}
+{:index 169, :time 8989386500, :type :ok, :process 0, :f :read, :value 0}
+{:index 170, :time 9169397417, :type :invoke, :process 1, :f :cas, :value [0 1]}
+{:index 171, :time 9177727625, :type :ok, :process 1, :f :cas, :value [0 1]}
+{:index 172, :time 9268448000, :type :invoke, :process 2, :f :write, :value 1}
+{:index 173, :time 9276998958, :type :ok, :process 2, :f :write, :value 1}
+{:index 174, :time 9452947167, :type :invoke, :process 3, :f :write, :value 8}
+{:index 175, :time 9461595083, :type :ok, :process 3, :f :write, :value 8}
+{:index 176, :time 9505436250, :type :invoke, :process 4, :f :read, :value nil}
+{:index 177, :time 9514355333, :type :ok, :process 4, :f :read, :value 8}
+{:index 178, :time 9579909708, :type :invoke, :process :nemesis, :f :write, :value 9}
+{:index 179, :time 9581608958, :type :info, :process :nemesis, :f :write, :value 9, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 180, :time 9712942625, :type :invoke, :process 0, :f :cas, :value [3 2]}
+{:index 181, :time 9720468917, :type :fail, :process 0, :f :cas, :value [3 2], :error :precondition-failed}
+{:index 182, :time 9867360333, :type :invoke, :process 1, :f :write, :value 1}
+{:index 183, :time 9875408458, :type :ok, :process 1, :f :write, :value 1}
+{:index 184, :time 9906875958, :type :invoke, :process 2, :f :cas, :value [4 1]}
+{:index 185, :time 9914803583, :type :fail, :process 2, :f :cas, :value [4 1], :error :precondition-failed}
+{:index 186, :time 9914855458, :type :info, :process 3, :f :start, :value nil}
+{:index 187, :time 9915608292, :type :info, :process 3, :f :start, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :start", :at [omnipaxos_jepsen.client.OmniPaxosClient invoke_BANG_ "client.clj" 33]}], :trace [[omnipaxos_jepsen.client.OmniPaxosClient invoke_BANG_ "client.clj" 33] [jepsen.client.Validate invoke_BANG_ "client.clj" 83] [jepsen.generator.interpreter.ClientWorker invoke_BANG_ "interpreter.clj" 65] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :start"}, :error "indeterminate: No matching clause: :start"}
+{:index 188, :time 9915706500, :type :invoke, :process 4, :f :read, :value nil}
+{:index 189, :time 9921837167, :type :ok, :process 4, :f :read, :value 1}
+{:index 190, :time 10118175708, :type :invoke, :process :nemesis, :f :cas, :value [0 4]}
+{:index 191, :time 10119918792, :type :info, :process :nemesis, :f :cas, :value [0 4], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 192, :time 10307139583, :type :invoke, :process 0, :f :read, :value nil}
+{:index 193, :time 10312502917, :type :invoke, :process 1, :f :read, :value nil}
+{:index 194, :time 10317994917, :type :ok, :process 0, :f :read, :value 1}
+{:index 195, :time 10322920333, :type :ok, :process 1, :f :read, :value 1}
+{:index 196, :time 10352857583, :type :invoke, :process 2, :f :cas, :value [0 1]}
+{:index 197, :time 10361183125, :type :fail, :process 2, :f :cas, :value [0 1], :error :precondition-failed}
+{:index 198, :time 10489013750, :type :invoke, :process 8, :f :cas, :value [1 4]}
+{:index 199, :time 10498423667, :type :ok, :process 8, :f :cas, :value [1 4]}
+{:index 200, :time 10545019125, :type :invoke, :process 4, :f :read, :value nil}
+{:index 201, :time 10554227583, :type :ok, :process 4, :f :read, :value 4}
+{:index 202, :time 10698029042, :type :invoke, :process :nemesis, :f :write, :value 9}
+{:index 203, :time 10699384000, :type :info, :process :nemesis, :f :write, :value 9, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 204, :time 10866467542, :type :invoke, :process 0, :f :cas, :value [2 2]}
+{:index 205, :time 10875128750, :type :fail, :process 0, :f :cas, :value [2 2], :error :precondition-failed}
+{:index 206, :time 11061516458, :type :invoke, :process 1, :f :cas, :value [4 3]}
+{:index 207, :time 11071053875, :type :ok, :process 1, :f :cas, :value [4 3]}
+{:index 208, :time 11146551667, :type :invoke, :process 2, :f :cas, :value [4 4]}
+{:index 209, :time 11155729208, :type :fail, :process 2, :f :cas, :value [4 4], :error :precondition-failed}
+{:index 210, :time 11312022792, :type :invoke, :process 8, :f :read, :value nil}
+{:index 211, :time 11324779750, :type :ok, :process 8, :f :read, :value 3}
+{:index 212, :time 11336168792, :type :invoke, :process 4, :f :cas, :value [3 2]}
+{:index 213, :time 11341697125, :type :ok, :process 4, :f :cas, :value [3 2]}
+{:index 214, :time 11494841417, :type :invoke, :process :nemesis, :f :cas, :value [4 0]}
+{:index 215, :time 11496694792, :type :info, :process :nemesis, :f :cas, :value [4 0], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 216, :time 11619699292, :type :invoke, :process 0, :f :cas, :value [3 3]}
+{:index 217, :time 11629252375, :type :fail, :process 0, :f :cas, :value [3 3], :error :precondition-failed}
+{:index 218, :time 11778361583, :type :invoke, :process 1, :f :cas, :value [3 3]}
+{:index 219, :time 11787736958, :type :fail, :process 1, :f :cas, :value [3 3], :error :precondition-failed}
+{:index 220, :time 11886550042, :type :invoke, :process 2, :f :cas, :value [2 2]}
+{:index 221, :time 11895177583, :type :ok, :process 2, :f :cas, :value [2 2]}
+{:index 222, :time 11977625083, :type :invoke, :process 8, :f :cas, :value [0 0]}
+{:index 223, :time 11988306500, :type :fail, :process 8, :f :cas, :value [0 0], :error :precondition-failed}
+{:index 224, :time 12065724958, :type :invoke, :process 4, :f :read, :value nil}
+{:index 225, :time 12071387042, :type :ok, :process 4, :f :read, :value 2}
+{:index 226, :time 12263962000, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 227, :time 12265425708, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 228, :time 12295716750, :type :invoke, :process 0, :f :read, :value nil}
+{:index 229, :time 12304490917, :type :ok, :process 0, :f :read, :value 2}
+{:index 230, :time 12358328542, :type :invoke, :process 1, :f :cas, :value [2 0]}
+{:index 231, :time 12365333667, :type :ok, :process 1, :f :cas, :value [2 0]}
+{:index 232, :time 12369575208, :type :invoke, :process 2, :f :write, :value 2}
+{:index 233, :time 12374337458, :type :ok, :process 2, :f :write, :value 2}
+{:index 234, :time 12445184292, :type :invoke, :process 8, :f :cas, :value [1 0]}
+{:index 235, :time 12454866875, :type :fail, :process 8, :f :cas, :value [1 0], :error :precondition-failed}
+{:index 236, :time 12632039417, :type :invoke, :process 4, :f :write, :value 6}
+{:index 237, :time 12639648708, :type :ok, :process 4, :f :write, :value 6}
+{:index 238, :time 12786233042, :type :invoke, :process :nemesis, :f :write, :value 5}
+{:index 239, :time 12787604917, :type :info, :process :nemesis, :f :write, :value 5, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 240, :time 12888705333, :type :invoke, :process 0, :f :write, :value 0}
+{:index 241, :time 12897534417, :type :ok, :process 0, :f :write, :value 0}
+{:index 242, :time 12927853208, :type :invoke, :process 1, :f :cas, :value [3 3]}
+{:index 243, :time 12936276708, :type :fail, :process 1, :f :cas, :value [3 3], :error :precondition-failed}
+{:index 244, :time 12959487875, :type :invoke, :process 2, :f :write, :value 3}
+{:index 245, :time 12968293458, :type :ok, :process 2, :f :write, :value 3}
+{:index 246, :time 13004789875, :type :invoke, :process 8, :f :read, :value nil}
+{:index 247, :time 13013364000, :type :ok, :process 8, :f :read, :value 3}
+{:index 248, :time 13181476125, :type :invoke, :process 4, :f :write, :value 1}
+{:index 249, :time 13190093875, :type :ok, :process 4, :f :write, :value 1}
+{:index 250, :time 13235254375, :type :invoke, :process :nemesis, :f :cas, :value [1 2]}
+{:index 251, :time 13237470250, :type :info, :process :nemesis, :f :cas, :value [1 2], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 252, :time 13311290167, :type :invoke, :process 0, :f :write, :value 4}
+{:index 253, :time 13321159208, :type :ok, :process 0, :f :write, :value 4}
+{:index 254, :time 13416559292, :type :invoke, :process 1, :f :read, :value nil}
+{:index 255, :time 13422431375, :type :ok, :process 1, :f :read, :value 4}
+{:index 256, :time 13597541250, :type :invoke, :process 2, :f :read, :value nil}
+{:index 257, :time 13606595708, :type :ok, :process 2, :f :read, :value 4}
+{:index 258, :time 13783063042, :type :invoke, :process 8, :f :read, :value nil}
+{:index 259, :time 13793115583, :type :ok, :process 8, :f :read, :value 4}
+{:index 260, :time 13915189083, :type :invoke, :process 4, :f :read, :value nil}
+{:index 261, :time 13924594708, :type :ok, :process 4, :f :read, :value 4}
+{:index 262, :time 14106793875, :type :invoke, :process :nemesis, :f :cas, :value [1 1]}
+{:index 263, :time 14108421292, :type :info, :process :nemesis, :f :cas, :value [1 1], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 264, :time 14233752917, :type :invoke, :process 0, :f :write, :value 9}
+{:index 265, :time 14242697417, :type :ok, :process 0, :f :write, :value 9}
+{:index 266, :time 14413943708, :type :invoke, :process 1, :f :write, :value 2}
+{:index 267, :time 14423386958, :type :ok, :process 1, :f :write, :value 2}
+{:index 268, :time 14463618917, :type :invoke, :process 2, :f :read, :value nil}
+{:index 269, :time 14472804708, :type :ok, :process 2, :f :read, :value 2}
+{:index 270, :time 14586191875, :type :invoke, :process 8, :f :cas, :value [3 3]}
+{:index 271, :time 14594482875, :type :fail, :process 8, :f :cas, :value [3 3], :error :precondition-failed}
+{:index 272, :time 14633648792, :type :invoke, :process 4, :f :cas, :value [1 3]}
+{:index 273, :time 14642333875, :type :fail, :process 4, :f :cas, :value [1 3], :error :precondition-failed}
+{:index 274, :time 14716034042, :type :invoke, :process :nemesis, :f :cas, :value [4 2]}
+{:index 275, :time 14716930500, :type :info, :process :nemesis, :f :cas, :value [4 2], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 276, :time 14792829375, :type :invoke, :process 0, :f :write, :value 9}
+{:index 277, :time 14799111583, :type :ok, :process 0, :f :write, :value 9}
+{:index 278, :time 14948806125, :type :invoke, :process 1, :f :cas, :value [2 4]}
+{:index 279, :time 14957912417, :type :fail, :process 1, :f :cas, :value [2 4], :error :precondition-failed}
+{:index 280, :time 15143804500, :type :invoke, :process 2, :f :cas, :value [3 2]}
+{:index 281, :time 15154114333, :type :fail, :process 2, :f :cas, :value [3 2], :error :precondition-failed}
+{:index 282, :time 15246926125, :type :invoke, :process 8, :f :cas, :value [0 3]}
+{:index 283, :time 15254699958, :type :fail, :process 8, :f :cas, :value [0 3], :error :precondition-failed}
+{:index 284, :time 15278236958, :type :invoke, :process 4, :f :read, :value nil}
+{:index 285, :time 15287531833, :type :ok, :process 4, :f :read, :value 9}
+{:index 286, :time 15338505500, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 287, :time 15339811792, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 288, :time 15498053750, :type :invoke, :process 0, :f :read, :value nil}
+{:index 289, :time 15506304958, :type :ok, :process 0, :f :read, :value 9}
+{:index 290, :time 15585682167, :type :invoke, :process 1, :f :write, :value 3}
+{:index 291, :time 15593473917, :type :ok, :process 1, :f :write, :value 3}
+{:index 292, :time 15712472292, :type :invoke, :process 2, :f :cas, :value [3 4]}
+{:index 293, :time 15722808500, :type :ok, :process 2, :f :cas, :value [3 4]}
+{:index 294, :time 15852882542, :type :invoke, :process 8, :f :cas, :value [0 4]}
+{:index 295, :time 15861093750, :type :fail, :process 8, :f :cas, :value [0 4], :error :precondition-failed}
+{:index 296, :time 15957650708, :type :invoke, :process 4, :f :read, :value nil}
+{:index 297, :time 15966730125, :type :ok, :process 4, :f :read, :value 4}
+{:index 298, :time 16044404250, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 299, :time 16045919375, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 300, :time 16246544417, :type :invoke, :process 0, :f :cas, :value [1 2]}
+{:index 301, :time 16254886042, :type :fail, :process 0, :f :cas, :value [1 2], :error :precondition-failed}
+{:index 302, :time 16308360208, :type :invoke, :process 1, :f :read, :value nil}
+{:index 303, :time 16318681625, :type :ok, :process 1, :f :read, :value 4}
+{:index 304, :time 16444056458, :type :invoke, :process 2, :f :read, :value nil}
+{:index 305, :time 16452735292, :type :ok, :process 2, :f :read, :value 4}
+{:index 306, :time 16559853708, :type :invoke, :process 8, :f :write, :value 5}
+{:index 307, :time 16573095583, :type :ok, :process 8, :f :write, :value 5}
+{:index 308, :time 16582707583, :type :invoke, :process 4, :f :read, :value nil}
+{:index 309, :time 16592158583, :type :ok, :process 4, :f :read, :value 5}
+{:index 310, :time 16618444875, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 311, :time 16619809542, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 312, :time 16665972750, :type :invoke, :process 0, :f :write, :value 8}
+{:index 313, :time 16674311542, :type :ok, :process 0, :f :write, :value 8}
+{:index 314, :time 16728515542, :type :invoke, :process 1, :f :write, :value 6}
+{:index 315, :time 16737649458, :type :ok, :process 1, :f :write, :value 6}
+{:index 316, :time 16751658333, :type :invoke, :process 2, :f :read, :value nil}
+{:index 317, :time 16760537458, :type :ok, :process 2, :f :read, :value 6}
+{:index 318, :time 16883070792, :type :invoke, :process 8, :f :read, :value nil}
+{:index 319, :time 16890683333, :type :ok, :process 8, :f :read, :value 6}
+{:index 320, :time 17040706167, :type :invoke, :process 4, :f :cas, :value [1 0]}
+{:index 321, :time 17057428125, :type :fail, :process 4, :f :cas, :value [1 0], :error :precondition-failed}
+{:index 322, :time 17143565625, :type :invoke, :process :nemesis, :f :write, :value 2}
+{:index 323, :time 17145258792, :type :info, :process :nemesis, :f :write, :value 2, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 324, :time 17202988583, :type :invoke, :process 0, :f :read, :value nil}
+{:index 325, :time 17210807625, :type :ok, :process 0, :f :read, :value 6}
+{:index 326, :time 17291060583, :type :invoke, :process 1, :f :read, :value nil}
+{:index 327, :time 17301252583, :type :ok, :process 1, :f :read, :value 6}
+{:index 328, :time 17418196833, :type :invoke, :process 2, :f :write, :value 2}
+{:index 329, :time 17429551000, :type :ok, :process 2, :f :write, :value 2}
+{:index 330, :time 17475886458, :type :invoke, :process 8, :f :read, :value nil}
+{:index 331, :time 17480290958, :type :ok, :process 8, :f :read, :value 2}
+{:index 332, :time 17653670167, :type :invoke, :process 4, :f :cas, :value [1 1]}
+{:index 333, :time 17659673000, :type :fail, :process 4, :f :cas, :value [1 1], :error :precondition-failed}
+{:index 334, :time 17719479875, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 335, :time 17720129167, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 336, :time 17831522333, :type :invoke, :process 0, :f :write, :value 4}
+{:index 337, :time 17840317375, :type :ok, :process 0, :f :write, :value 4}
+{:index 338, :time 17942266000, :type :invoke, :process 1, :f :write, :value 2}
+{:index 339, :time 17946960833, :type :ok, :process 1, :f :write, :value 2}
+{:index 340, :time 18135409458, :type :invoke, :process 2, :f :write, :value 1}
+{:index 341, :time 18143197583, :type :ok, :process 2, :f :write, :value 1}
+{:index 342, :time 18148079250, :type :invoke, :process 8, :f :cas, :value [0 2]}
+{:index 343, :time 18156169667, :type :fail, :process 8, :f :cas, :value [0 2], :error :precondition-failed}
+{:index 344, :time 18278266375, :type :invoke, :process 4, :f :read, :value nil}
+{:index 345, :time 18287428250, :type :ok, :process 4, :f :read, :value 1}
+{:index 346, :time 18399278750, :type :invoke, :process :nemesis, :f :write, :value 4}
+{:index 347, :time 18400680250, :type :info, :process :nemesis, :f :write, :value 4, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 348, :time 18591709917, :type :invoke, :process 0, :f :read, :value nil}
+{:index 349, :time 18601263958, :type :ok, :process 0, :f :read, :value 1}
+{:index 350, :time 18628244542, :type :invoke, :process 1, :f :read, :value nil}
+{:index 351, :time 18637384958, :type :ok, :process 1, :f :read, :value 1}
+{:index 352, :time 18776415792, :type :invoke, :process 2, :f :cas, :value [0 4]}
+{:index 353, :time 18786865333, :type :fail, :process 2, :f :cas, :value [0 4], :error :precondition-failed}
+{:index 354, :time 18936203833, :type :invoke, :process 8, :f :write, :value 3}
+{:index 355, :time 18941773583, :type :invoke, :process 4, :f :write, :value 6}
+{:index 356, :time 18946281042, :type :ok, :process 8, :f :write, :value 3}
+{:index 357, :time 18950133417, :type :ok, :process 4, :f :write, :value 6}
+{:index 358, :time 18967069667, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 359, :time 18968251125, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 360, :time 19144026958, :type :invoke, :process 0, :f :read, :value nil}
+{:index 361, :time 19150706250, :type :ok, :process 0, :f :read, :value 6}
+{:index 362, :time 19314810958, :type :invoke, :process 1, :f :write, :value 8}
+{:index 363, :time 19325765917, :type :ok, :process 1, :f :write, :value 8}
+{:index 364, :time 19416823208, :type :invoke, :process 2, :f :read, :value nil}
+{:index 365, :time 19425412500, :type :ok, :process 2, :f :read, :value 8}
+{:index 366, :time 19602934583, :type :invoke, :process 8, :f :cas, :value [3 1]}
+{:index 367, :time 19603844417, :type :invoke, :process 4, :f :read, :value nil}
+{:index 368, :time 19612207625, :type :fail, :process 8, :f :cas, :value [3 1], :error :precondition-failed}
+{:index 369, :time 19612295458, :type :ok, :process 4, :f :read, :value 8}
+{:index 370, :time 19646264208, :type :invoke, :process :nemesis, :f :cas, :value [2 1]}
+{:index 371, :time 19647834042, :type :info, :process :nemesis, :f :cas, :value [2 1], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 372, :time 19700860792, :type :invoke, :process 0, :f :read, :value nil}
+{:index 373, :time 19707482500, :type :ok, :process 0, :f :read, :value 8}
+{:index 374, :time 19746108333, :type :invoke, :process 1, :f :cas, :value [0 2]}
+{:index 375, :time 19752716542, :type :fail, :process 1, :f :cas, :value [0 2], :error :precondition-failed}
+{:index 376, :time 19819072583, :type :invoke, :process 2, :f :cas, :value [3 0]}
+{:index 377, :time 19824911292, :type :fail, :process 2, :f :cas, :value [3 0], :error :precondition-failed}
+{:index 378, :time 19923411333, :type :invoke, :process 8, :f :cas, :value [3 3]}
+{:index 379, :time 19932449708, :type :fail, :process 8, :f :cas, :value [3 3], :error :precondition-failed}
+{:index 380, :time 19979572625, :type :invoke, :process 4, :f :write, :value 4}
+{:index 381, :time 19988804833, :type :ok, :process 4, :f :write, :value 4}
+{:index 382, :time 20046446292, :type :invoke, :process :nemesis, :f :write, :value 8}
+{:index 383, :time 20048266875, :type :info, :process :nemesis, :f :write, :value 8, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 384, :time 20200481625, :type :invoke, :process 0, :f :read, :value nil}
+{:index 385, :time 20209554792, :type :ok, :process 0, :f :read, :value 4}
+{:index 386, :time 20352971000, :type :invoke, :process 1, :f :write, :value 4}
+{:index 387, :time 20361268833, :type :ok, :process 1, :f :write, :value 4}
+{:index 388, :time 20460740792, :type :invoke, :process 2, :f :read, :value nil}
+{:index 389, :time 20470523292, :type :ok, :process 2, :f :read, :value 4}
+{:index 390, :time 20553563458, :type :invoke, :process 8, :f :cas, :value [4 0]}
+{:index 391, :time 20561876333, :type :ok, :process 8, :f :cas, :value [4 0]}
+{:index 392, :time 20624100333, :type :invoke, :process 4, :f :read, :value nil}
+{:index 393, :time 20632535125, :type :ok, :process 4, :f :read, :value 0}
+{:index 394, :time 20819562792, :type :invoke, :process :nemesis, :f :write, :value 8}
+{:index 395, :time 20820916083, :type :info, :process :nemesis, :f :write, :value 8, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 396, :time 20988429708, :type :invoke, :process 0, :f :read, :value nil}
+{:index 397, :time 20998092625, :type :ok, :process 0, :f :read, :value 0}
+{:index 398, :time 21059974000, :type :invoke, :process 1, :f :read, :value nil}
+{:index 399, :time 21073457625, :type :ok, :process 1, :f :read, :value 0}
+{:index 400, :time 21169996250, :type :invoke, :process 2, :f :cas, :value [4 1]}
+{:index 401, :time 21177789333, :type :fail, :process 2, :f :cas, :value [4 1], :error :precondition-failed}
+{:index 402, :time 21265772333, :type :invoke, :process 8, :f :write, :value 8}
+{:index 403, :time 21274147875, :type :ok, :process 8, :f :write, :value 8}
+{:index 404, :time 21336191500, :type :invoke, :process 4, :f :cas, :value [0 1]}
+{:index 405, :time 21344576125, :type :fail, :process 4, :f :cas, :value [0 1], :error :precondition-failed}
+{:index 406, :time 21519519625, :type :invoke, :process :nemesis, :f :cas, :value [2 0]}
+{:index 407, :time 21520968417, :type :info, :process :nemesis, :f :cas, :value [2 0], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 408, :time 21588710542, :type :invoke, :process 0, :f :read, :value nil}
+{:index 409, :time 21595915708, :type :ok, :process 0, :f :read, :value 8}
+{:index 410, :time 21678155208, :type :invoke, :process 1, :f :write, :value 0}
+{:index 411, :time 21684697125, :type :ok, :process 1, :f :write, :value 0}
+{:index 412, :time 21686146917, :type :invoke, :process 2, :f :read, :value nil}
+{:index 413, :time 21690405917, :type :ok, :process 2, :f :read, :value 0}
+{:index 414, :time 21802035125, :type :invoke, :process 8, :f :read, :value nil}
+{:index 415, :time 21808331208, :type :ok, :process 8, :f :read, :value 0}
+{:index 416, :time 21932011667, :type :invoke, :process 4, :f :cas, :value [0 2]}
+{:index 417, :time 21940739542, :type :ok, :process 4, :f :cas, :value [0 2]}
+{:index 418, :time 22124783917, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 419, :time 22125864708, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 420, :time 22280172000, :type :invoke, :process 0, :f :read, :value nil}
+{:index 421, :time 22288371333, :type :ok, :process 0, :f :read, :value 2}
+{:index 422, :time 22419019458, :type :invoke, :process 1, :f :cas, :value [4 0]}
+{:index 423, :time 22424838875, :type :fail, :process 1, :f :cas, :value [4 0], :error :precondition-failed}
+{:index 424, :time 22557702333, :type :invoke, :process 2, :f :write, :value 8}
+{:index 425, :time 22566109917, :type :ok, :process 2, :f :write, :value 8}
+{:index 426, :time 22611593708, :type :invoke, :process 8, :f :write, :value 7}
+{:index 427, :time 22620532875, :type :ok, :process 8, :f :write, :value 7}
+{:index 428, :time 22801268042, :type :invoke, :process 4, :f :write, :value 7}
+{:index 429, :time 22808981042, :type :ok, :process 4, :f :write, :value 7}
+{:index 430, :time 22981626208, :type :invoke, :process :nemesis, :f :write, :value 5}
+{:index 431, :time 22983032208, :type :info, :process :nemesis, :f :write, :value 5, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 432, :time 23153086708, :type :invoke, :process 0, :f :read, :value nil}
+{:index 433, :time 23158431792, :type :ok, :process 0, :f :read, :value 7}
+{:index 434, :time 23333756625, :type :invoke, :process 1, :f :write, :value 5}
+{:index 435, :time 23341571125, :type :ok, :process 1, :f :write, :value 5}
+{:index 436, :time 23369524042, :type :invoke, :process 2, :f :read, :value nil}
+{:index 437, :time 23377332250, :type :ok, :process 2, :f :read, :value 5}
+{:index 438, :time 23401133083, :type :invoke, :process 8, :f :cas, :value [1 4]}
+{:index 439, :time 23409222875, :type :fail, :process 8, :f :cas, :value [1 4], :error :precondition-failed}
+{:index 440, :time 23422141750, :type :invoke, :process 4, :f :cas, :value [4 2]}
+{:index 441, :time 23430726125, :type :fail, :process 4, :f :cas, :value [4 2], :error :precondition-failed}
+{:index 442, :time 23557872750, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 443, :time 23559134667, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 444, :time 23705011542, :type :invoke, :process 0, :f :read, :value nil}
+{:index 445, :time 23713981708, :type :ok, :process 0, :f :read, :value 5}
+{:index 446, :time 23763842083, :type :invoke, :process 1, :f :read, :value nil}
+{:index 447, :time 23772010042, :type :ok, :process 1, :f :read, :value 5}
+{:index 448, :time 23839878333, :type :invoke, :process 2, :f :cas, :value [1 2]}
+{:index 449, :time 23848767083, :type :fail, :process 2, :f :cas, :value [1 2], :error :precondition-failed}
+{:index 450, :time 23967009333, :type :invoke, :process 8, :f :cas, :value [0 3]}
+{:index 451, :time 23975086875, :type :fail, :process 8, :f :cas, :value [0 3], :error :precondition-failed}
+{:index 452, :time 24019516833, :type :invoke, :process 4, :f :cas, :value [3 2]}
+{:index 453, :time 24027395417, :type :fail, :process 4, :f :cas, :value [3 2], :error :precondition-failed}
+{:index 454, :time 24072939458, :type :invoke, :process :nemesis, :f :write, :value 8}
+{:index 455, :time 24073921458, :type :info, :process :nemesis, :f :write, :value 8, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 456, :time 24163807500, :type :invoke, :process 0, :f :read, :value nil}
+{:index 457, :time 24172757292, :type :ok, :process 0, :f :read, :value 5}
+{:index 458, :time 24202835917, :type :invoke, :process 1, :f :write, :value 6}
+{:index 459, :time 24209162500, :type :ok, :process 1, :f :write, :value 6}
+{:index 460, :time 24396824500, :type :invoke, :process 2, :f :cas, :value [4 1]}
+{:index 461, :time 24405173292, :type :fail, :process 2, :f :cas, :value [4 1], :error :precondition-failed}
+{:index 462, :time 24455975958, :type :invoke, :process 8, :f :cas, :value [4 4]}
+{:index 463, :time 24465374875, :type :fail, :process 8, :f :cas, :value [4 4], :error :precondition-failed}
+{:index 464, :time 24626951583, :type :invoke, :process 4, :f :read, :value nil}
+{:index 465, :time 24637930000, :type :ok, :process 4, :f :read, :value 6}
+{:index 466, :time 24685706458, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 467, :time 24686540167, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 468, :time 24698541792, :type :invoke, :process 0, :f :cas, :value [2 4]}
+{:index 469, :time 24704291375, :type :fail, :process 0, :f :cas, :value [2 4], :error :precondition-failed}
+{:index 470, :time 24761817958, :type :invoke, :process 1, :f :cas, :value [0 3]}
+{:index 471, :time 24766086125, :type :fail, :process 1, :f :cas, :value [0 3], :error :precondition-failed}
+{:index 472, :time 24889981500, :type :invoke, :process 2, :f :cas, :value [4 4]}
+{:index 473, :time 24897466833, :type :fail, :process 2, :f :cas, :value [4 4], :error :precondition-failed}
+{:index 474, :time 24902221417, :type :invoke, :process 8, :f :write, :value 9}
+{:index 475, :time 24906085042, :type :ok, :process 8, :f :write, :value 9}
+{:index 476, :time 25103237833, :type :invoke, :process 4, :f :write, :value 5}
+{:index 477, :time 25110866583, :type :ok, :process 4, :f :write, :value 5}
+{:index 478, :time 25147987125, :type :invoke, :process :nemesis, :f :write, :value 1}
+{:index 479, :time 25149399125, :type :info, :process :nemesis, :f :write, :value 1, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 480, :time 25293685708, :type :invoke, :process 0, :f :cas, :value [0 4]}
+{:index 481, :time 25299320208, :type :invoke, :process 1, :f :write, :value 5}
+{:index 482, :time 25304486000, :type :fail, :process 0, :f :cas, :value [0 4], :error :precondition-failed}
+{:index 483, :time 25308989875, :type :ok, :process 1, :f :write, :value 5}
+{:index 484, :time 25462298750, :type :invoke, :process 2, :f :read, :value nil}
+{:index 485, :time 25470205125, :type :ok, :process 2, :f :read, :value 5}
+{:index 486, :time 25505765875, :type :invoke, :process 8, :f :write, :value 5}
+{:index 487, :time 25506068083, :type :invoke, :process 4, :f :write, :value 4}
+{:index 488, :time 25513223875, :type :ok, :process 4, :f :write, :value 4}
+{:index 489, :time 25513298875, :type :ok, :process 8, :f :write, :value 5}
+{:index 490, :time 25649685417, :type :invoke, :process :nemesis, :f :cas, :value [4 3]}
+{:index 491, :time 25650288333, :type :info, :process :nemesis, :f :cas, :value [4 3], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 492, :time 25743567500, :type :invoke, :process 0, :f :read, :value nil}
+{:index 493, :time 25752177167, :type :ok, :process 0, :f :read, :value 4}
+{:index 494, :time 25888839417, :type :invoke, :process 1, :f :read, :value nil}
+{:index 495, :time 25897231667, :type :ok, :process 1, :f :read, :value 4}
+{:index 496, :time 25968765250, :type :invoke, :process 2, :f :cas, :value [2 3]}
+{:index 497, :time 25977527000, :type :fail, :process 2, :f :cas, :value [2 3], :error :precondition-failed}
+{:index 498, :time 26044906167, :type :invoke, :process 8, :f :write, :value 4}
+{:index 499, :time 26050105125, :type :ok, :process 8, :f :write, :value 4}
+{:index 500, :time 26235576458, :type :invoke, :process 4, :f :read, :value nil}
+{:index 501, :time 26243235333, :type :ok, :process 4, :f :read, :value 4}
+{:index 502, :time 26401582417, :type :invoke, :process :nemesis, :f :cas, :value [3 4]}
+{:index 503, :time 26402817625, :type :info, :process :nemesis, :f :cas, :value [3 4], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 504, :time 26525165542, :type :invoke, :process 0, :f :read, :value nil}
+{:index 505, :time 26532789000, :type :ok, :process 0, :f :read, :value 4}
+{:index 506, :time 26576747583, :type :invoke, :process 1, :f :write, :value 5}
+{:index 507, :time 26585689125, :type :ok, :process 1, :f :write, :value 5}
+{:index 508, :time 26762963083, :type :invoke, :process 2, :f :write, :value 6}
+{:index 509, :time 26773418792, :type :ok, :process 2, :f :write, :value 6}
+{:index 510, :time 26802801958, :type :invoke, :process 8, :f :write, :value 9}
+{:index 511, :time 26811423667, :type :ok, :process 8, :f :write, :value 9}
+{:index 512, :time 26909223292, :type :invoke, :process 4, :f :cas, :value [2 0]}
+{:index 513, :time 26914268625, :type :fail, :process 4, :f :cas, :value [2 0], :error :precondition-failed}
+{:index 514, :time 26939495083, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 515, :time 26940107583, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 516, :time 27078118833, :type :invoke, :process 0, :f :cas, :value [0 2]}
+{:index 517, :time 27087456875, :type :fail, :process 0, :f :cas, :value [0 2], :error :precondition-failed}
+{:index 518, :time 27277840875, :type :invoke, :process 1, :f :read, :value nil}
+{:index 519, :time 27287375167, :type :ok, :process 1, :f :read, :value 9}
+{:index 520, :time 27336255125, :type :invoke, :process 2, :f :cas, :value [3 3]}
+{:index 521, :time 27344462208, :type :fail, :process 2, :f :cas, :value [3 3], :error :precondition-failed}
+{:index 522, :time 27478614583, :type :invoke, :process 8, :f :read, :value nil}
+{:index 523, :time 27487177583, :type :ok, :process 8, :f :read, :value 9}
+{:index 524, :time 27597056208, :type :invoke, :process 4, :f :cas, :value [0 1]}
+{:index 525, :time 27604394292, :type :fail, :process 4, :f :cas, :value [0 1], :error :precondition-failed}
+{:index 526, :time 27678247750, :type :invoke, :process :nemesis, :f :write, :value 1}
+{:index 527, :time 27678751292, :type :info, :process :nemesis, :f :write, :value 1, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 528, :time 27774789750, :type :invoke, :process 0, :f :read, :value nil}
+{:index 529, :time 27783537083, :type :ok, :process 0, :f :read, :value 9}
+{:index 530, :time 27944401000, :type :invoke, :process 1, :f :read, :value nil}
+{:index 531, :time 27953138125, :type :ok, :process 1, :f :read, :value 9}
+{:index 532, :time 28044340417, :type :invoke, :process 2, :f :cas, :value [3 2]}
+{:index 533, :time 28052071292, :type :fail, :process 2, :f :cas, :value [3 2], :error :precondition-failed}
+{:index 534, :time 28161801292, :type :invoke, :process 8, :f :write, :value 5}
+{:index 535, :time 28171013667, :type :ok, :process 8, :f :write, :value 5}
+{:index 536, :time 28177070250, :type :invoke, :process 4, :f :cas, :value [4 0]}
+{:index 537, :time 28184991500, :type :fail, :process 4, :f :cas, :value [4 0], :error :precondition-failed}
+{:index 538, :time 28295443208, :type :invoke, :process :nemesis, :f :cas, :value [4 3]}
+{:index 539, :time 28296914417, :type :info, :process :nemesis, :f :cas, :value [4 3], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 540, :time 28467336167, :type :invoke, :process 0, :f :write, :value 5}
+{:index 541, :time 28475218458, :type :ok, :process 0, :f :write, :value 5}
+{:index 542, :time 28516819708, :type :invoke, :process 1, :f :write, :value 6}
+{:index 543, :time 28524134708, :type :ok, :process 1, :f :write, :value 6}
+{:index 544, :time 28545919750, :type :invoke, :process 2, :f :write, :value 8}
+{:index 545, :time 28554694542, :type :ok, :process 2, :f :write, :value 8}
+{:index 546, :time 28600826833, :type :invoke, :process 8, :f :write, :value 3}
+{:index 547, :time 28608661792, :type :ok, :process 8, :f :write, :value 3}
+{:index 548, :time 28777801333, :type :invoke, :process 4, :f :cas, :value [1 0]}
+{:index 549, :time 28786843875, :type :fail, :process 4, :f :cas, :value [1 0], :error :precondition-failed}
+{:index 550, :time 28874552208, :type :invoke, :process :nemesis, :f :cas, :value [1 3]}
+{:index 551, :time 28875764167, :type :info, :process :nemesis, :f :cas, :value [1 3], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 552, :time 28984947083, :type :invoke, :process 0, :f :read, :value nil}
+{:index 553, :time 28993641667, :type :ok, :process 0, :f :read, :value 3}
+{:index 554, :time 29144833375, :type :invoke, :process 1, :f :cas, :value [4 4]}
+{:index 555, :time 29152866750, :type :fail, :process 1, :f :cas, :value [4 4], :error :precondition-failed}
+{:index 556, :time 29235251500, :type :invoke, :process 2, :f :write, :value 3}
+{:index 557, :time 29242763833, :type :ok, :process 2, :f :write, :value 3}
+{:index 558, :time 29359385792, :type :invoke, :process 8, :f :cas, :value [2 4]}
+{:index 559, :time 29367991625, :type :fail, :process 8, :f :cas, :value [2 4], :error :precondition-failed}
+{:index 560, :time 29394363625, :type :invoke, :process 4, :f :write, :value 8}
+{:index 561, :time 29401867500, :type :ok, :process 4, :f :write, :value 8}
+{:index 562, :time 29588200792, :type :invoke, :process :nemesis, :f :cas, :value [4 4]}
+{:index 563, :time 29589319500, :type :info, :process :nemesis, :f :cas, :value [4 4], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 564, :time 29647961875, :type :invoke, :process 0, :f :cas, :value [4 3]}
+{:index 565, :time 29656654667, :type :fail, :process 0, :f :cas, :value [4 3], :error :precondition-failed}
+{:index 566, :time 29811831042, :type :invoke, :process 1, :f :read, :value nil}
+{:index 567, :time 29816820250, :type :ok, :process 1, :f :read, :value 8}
+{:index 568, :time 29895299292, :type :invoke, :process 2, :f :read, :value nil}
+{:index 569, :time 29902616042, :type :invoke, :process 8, :f :read, :value nil}
+{:index 570, :time 29902965625, :type :ok, :process 2, :f :read, :value 8}
+{:index 571, :time 29909844958, :type :ok, :process 8, :f :read, :value 8}
+{:index 572, :time 29909888417, :type :info, :process 4, :f :stop, :value nil}
+{:index 573, :time 29910599708, :type :info, :process 4, :f :stop, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :stop", :at [omnipaxos_jepsen.client.OmniPaxosClient invoke_BANG_ "client.clj" 33]}], :trace [[omnipaxos_jepsen.client.OmniPaxosClient invoke_BANG_ "client.clj" 33] [jepsen.client.Validate invoke_BANG_ "client.clj" 83] [jepsen.generator.interpreter.ClientWorker invoke_BANG_ "interpreter.clj" 65] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :stop"}, :error "indeterminate: No matching clause: :stop"}
+{:index 574, :time 29910669583, :type :invoke, :process :nemesis, :f :write, :value 7}
+{:index 575, :time 29911183958, :type :info, :process :nemesis, :f :write, :value 7, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 576, :time 29998701417, :type :invoke, :process 0, :f :cas, :value [0 4]}
+{:index 577, :time 30007044375, :type :fail, :process 0, :f :cas, :value [0 4], :error :precondition-failed}
+{:index 578, :time 30043636750, :type :invoke, :process 1, :f :write, :value 9}
+{:index 579, :time 30052611292, :type :ok, :process 1, :f :write, :value 9}
+{:index 580, :time 30213379500, :type :invoke, :process 2, :f :cas, :value [1 4]}
+{:index 581, :time 30222894583, :type :fail, :process 2, :f :cas, :value [1 4], :error :precondition-failed}
+{:index 582, :time 30358184667, :type :invoke, :process 8, :f :read, :value nil}
+{:index 583, :time 30367220667, :type :ok, :process 8, :f :read, :value 9}
+{:index 584, :time 30434218167, :type :invoke, :process 9, :f :write, :value 1}
+{:index 585, :time 30442821708, :type :ok, :process 9, :f :write, :value 1}
+{:index 586, :time 30446377333, :type :invoke, :process :nemesis, :f :cas, :value [1 4]}
+{:index 587, :time 30447412917, :type :info, :process :nemesis, :f :cas, :value [1 4], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 588, :time 30518578167, :type :invoke, :process 0, :f :read, :value nil}
+{:index 589, :time 30527189458, :type :ok, :process 0, :f :read, :value 1}
+{:index 590, :time 30626714083, :type :invoke, :process 1, :f :cas, :value [0 3]}
+{:index 591, :time 30635244083, :type :fail, :process 1, :f :cas, :value [0 3], :error :precondition-failed}
+{:index 592, :time 30741737625, :type :invoke, :process 2, :f :write, :value 2}
+{:index 593, :time 30749800625, :type :ok, :process 2, :f :write, :value 2}
+{:index 594, :time 30916643125, :type :invoke, :process 8, :f :write, :value 7}
+{:index 595, :time 30924265750, :type :ok, :process 8, :f :write, :value 7}
+{:index 596, :time 31069468833, :type :invoke, :process 9, :f :read, :value nil}
+{:index 597, :time 31076101583, :type :ok, :process 9, :f :read, :value 7}
+{:index 598, :time 31152314833, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 599, :time 31153824958, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 600, :time 31266559500, :type :invoke, :process 0, :f :write, :value 4}
+{:index 601, :time 31273601417, :type :ok, :process 0, :f :write, :value 4}
+{:index 602, :time 31363681625, :type :invoke, :process 1, :f :read, :value nil}
+{:index 603, :time 31371992000, :type :ok, :process 1, :f :read, :value 4}
+{:index 604, :time 31473127792, :type :invoke, :process 2, :f :write, :value 7}
+{:index 605, :time 31481819708, :type :ok, :process 2, :f :write, :value 7}
+{:index 606, :time 31561156875, :type :invoke, :process 8, :f :read, :value nil}
+{:index 607, :time 31576329792, :type :ok, :process 8, :f :read, :value 7}
+{:index 608, :time 31616306042, :type :invoke, :process 9, :f :cas, :value [1 3]}
+{:index 609, :time 31624320958, :type :fail, :process 9, :f :cas, :value [1 3], :error :precondition-failed}
+{:index 610, :time 31816572875, :type :invoke, :process :nemesis, :f :cas, :value [3 2]}
+{:index 611, :time 31817948042, :type :info, :process :nemesis, :f :cas, :value [3 2], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 612, :time 31969484917, :type :invoke, :process 0, :f :cas, :value [4 3]}
+{:index 613, :time 31974233417, :type :invoke, :process 1, :f :cas, :value [2 0]}
+{:index 614, :time 31979047208, :type :fail, :process 0, :f :cas, :value [4 3], :error :precondition-failed}
+{:index 615, :time 31985792083, :type :fail, :process 1, :f :cas, :value [2 0], :error :precondition-failed}
+{:index 616, :time 32131794208, :type :invoke, :process 2, :f :read, :value nil}
+{:index 617, :time 32141107583, :type :ok, :process 2, :f :read, :value 7}
+{:index 618, :time 32223518458, :type :invoke, :process 8, :f :read, :value nil}
+{:index 619, :time 32232547083, :type :ok, :process 8, :f :read, :value 7}
+{:index 620, :time 32261291542, :type :invoke, :process 9, :f :read, :value nil}
+{:index 621, :time 32269555958, :type :ok, :process 9, :f :read, :value 7}
+{:index 622, :time 32380288667, :type :invoke, :process :nemesis, :f :cas, :value [3 4]}
+{:index 623, :time 32381780333, :type :info, :process :nemesis, :f :cas, :value [3 4], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 624, :time 32577508583, :type :invoke, :process 0, :f :cas, :value [0 1]}
+{:index 625, :time 32583336833, :type :fail, :process 0, :f :cas, :value [0 1], :error :precondition-failed}
+{:index 626, :time 32694275000, :type :invoke, :process 1, :f :write, :value 0}
+{:index 627, :time 32702017042, :type :ok, :process 1, :f :write, :value 0}
+{:index 628, :time 32725066500, :type :invoke, :process 2, :f :write, :value 7}
+{:index 629, :time 32733434792, :type :ok, :process 2, :f :write, :value 7}
+{:index 630, :time 32748599542, :type :invoke, :process 8, :f :write, :value 8}
+{:index 631, :time 32757571875, :type :ok, :process 8, :f :write, :value 8}
+{:index 632, :time 32828684125, :type :invoke, :process 9, :f :write, :value 1}
+{:index 633, :time 32837283250, :type :ok, :process 9, :f :write, :value 1}
+{:index 634, :time 32919420542, :type :invoke, :process :nemesis, :f :cas, :value [1 1]}
+{:index 635, :time 32920846042, :type :info, :process :nemesis, :f :cas, :value [1 1], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 636, :time 33015404042, :type :invoke, :process 0, :f :read, :value nil}
+{:index 637, :time 33023541917, :type :ok, :process 0, :f :read, :value 1}
+{:index 638, :time 33030018750, :type :invoke, :process 1, :f :write, :value 5}
+{:index 639, :time 33038586333, :type :ok, :process 1, :f :write, :value 5}
+{:index 640, :time 33062675958, :type :invoke, :process 2, :f :cas, :value [4 0]}
+{:index 641, :time 33070913208, :type :fail, :process 2, :f :cas, :value [4 0], :error :precondition-failed}
+{:index 642, :time 33257001875, :type :invoke, :process 8, :f :write, :value 0}
+{:index 643, :time 33266091208, :type :ok, :process 8, :f :write, :value 0}
+{:index 644, :time 33398442375, :type :invoke, :process 9, :f :write, :value 2}
+{:index 645, :time 33406012833, :type :ok, :process 9, :f :write, :value 2}
+{:index 646, :time 33461722708, :type :invoke, :process :nemesis, :f :write, :value 6}
+{:index 647, :time 33463130583, :type :info, :process :nemesis, :f :write, :value 6, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 648, :time 33611281250, :type :invoke, :process 0, :f :read, :value nil}
+{:index 649, :time 33619347583, :type :ok, :process 0, :f :read, :value 2}
+{:index 650, :time 33687690833, :type :invoke, :process 1, :f :read, :value nil}
+{:index 651, :time 33688941458, :type :invoke, :process 2, :f :read, :value nil}
+{:index 652, :time 33694871833, :type :ok, :process 1, :f :read, :value 2}
+{:index 653, :time 33694968792, :type :ok, :process 2, :f :read, :value 2}
+{:index 654, :time 33797345458, :type :invoke, :process 8, :f :cas, :value [1 3]}
+{:index 655, :time 33801891042, :type :fail, :process 8, :f :cas, :value [1 3], :error :precondition-failed}
+{:index 656, :time 33811142917, :type :invoke, :process 9, :f :write, :value 2}
+{:index 657, :time 33816537958, :type :ok, :process 9, :f :write, :value 2}
+{:index 658, :time 33933336458, :type :invoke, :process :nemesis, :f :cas, :value [3 2]}
+{:index 659, :time 33934435042, :type :info, :process :nemesis, :f :cas, :value [3 2], :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :cas", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :cas"}, :error "indeterminate: No matching clause: :cas"}
+{:index 660, :time 34086177250, :type :invoke, :process 0, :f :cas, :value [0 0]}
+{:index 661, :time 34093275125, :type :fail, :process 0, :f :cas, :value [0 0], :error :precondition-failed}
+{:index 662, :time 34282453458, :type :invoke, :process 1, :f :read, :value nil}
+{:index 663, :time 34290788792, :type :ok, :process 1, :f :read, :value 2}
+{:index 664, :time 34374411917, :type :invoke, :process 2, :f :write, :value 5}
+{:index 665, :time 34382674292, :type :ok, :process 2, :f :write, :value 5}
+{:index 666, :time 34575257750, :type :invoke, :process 8, :f :cas, :value [1 1]}
+{:index 667, :time 34583988917, :type :fail, :process 8, :f :cas, :value [1 1], :error :precondition-failed}
+{:index 668, :time 34641487375, :type :invoke, :process 9, :f :write, :value 7}
+{:index 669, :time 34650478208, :type :ok, :process 9, :f :write, :value 7}
+{:index 670, :time 34753056417, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 671, :time 34753748167, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 672, :time 34952458750, :type :invoke, :process 0, :f :cas, :value [1 1]}
+{:index 673, :time 34960820083, :type :fail, :process 0, :f :cas, :value [1 1], :error :precondition-failed}
+{:index 674, :time 35069467750, :type :invoke, :process 1, :f :read, :value nil}
+{:index 675, :time 35077401208, :type :ok, :process 1, :f :read, :value 7}
+{:index 676, :time 35101672542, :type :invoke, :process 2, :f :write, :value 4}
+{:index 677, :time 35109128333, :type :ok, :process 2, :f :write, :value 4}
+{:index 678, :time 35263140333, :type :invoke, :process 8, :f :write, :value 1}
+{:index 679, :time 35271086208, :type :ok, :process 8, :f :write, :value 1}
+{:index 680, :time 35433178042, :type :invoke, :process 9, :f :cas, :value [2 2]}
+{:index 681, :time 35441384750, :type :fail, :process 9, :f :cas, :value [2 2], :error :precondition-failed}
+{:index 682, :time 35498865958, :type :invoke, :process :nemesis, :f :write, :value 0}
+{:index 683, :time 35500043292, :type :info, :process :nemesis, :f :write, :value 0, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 684, :time 35688958625, :type :invoke, :process 0, :f :cas, :value [4 0]}
+{:index 685, :time 35698202292, :type :fail, :process 0, :f :cas, :value [4 0], :error :precondition-failed}
+{:index 686, :time 35852808625, :type :invoke, :process 1, :f :write, :value 2}
+{:index 687, :time 35860397833, :type :ok, :process 1, :f :write, :value 2}
+{:index 688, :time 35959618833, :type :invoke, :process 2, :f :cas, :value [1 3]}
+{:index 689, :time 35967590667, :type :fail, :process 2, :f :cas, :value [1 3], :error :precondition-failed}
+{:index 690, :time 36029391792, :type :invoke, :process 8, :f :write, :value 4}
+{:index 691, :time 36037496417, :type :ok, :process 8, :f :write, :value 4}
+{:index 692, :time 36135045500, :type :invoke, :process 9, :f :read, :value nil}
+{:index 693, :time 36137753333, :type :invoke, :process :nemesis, :f :write, :value 7}
+{:index 694, :time 36138523125, :type :info, :process :nemesis, :f :write, :value 7, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 695, :time 36142713250, :type :ok, :process 9, :f :read, :value 4}
+{:index 696, :time 36311922083, :type :invoke, :process 0, :f :cas, :value [4 3]}
+{:index 697, :time 36322705167, :type :ok, :process 0, :f :cas, :value [4 3]}
+{:index 698, :time 36369557792, :type :invoke, :process 1, :f :write, :value 0}
+{:index 699, :time 36377730958, :type :ok, :process 1, :f :write, :value 0}
+{:index 700, :time 36534096875, :type :invoke, :process 2, :f :cas, :value [1 3]}
+{:index 701, :time 36541938875, :type :fail, :process 2, :f :cas, :value [1 3], :error :precondition-failed}
+{:index 702, :time 36575402333, :type :invoke, :process 8, :f :cas, :value [0 4]}
+{:index 703, :time 36583820208, :type :ok, :process 8, :f :cas, :value [0 4]}
+{:index 704, :time 36760383625, :type :invoke, :process 9, :f :cas, :value [4 3]}
+{:index 705, :time 36768055542, :type :ok, :process 9, :f :cas, :value [4 3]}
+{:index 706, :time 36935094333, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 707, :time 36936358833, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 708, :time 37045130500, :type :invoke, :process 0, :f :read, :value nil}
+{:index 709, :time 37052901458, :type :ok, :process 0, :f :read, :value 3}
+{:index 710, :time 37161869125, :type :invoke, :process 1, :f :cas, :value [2 0]}
+{:index 711, :time 37170445500, :type :fail, :process 1, :f :cas, :value [2 0], :error :precondition-failed}
+{:index 712, :time 37237242958, :type :invoke, :process 2, :f :cas, :value [2 3]}
+{:index 713, :time 37244708000, :type :fail, :process 2, :f :cas, :value [2 3], :error :precondition-failed}
+{:index 714, :time 37428565500, :type :invoke, :process 8, :f :write, :value 1}
+{:index 715, :time 37437206083, :type :ok, :process 8, :f :write, :value 1}
+{:index 716, :time 37613778375, :type :invoke, :process 9, :f :read, :value nil}
+{:index 717, :time 37621522542, :type :ok, :process 9, :f :read, :value 1}
+{:index 718, :time 37678221042, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 719, :time 37679513250, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 720, :time 37696533708, :type :invoke, :process 0, :f :cas, :value [2 2]}
+{:index 721, :time 37702705917, :type :fail, :process 0, :f :cas, :value [2 2], :error :precondition-failed}
+{:index 722, :time 37811878500, :type :invoke, :process 1, :f :cas, :value [4 0]}
+{:index 723, :time 37819662250, :type :fail, :process 1, :f :cas, :value [4 0], :error :precondition-failed}
+{:index 724, :time 38011977917, :type :invoke, :process 2, :f :write, :value 9}
+{:index 725, :time 38019026208, :type :ok, :process 2, :f :write, :value 9}
+{:index 726, :time 38055214875, :type :invoke, :process 8, :f :read, :value nil}
+{:index 727, :time 38060432625, :type :ok, :process 8, :f :read, :value 9}
+{:index 728, :time 38227278875, :type :invoke, :process 9, :f :cas, :value [0 4]}
+{:index 729, :time 38235498708, :type :fail, :process 9, :f :cas, :value [0 4], :error :precondition-failed}
+{:index 730, :time 38236154750, :type :invoke, :process :nemesis, :f :write, :value 8}
+{:index 731, :time 38237058625, :type :info, :process :nemesis, :f :write, :value 8, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 732, :time 38398732542, :type :invoke, :process 0, :f :write, :value 6}
+{:index 733, :time 38406962083, :type :ok, :process 0, :f :write, :value 6}
+{:index 734, :time 38534538833, :type :invoke, :process 1, :f :read, :value nil}
+{:index 735, :time 38542638125, :type :ok, :process 1, :f :read, :value 6}
+{:index 736, :time 38644638792, :type :invoke, :process 2, :f :cas, :value [3 2]}
+{:index 737, :time 38653413667, :type :fail, :process 2, :f :cas, :value [3 2], :error :precondition-failed}
+{:index 738, :time 38673234792, :type :invoke, :process 8, :f :write, :value 6}
+{:index 739, :time 38680992542, :type :ok, :process 8, :f :write, :value 6}
+{:index 740, :time 38772771750, :type :invoke, :process 9, :f :cas, :value [2 3]}
+{:index 741, :time 38778443833, :type :fail, :process 9, :f :cas, :value [2 3], :error :precondition-failed}
+{:index 742, :time 38907315875, :type :invoke, :process :nemesis, :f :read, :value nil}
+{:index 743, :time 38908523917, :type :info, :process :nemesis, :f :read, :value nil, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :read", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :read"}, :error "indeterminate: No matching clause: :read"}
+{:index 744, :time 39073925667, :type :invoke, :process 0, :f :cas, :value [0 3]}
+{:index 745, :time 39079143667, :type :fail, :process 0, :f :cas, :value [0 3], :error :precondition-failed}
+{:index 746, :time 39220397458, :type :invoke, :process 1, :f :write, :value 7}
+{:index 747, :time 39228634792, :type :ok, :process 1, :f :write, :value 7}
+{:index 748, :time 39386206000, :type :invoke, :process 2, :f :read, :value nil}
+{:index 749, :time 39394306458, :type :ok, :process 2, :f :read, :value 7}
+{:index 750, :time 39409105375, :type :invoke, :process 8, :f :cas, :value [1 0]}
+{:index 751, :time 39417679000, :type :fail, :process 8, :f :cas, :value [1 0], :error :precondition-failed}
+{:index 752, :time 39552835750, :type :invoke, :process 9, :f :write, :value 5}
+{:index 753, :time 39559571833, :type :ok, :process 9, :f :write, :value 5}
+{:index 754, :time 39616508625, :type :invoke, :process :nemesis, :f :write, :value 8}
+{:index 755, :time 39619637917, :type :info, :process :nemesis, :f :write, :value 8, :exception {:via [{:type java.lang.IllegalArgumentException, :message "No matching clause: :write", :at [omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11]}], :trace [[omnipaxos_jepsen.nemesis$partition_nemesis$reify__2387 invoke_BANG_ "nemesis.clj" 11] [jepsen.nemesis.Validate invoke_BANG_ "nemesis.clj" 63] [jepsen.generator.interpreter.NemesisWorker invoke_BANG_ "interpreter.clj" 77] [jepsen.generator.interpreter$spawn_worker$fn__13146$fn__13147 invoke "interpreter.clj" 140] [jepsen.generator.interpreter$spawn_worker$fn__13146 invoke "interpreter.clj" 123] [clojure.core$binding_conveyor_fn$fn__5823 invoke "core.clj" 2047] [clojure.lang.AFn call "AFn.java" 18] [java.util.concurrent.FutureTask run "FutureTask.java" 317] [java.util.concurrent.ThreadPoolExecutor runWorker "ThreadPoolExecutor.java" 1144] [java.util.concurrent.ThreadPoolExecutor$Worker run "ThreadPoolExecutor.java" 642] [java.lang.Thread run "Thread.java" 1583]], :cause "No matching clause: :write"}, :error "indeterminate: No matching clause: :write"}
+{:index 756, :time 39663671083, :type :invoke, :process 0, :f :cas, :value [4 1]}
+{:index 757, :time 39671727708, :type :fail, :process 0, :f :cas, :value [4 1], :error :precondition-failed}
+{:index 758, :time 39808926875, :type :invoke, :process 1, :f :write, :value 9}
+{:index 759, :time 39816062833, :type :ok, :process 1, :f :write, :value 9}

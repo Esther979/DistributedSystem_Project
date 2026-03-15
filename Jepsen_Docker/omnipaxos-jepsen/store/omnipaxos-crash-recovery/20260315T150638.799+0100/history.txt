@@ -1,0 +1,104 @@
+0	:invoke	:write	0
+0	:ok	:write	0
+1	:invoke	:cas	[1 0]
+1	:fail	:cas	[1 0]	:precondition-failed
+2	:invoke	:cas	[4 1]
+2	:fail	:cas	[4 1]	:precondition-failed
+3	:invoke	:write	3
+3	:ok	:write	3
+4	:invoke	:cas	[0 4]
+4	:fail	:cas	[0 4]	:precondition-failed
+0	:invoke	:cas	[2 3]
+0	:fail	:cas	[2 3]	:precondition-failed
+0	:invoke	:read	nil
+0	:ok	:read	3
+1	:invoke	:read	nil
+1	:ok	:read	3
+2	:invoke	:write	8
+2	:ok	:write	8
+3	:invoke	:read	nil
+3	:ok	:read	8
+4	:invoke	:read	nil
+4	:ok	:read	8
+0	:invoke	:read	nil
+0	:ok	:read	8
+0	:invoke	:write	4
+0	:ok	:write	4
+1	:invoke	:write	8
+1	:ok	:write	8
+2	:invoke	:cas	[3 1]
+2	:fail	:cas	[3 1]	:precondition-failed
+3	:invoke	:write	7
+3	:ok	:write	7
+4	:invoke	:cas	[1 0]
+4	:fail	:cas	[1 0]	:precondition-failed
+0	:invoke	:read	nil
+0	:ok	:read	7
+:nemesis	:info	:kill-leader	nil
+1	:invoke	:cas	[4 2]
+1	:fail	:cas	[4 2]	:precondition-failed
+2	:invoke	:write	3
+2	:ok	:write	3
+:nemesis	:info	:kill-leader	"killed s1"
+3	:invoke	:read	nil
+3	:info	:read	nil	:timeout
+4	:invoke	:read	nil
+4	:info	:read	nil	:timeout
+0	:invoke	:cas	[3 4]
+0	:ok	:cas	[3 4]
+0	:invoke	:write	4
+0	:info	:write	4	:timeout
+1	:invoke	:read	nil
+1	:info	:read	nil	:timeout
+2	:invoke	:cas	[3 3]
+2	:info	:cas	[3 3]	:timeout
+8	:invoke	:cas	[3 2]
+8	:fail	:cas	[3 2]	:precondition-failed
+9	:invoke	:cas	[2 4]
+9	:fail	:cas	[2 4]	:precondition-failed
+5	:invoke	:cas	[4 2]
+5	:ok	:cas	[4 2]
+5	:invoke	:write	1
+5	:ok	:write	1
+6	:invoke	:cas	[2 4]
+6	:fail	:cas	[2 4]	:precondition-failed
+7	:invoke	:cas	[3 1]
+7	:fail	:cas	[3 1]	:precondition-failed
+8	:invoke	:cas	[3 2]
+8	:fail	:cas	[3 2]	:precondition-failed
+:nemesis	:info	:restart	nil
+:nemesis	:info	:restart	"restarted all nodes"
+5	:invoke	:write	0
+5	:ok	:write	0
+5	:invoke	:read	nil
+5	:info	:read	nil	:timeout
+6	:invoke	:cas	[0 4]
+6	:ok	:cas	[0 4]
+7	:invoke	:cas	[0 1]
+7	:info	:cas	[0 1]	:timeout
+8	:invoke	:cas	[3 3]
+8	:fail	:cas	[3 3]	:precondition-failed
+9	:invoke	:read	nil
+9	:ok	:read	4
+10	:invoke	:write	9
+10	:ok	:write	9
+10	:invoke	:read	nil
+10	:ok	:read	9
+6	:invoke	:write	1
+6	:ok	:write	1
+12	:invoke	:write	6
+12	:ok	:write	6
+8	:invoke	:write	9
+8	:info	:write	9	:timeout
+9	:invoke	:read	nil
+9	:ok	:read	6
+10	:invoke	:cas	[4 2]
+10	:fail	:cas	[4 2]	:precondition-failed
+10	:invoke	:read	nil
+10	:info	:read	nil	:timeout
+6	:invoke	:read	nil
+6	:ok	:read	6
+12	:invoke	:read	nil
+12	:ok	:read	6
+13	:invoke	:write	6
+13	:ok	:write	6

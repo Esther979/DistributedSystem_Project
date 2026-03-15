@@ -1,0 +1,72 @@
+{:index 0, :time 13070417, :type :invoke, :process 0, :f :write, :value 0}
+{:index 1, :time 147590834, :type :ok, :process 0, :f :write, :value 0}
+{:index 2, :time 147666750, :type :invoke, :process 1, :f :read, :value nil}
+{:index 3, :time 153338500, :type :ok, :process 1, :f :read, :value 0}
+{:index 4, :time 1123104000, :type :invoke, :process 2, :f :cas, :value [0 3]}
+{:index 5, :time 1133298834, :type :ok, :process 2, :f :cas, :value [0 3]}
+{:index 6, :time 1439218500, :type :invoke, :process 3, :f :write, :value 0}
+{:index 7, :time 1449069459, :type :ok, :process 3, :f :write, :value 0}
+{:index 8, :time 1789317750, :type :invoke, :process 4, :f :cas, :value [4 4]}
+{:index 9, :time 1795669709, :type :fail, :process 4, :f :cas, :value [4 4], :error :precondition-failed}
+{:index 10, :time 2401394542, :type :invoke, :process 0, :f :write, :value 0}
+{:index 11, :time 2411318084, :type :ok, :process 0, :f :write, :value 0}
+{:index 12, :time 3168512792, :type :invoke, :process 0, :f :write, :value 9}
+{:index 13, :time 3178844834, :type :ok, :process 0, :f :write, :value 9}
+{:index 14, :time 3239605834, :type :invoke, :process 1, :f :write, :value 2}
+{:index 15, :time 3243806834, :type :ok, :process 1, :f :write, :value 2}
+{:index 16, :time 3441989625, :type :invoke, :process 2, :f :write, :value 9}
+{:index 17, :time 3451770709, :type :ok, :process 2, :f :write, :value 9}
+{:index 18, :time 4091904917, :type :invoke, :process 3, :f :write, :value 0}
+{:index 19, :time 4101609167, :type :ok, :process 3, :f :write, :value 0}
+{:index 20, :time 4713999292, :type :invoke, :process 4, :f :cas, :value [3 3]}
+{:index 21, :time 4723562417, :type :fail, :process 4, :f :cas, :value [3 3], :error :precondition-failed}
+{:index 22, :time 4930556792, :type :invoke, :process 0, :f :write, :value 4}
+{:index 23, :time 4939329042, :type :ok, :process 0, :f :write, :value 4}
+{:index 24, :time 4939425834, :type :info, :process :nemesis, :f :start, :value nil}
+{:index 25, :time 4939698417, :type :invoke, :process 1, :f :read, :value nil}
+{:index 26, :time 4951817709, :type :ok, :process 1, :f :read, :value 4}
+{:index 27, :time 5040608167, :type :info, :process :nemesis, :f :start, :value "paused s2, s3"}
+{:index 28, :time 5393161209, :type :invoke, :process 2, :f :cas, :value [1 4]}
+{:index 29, :time 5660354250, :type :invoke, :process 3, :f :read, :value nil}
+{:index 30, :time 6639244834, :type :invoke, :process 4, :f :write, :value 7}
+{:index 31, :time 6979622250, :type :invoke, :process 0, :f :read, :value nil}
+{:index 32, :time 7367999209, :type :invoke, :process 1, :f :write, :value 4}
+{:index 33, :time 10406401125, :type :info, :process 2, :f :cas, :value [1 4], :error :timeout}
+{:index 34, :time 10406596500, :type :invoke, :process 7, :f :read, :value nil}
+{:index 35, :time 10666966834, :type :info, :process 3, :f :read, :value nil, :error :timeout}
+{:index 36, :time 11091532459, :type :invoke, :process 8, :f :write, :value 0}
+{:index 37, :time 11646015667, :type :info, :process 4, :f :write, :value 7, :error :timeout}
+{:index 38, :time 11917312500, :type :invoke, :process 9, :f :cas, :value [0 0]}
+{:index 39, :time 11986527417, :type :info, :process 0, :f :read, :value nil, :error :timeout}
+{:index 40, :time 12375217125, :type :info, :process 1, :f :write, :value 4, :error :timeout}
+{:index 41, :time 12698970667, :type :invoke, :process 5, :f :read, :value nil}
+{:index 42, :time 12892217042, :type :invoke, :process 6, :f :write, :value 4}
+{:index 43, :time 15412987625, :type :info, :process 7, :f :read, :value nil, :error :timeout}
+{:index 44, :time 16097975334, :type :info, :process 8, :f :write, :value 0, :error :timeout}
+{:index 45, :time 16923924792, :type :info, :process 9, :f :cas, :value [0 0], :error :timeout}
+{:index 46, :time 17706260500, :type :info, :process 5, :f :read, :value nil, :error :timeout}
+{:index 47, :time 17898319167, :type :info, :process 6, :f :write, :value 4, :error :timeout}
+{:index 48, :time 17898399459, :type :info, :process :nemesis, :f :stop, :value nil}
+{:index 49, :time 18008435459, :type :info, :process :nemesis, :f :stop, :value "unpaused s2, s3"}
+{:index 50, :time 18008553375, :type :invoke, :process 11, :f :write, :value 7}
+{:index 51, :time 18017982750, :type :ok, :process 11, :f :write, :value 7}
+{:index 52, :time 18039603667, :type :invoke, :process 12, :f :cas, :value [2 0]}
+{:index 53, :time 18046369375, :type :fail, :process 12, :f :cas, :value [2 0], :error :precondition-failed}
+{:index 54, :time 18873717250, :type :invoke, :process 13, :f :read, :value nil}
+{:index 55, :time 18883556084, :type :ok, :process 13, :f :read, :value 7}
+{:index 56, :time 19857569584, :type :invoke, :process 14, :f :read, :value nil}
+{:index 57, :time 19867129667, :type :ok, :process 14, :f :read, :value 7}
+{:index 58, :time 20679530584, :type :invoke, :process 10, :f :read, :value nil}
+{:index 59, :time 20686260959, :type :ok, :process 10, :f :read, :value 7}
+{:index 60, :time 21311065417, :type :invoke, :process 10, :f :cas, :value [1 2]}
+{:index 61, :time 21322604209, :type :fail, :process 10, :f :cas, :value [1 2], :error :precondition-failed}
+{:index 62, :time 21540024625, :type :invoke, :process 11, :f :cas, :value [3 2]}
+{:index 63, :time 21549944250, :type :fail, :process 11, :f :cas, :value [3 2], :error :precondition-failed}
+{:index 64, :time 22104555584, :type :invoke, :process 12, :f :read, :value nil}
+{:index 65, :time 22112296750, :type :ok, :process 12, :f :read, :value 7}
+{:index 66, :time 22469916167, :type :invoke, :process 13, :f :write, :value 4}
+{:index 67, :time 22486048792, :type :ok, :process 13, :f :write, :value 4}
+{:index 68, :time 22519092667, :type :invoke, :process 14, :f :read, :value nil}
+{:index 69, :time 22527636584, :type :ok, :process 14, :f :read, :value 4}
+{:index 70, :time 22790890667, :type :invoke, :process 10, :f :read, :value nil}
+{:index 71, :time 22799007084, :type :ok, :process 10, :f :read, :value 4}

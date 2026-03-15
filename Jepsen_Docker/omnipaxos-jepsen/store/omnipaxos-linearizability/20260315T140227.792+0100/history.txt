@@ -1,0 +1,774 @@
+0	:invoke	:cas	[1 4]
+1	:invoke	:cas	[4 0]
+2	:invoke	:write	9
+1	:fail	:cas	[4 0]	:precondition-failed
+2	:ok	:write	9
+0	:fail	:cas	[1 4]	:precondition-failed
+3	:invoke	:read	nil
+3	:ok	:read	9
+4	:invoke	:read	nil
+4	:ok	:read	9
+:nemesis	:invoke	:cas	[4 2]
+:nemesis	:info	:cas	[4 2]	indeterminate: No matching clause: :cas
+0	:invoke	:cas	[3 1]
+0	:fail	:cas	[3 1]	:precondition-failed
+1	:invoke	:read	nil
+1	:ok	:read	9
+2	:invoke	:write	3
+2	:ok	:write	3
+3	:invoke	:read	nil
+3	:ok	:read	3
+4	:invoke	:read	nil
+4	:ok	:read	3
+:nemesis	:invoke	:write	6
+:nemesis	:info	:write	6	indeterminate: No matching clause: :write
+0	:invoke	:read	nil
+0	:ok	:read	3
+1	:invoke	:cas	[1 4]
+1	:fail	:cas	[1 4]	:precondition-failed
+2	:invoke	:cas	[4 4]
+2	:fail	:cas	[4 4]	:precondition-failed
+3	:invoke	:cas	[2 4]
+3	:fail	:cas	[2 4]	:precondition-failed
+4	:invoke	:read	nil
+4	:ok	:read	3
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+0	:invoke	:write	8
+0	:ok	:write	8
+1	:invoke	:write	4
+1	:ok	:write	4
+2	:invoke	:write	9
+2	:ok	:write	9
+3	:invoke	:read	nil
+3	:ok	:read	9
+4	:invoke	:cas	[4 1]
+4	:fail	:cas	[4 1]	:precondition-failed
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+0	:invoke	:read	nil
+0	:ok	:read	9
+1	:invoke	:write	7
+1	:ok	:write	7
+2	:invoke	:read	nil
+2	:ok	:read	7
+3	:invoke	:cas	[2 4]
+3	:fail	:cas	[2 4]	:precondition-failed
+4	:invoke	:cas	[4 1]
+4	:fail	:cas	[4 1]	:precondition-failed
+:nemesis	:invoke	:cas	[3 0]
+:nemesis	:info	:cas	[3 0]	indeterminate: No matching clause: :cas
+0	:invoke	:write	3
+1	:invoke	:cas	[4 2]
+0	:ok	:write	3
+1	:fail	:cas	[4 2]	:precondition-failed
+2	:invoke	:cas	[2 2]
+2	:fail	:cas	[2 2]	:precondition-failed
+3	:invoke	:cas	[3 4]
+3	:ok	:cas	[3 4]
+4	:invoke	:cas	[2 4]
+4	:fail	:cas	[2 4]	:precondition-failed
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+0	:invoke	:cas	[4 3]
+0	:ok	:cas	[4 3]
+1	:invoke	:read	nil
+1	:ok	:read	3
+2	:invoke	:write	0
+2	:ok	:write	0
+3	:invoke	:cas	[0 4]
+3	:ok	:cas	[0 4]
+4	:invoke	:read	nil
+4	:ok	:read	4
+:nemesis	:invoke	:cas	[2 2]
+:nemesis	:info	:cas	[2 2]	indeterminate: No matching clause: :cas
+0	:invoke	:read	nil
+0	:ok	:read	4
+1	:invoke	:write	5
+1	:ok	:write	5
+2	:invoke	:cas	[3 1]
+2	:fail	:cas	[3 1]	:precondition-failed
+3	:invoke	:read	nil
+3	:ok	:read	5
+4	:invoke	:cas	[4 3]
+4	:fail	:cas	[4 3]	:precondition-failed
+:nemesis	:invoke	:write	7
+:nemesis	:info	:write	7	indeterminate: No matching clause: :write
+0	:invoke	:write	2
+0	:ok	:write	2
+1	:invoke	:read	nil
+1	:ok	:read	2
+2	:invoke	:cas	[2 2]
+2	:ok	:cas	[2 2]
+3	:invoke	:cas	[4 2]
+3	:fail	:cas	[4 2]	:precondition-failed
+4	:invoke	:read	nil
+4	:ok	:read	2
+:nemesis	:invoke	:write	2
+:nemesis	:info	:write	2	indeterminate: No matching clause: :write
+0	:invoke	:write	9
+0	:ok	:write	9
+1	:invoke	:read	nil
+1	:ok	:read	9
+2	:invoke	:write	0
+2	:ok	:write	0
+3	:invoke	:read	nil
+3	:ok	:read	0
+4	:invoke	:cas	[4 4]
+4	:fail	:cas	[4 4]	:precondition-failed
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+0	:invoke	:cas	[1 4]
+0	:fail	:cas	[1 4]	:precondition-failed
+1	:invoke	:read	nil
+1	:ok	:read	0
+2	:invoke	:write	9
+2	:ok	:write	9
+3	:invoke	:cas	[3 4]
+3	:fail	:cas	[3 4]	:precondition-failed
+4	:invoke	:read	nil
+4	:ok	:read	9
+:nemesis	:invoke	:cas	[3 0]
+:nemesis	:info	:cas	[3 0]	indeterminate: No matching clause: :cas
+0	:invoke	:cas	[2 3]
+0	:fail	:cas	[2 3]	:precondition-failed
+1	:invoke	:write	4
+1	:ok	:write	4
+2	:invoke	:read	nil
+2	:ok	:read	4
+3	:invoke	:write	2
+3	:ok	:write	2
+4	:invoke	:write	0
+4	:ok	:write	0
+:nemesis	:invoke	:write	2
+:nemesis	:info	:write	2	indeterminate: No matching clause: :write
+0	:invoke	:read	nil
+0	:ok	:read	0
+1	:invoke	:cas	[2 1]
+1	:fail	:cas	[2 1]	:precondition-failed
+2	:invoke	:write	3
+2	:ok	:write	3
+3	:invoke	:cas	[3 1]
+3	:ok	:cas	[3 1]
+4	:invoke	:cas	[0 2]
+4	:fail	:cas	[0 2]	:precondition-failed
+:nemesis	:invoke	:write	4
+:nemesis	:info	:write	4	indeterminate: No matching clause: :write
+0	:invoke	:cas	[0 1]
+0	:fail	:cas	[0 1]	:precondition-failed
+1	:invoke	:cas	[2 2]
+1	:fail	:cas	[2 2]	:precondition-failed
+2	:invoke	:cas	[1 0]
+2	:ok	:cas	[1 0]
+3	:invoke	:write	3
+3	:ok	:write	3
+4	:invoke	:read	nil
+4	:ok	:read	3
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+0	:invoke	:write	9
+0	:ok	:write	9
+1	:invoke	:read	nil
+1	:ok	:read	9
+2	:invoke	:read	nil
+2	:ok	:read	9
+3	:invoke	:cas	[4 4]
+4	:invoke	:cas	[4 4]
+3	:fail	:cas	[4 4]	:precondition-failed
+4	:fail	:cas	[4 4]	:precondition-failed
+:nemesis	:invoke	:write	9
+:nemesis	:info	:write	9	indeterminate: No matching clause: :write
+0	:invoke	:read	nil
+0	:ok	:read	9
+1	:invoke	:read	nil
+1	:ok	:read	9
+2	:invoke	:write	4
+2	:ok	:write	4
+3	:invoke	:cas	[4 1]
+3	:ok	:cas	[4 1]
+4	:invoke	:read	nil
+4	:ok	:read	1
+:nemesis	:invoke	:write	5
+:nemesis	:info	:write	5	indeterminate: No matching clause: :write
+:nemesis	:info	:start	nil
+:nemesis	:info	:start	"paused s2, s3"
+1	:invoke	:cas	[1 2]
+2	:invoke	:write	3
+3	:invoke	:cas	[3 0]
+4	:invoke	:cas	[4 1]
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+0	:invoke	:cas	[3 1]
+:nemesis	:invoke	:write	9
+:nemesis	:info	:write	9	indeterminate: No matching clause: :write
+:nemesis	:invoke	:write	2
+:nemesis	:info	:write	2	indeterminate: No matching clause: :write
+:nemesis	:invoke	:write	6
+:nemesis	:info	:write	6	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[0 2]
+:nemesis	:info	:cas	[0 2]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:write	6
+:nemesis	:info	:write	6	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[0 2]
+:nemesis	:info	:cas	[0 2]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:cas	[4 1]
+:nemesis	:info	:cas	[4 1]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	6
+:nemesis	:info	:write	6	indeterminate: No matching clause: :write
+:nemesis	:invoke	:write	5
+:nemesis	:info	:write	5	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[3 1]
+:nemesis	:info	:cas	[3 1]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:cas	[3 3]
+:nemesis	:info	:cas	[3 3]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:cas	[4 4]
+:nemesis	:info	:cas	[4 4]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	0
+:nemesis	:info	:write	0	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:write	3
+:nemesis	:info	:write	3	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[0 1]
+:nemesis	:info	:cas	[0 1]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:cas	[1 0]
+:nemesis	:info	:cas	[1 0]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[4 2]
+:nemesis	:info	:cas	[4 2]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	1
+:nemesis	:info	:write	1	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[0 4]
+:nemesis	:info	:cas	[0 4]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	0
+:nemesis	:info	:write	0	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[2 4]
+:nemesis	:info	:cas	[2 4]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	4
+:nemesis	:info	:write	4	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:write	4
+:nemesis	:info	:write	4	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:write	8
+:nemesis	:info	:write	8	indeterminate: No matching clause: :write
+:nemesis	:invoke	:write	8
+:nemesis	:info	:write	8	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[1 0]
+:nemesis	:info	:cas	[1 0]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:write	1
+:nemesis	:info	:write	1	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:write	2
+:nemesis	:info	:write	2	indeterminate: No matching clause: :write
+:nemesis	:invoke	:write	6
+:nemesis	:info	:write	6	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[2 2]
+:nemesis	:info	:cas	[2 2]	indeterminate: No matching clause: :cas
+1	:info	:cas	[1 2]	:timeout
+6	:invoke	:cas	[1 1]
+2	:info	:write	3	:timeout
+7	:invoke	:write	6
+:nemesis	:invoke	:write	8
+:nemesis	:info	:write	8	indeterminate: No matching clause: :write
+3	:info	:cas	[3 0]	:timeout
+4	:info	:cas	[4 1]	:timeout
+9	:invoke	:read	nil
+:nemesis	:invoke	:cas	[3 1]
+:nemesis	:info	:cas	[3 1]	indeterminate: No matching clause: :cas
+8	:invoke	:read	nil
+0	:info	:cas	[3 1]	:timeout
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[1 2]
+:nemesis	:info	:cas	[1 2]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	8
+:nemesis	:info	:write	8	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[2 2]
+:nemesis	:info	:cas	[2 2]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:cas	[3 1]
+:nemesis	:info	:cas	[3 1]	indeterminate: No matching clause: :cas
+5	:invoke	:write	8
+:nemesis	:invoke	:cas	[2 4]
+:nemesis	:info	:cas	[2 4]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	1
+:nemesis	:info	:write	1	indeterminate: No matching clause: :write
+:nemesis	:invoke	:write	8
+:nemesis	:info	:write	8	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[1 0]
+:nemesis	:info	:cas	[1 0]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	6
+:nemesis	:info	:write	6	indeterminate: No matching clause: :write
+:nemesis	:invoke	:write	8
+:nemesis	:info	:write	8	indeterminate: No matching clause: :write
+:nemesis	:invoke	:write	0
+:nemesis	:info	:write	0	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[4 2]
+:nemesis	:info	:cas	[4 2]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:cas	[4 0]
+:nemesis	:info	:cas	[4 0]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:write	8
+:nemesis	:info	:write	8	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[4 3]
+:nemesis	:info	:cas	[4 3]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:cas	[4 4]
+:nemesis	:info	:cas	[4 4]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:cas	[1 0]
+:nemesis	:info	:cas	[1 0]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	3
+:nemesis	:info	:write	3	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[3 1]
+:nemesis	:info	:cas	[3 1]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:cas	[4 4]
+:nemesis	:info	:cas	[4 4]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	4
+:nemesis	:info	:write	4	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[1 1]
+:nemesis	:info	:cas	[1 1]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[3 0]
+:nemesis	:info	:cas	[3 0]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:cas	[4 4]
+:nemesis	:info	:cas	[4 4]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:cas	[4 1]
+:nemesis	:info	:cas	[4 1]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:write	3
+:nemesis	:info	:write	3	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[2 0]
+:nemesis	:info	:cas	[2 0]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	6
+:nemesis	:info	:write	6	indeterminate: No matching clause: :write
+:nemesis	:invoke	:write	4
+:nemesis	:info	:write	4	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:write	1
+:nemesis	:info	:write	1	indeterminate: No matching clause: :write
+:nemesis	:invoke	:write	2
+:nemesis	:info	:write	2	indeterminate: No matching clause: :write
+6	:info	:cas	[1 1]	:timeout
+11	:invoke	:cas	[3 2]
+7	:info	:write	6	:timeout
+12	:invoke	:read	nil
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+9	:info	:read	nil	:timeout
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+8	:info	:read	nil	:timeout
+13	:invoke	:read	nil
+14	:invoke	:read	nil
+:nemesis	:invoke	:cas	[4 0]
+:nemesis	:info	:cas	[4 0]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	6
+:nemesis	:info	:write	6	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[2 3]
+:nemesis	:info	:cas	[2 3]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:write	6
+:nemesis	:info	:write	6	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[1 4]
+:nemesis	:info	:cas	[1 4]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	6
+:nemesis	:info	:write	6	indeterminate: No matching clause: :write
+5	:info	:write	8	:timeout
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[0 3]
+:nemesis	:info	:cas	[0 3]	indeterminate: No matching clause: :cas
+10	:invoke	:write	5
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[4 0]
+:nemesis	:info	:cas	[4 0]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:write	0
+:nemesis	:info	:write	0	indeterminate: No matching clause: :write
+:nemesis	:invoke	:write	9
+:nemesis	:info	:write	9	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[1 2]
+:nemesis	:info	:cas	[1 2]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:write	6
+:nemesis	:info	:write	6	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[3 3]
+:nemesis	:info	:cas	[3 3]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:write	3
+:nemesis	:info	:write	3	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[3 0]
+:nemesis	:info	:cas	[3 0]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	2
+:nemesis	:info	:write	2	indeterminate: No matching clause: :write
+:nemesis	:invoke	:write	6
+:nemesis	:info	:write	6	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[1 0]
+:nemesis	:info	:cas	[1 0]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:cas	[4 3]
+:nemesis	:info	:cas	[4 3]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[3 3]
+:nemesis	:info	:cas	[3 3]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:cas	[0 2]
+:nemesis	:info	:cas	[0 2]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:write	6
+:nemesis	:info	:write	6	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[2 1]
+:nemesis	:info	:cas	[2 1]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	4
+:nemesis	:info	:write	4	indeterminate: No matching clause: :write
+:nemesis	:invoke	:write	8
+:nemesis	:info	:write	8	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[2 4]
+:nemesis	:info	:cas	[2 4]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	1
+:nemesis	:info	:write	1	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+11	:info	:cas	[3 2]	:timeout
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:write	0
+:nemesis	:info	:write	0	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[1 4]
+:nemesis	:info	:cas	[1 4]	indeterminate: No matching clause: :cas
+12	:info	:read	nil	:timeout
+16	:invoke	:read	nil
+17	:invoke	:read	nil
+:nemesis	:invoke	:write	6
+:nemesis	:info	:write	6	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+13	:info	:read	nil	:timeout
+:nemesis	:invoke	:write	3
+:nemesis	:info	:write	3	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+14	:info	:read	nil	:timeout
+18	:invoke	:read	nil
+19	:invoke	:read	nil
+:nemesis	:invoke	:write	2
+:nemesis	:info	:write	2	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[2 1]
+:nemesis	:info	:cas	[2 1]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	7
+:nemesis	:info	:write	7	indeterminate: No matching clause: :write
+:nemesis	:invoke	:write	1
+:nemesis	:info	:write	1	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+10	:info	:write	5	:timeout
+:nemesis	:invoke	:cas	[1 0]
+:nemesis	:info	:cas	[1 0]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	4
+:nemesis	:info	:write	4	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[4 0]
+:nemesis	:info	:cas	[4 0]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+15	:invoke	:read	nil
+:nemesis	:invoke	:cas	[2 1]
+:nemesis	:info	:cas	[2 1]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:write	5
+:nemesis	:info	:write	5	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[2 1]
+:nemesis	:info	:cas	[2 1]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[3 3]
+:nemesis	:info	:cas	[3 3]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	7
+:nemesis	:info	:write	7	indeterminate: No matching clause: :write
+:nemesis	:invoke	:write	7
+:nemesis	:info	:write	7	indeterminate: No matching clause: :write
+:nemesis	:invoke	:write	5
+:nemesis	:info	:write	5	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[1 3]
+:nemesis	:info	:cas	[1 3]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:cas	[4 0]
+:nemesis	:info	:cas	[4 0]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:cas	[4 1]
+:nemesis	:info	:cas	[4 1]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:write	7
+:nemesis	:info	:write	7	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[3 4]
+:nemesis	:info	:cas	[3 4]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	5
+:nemesis	:info	:write	5	indeterminate: No matching clause: :write
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[2 2]
+:nemesis	:info	:cas	[2 2]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:cas	[3 4]
+:nemesis	:info	:cas	[3 4]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+:nemesis	:invoke	:cas	[2 3]
+:nemesis	:info	:cas	[2 3]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	3
+:nemesis	:info	:write	3	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[4 2]
+:nemesis	:info	:cas	[4 2]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:write	2
+:nemesis	:info	:write	2	indeterminate: No matching clause: :write
+:nemesis	:invoke	:cas	[0 4]
+:nemesis	:info	:cas	[0 4]	indeterminate: No matching clause: :cas
+:nemesis	:invoke	:cas	[4 1]
+:nemesis	:info	:cas	[4 1]	indeterminate: No matching clause: :cas
+16	:info	:read	nil	:timeout
+17	:info	:read	nil	:timeout
+18	:info	:read	nil	:timeout
+19	:info	:read	nil	:timeout
+15	:info	:read	nil	:timeout
+:nemesis	:info	:stop	nil
+:nemesis	:info	:stop	"unpaused s2, s3"
+:nemesis	:invoke	:cas	[2 3]
+:nemesis	:info	:cas	[2 3]	indeterminate: No matching clause: :cas
+20	:invoke	:cas	[3 1]
+20	:ok	:cas	[3 1]
+21	:invoke	:write	3
+21	:ok	:write	3
+22	:invoke	:read	nil
+22	:ok	:read	3
+23	:invoke	:read	nil
+23	:ok	:read	3
+24	:invoke	:cas	[4 3]
+24	:fail	:cas	[4 3]	:precondition-failed
+:nemesis	:invoke	:cas	[3 1]
+:nemesis	:info	:cas	[3 1]	indeterminate: No matching clause: :cas
+20	:invoke	:cas	[1 0]
+20	:fail	:cas	[1 0]	:precondition-failed
+21	:invoke	:write	7
+21	:ok	:write	7
+22	:invoke	:cas	[0 0]
+22	:fail	:cas	[0 0]	:precondition-failed
+23	:invoke	:cas	[4 1]
+23	:fail	:cas	[4 1]	:precondition-failed
+24	:invoke	:write	0
+24	:ok	:write	0
+:nemesis	:invoke	:cas	[3 4]
+:nemesis	:info	:cas	[3 4]	indeterminate: No matching clause: :cas
+20	:invoke	:write	3
+20	:ok	:write	3
+21	:invoke	:write	8
+21	:ok	:write	8
+22	:invoke	:cas	[4 1]
+22	:fail	:cas	[4 1]	:precondition-failed
+23	:invoke	:read	nil
+23	:ok	:read	8
+24	:invoke	:cas	[1 0]
+24	:fail	:cas	[1 0]	:precondition-failed
+:nemesis	:invoke	:write	2
+:nemesis	:info	:write	2	indeterminate: No matching clause: :write
+20	:invoke	:read	nil
+20	:ok	:read	8
+21	:invoke	:cas	[3 1]
+21	:fail	:cas	[3 1]	:precondition-failed
+22	:invoke	:read	nil
+22	:ok	:read	8
+23	:invoke	:write	2
+23	:ok	:write	2
+24	:invoke	:write	6
+24	:ok	:write	6
+:nemesis	:invoke	:write	7
+:nemesis	:info	:write	7	indeterminate: No matching clause: :write
+20	:invoke	:write	7
+20	:ok	:write	7
+21	:invoke	:write	8
+21	:ok	:write	8
+22	:invoke	:write	8
+22	:ok	:write	8
+23	:invoke	:read	nil
+23	:ok	:read	8
+24	:invoke	:write	9
+24	:ok	:write	9
+:nemesis	:invoke	:cas	[1 2]
+:nemesis	:info	:cas	[1 2]	indeterminate: No matching clause: :cas
+20	:invoke	:read	nil
+20	:ok	:read	9
+21	:invoke	:read	nil
+21	:ok	:read	9
+22	:invoke	:cas	[3 3]
+22	:fail	:cas	[3 3]	:precondition-failed
+23	:invoke	:cas	[0 0]
+23	:fail	:cas	[0 0]	:precondition-failed
+24	:invoke	:write	5
+24	:ok	:write	5
+:nemesis	:invoke	:cas	[3 0]
+:nemesis	:info	:cas	[3 0]	indeterminate: No matching clause: :cas
+20	:invoke	:read	nil
+20	:ok	:read	5
+21	:invoke	:write	4
+21	:ok	:write	4
+22	:invoke	:read	nil
+22	:ok	:read	4
+23	:invoke	:read	nil
+23	:ok	:read	4
+24	:invoke	:cas	[2 0]
+24	:fail	:cas	[2 0]	:precondition-failed
+:nemesis	:invoke	:write	2
+:nemesis	:info	:write	2	indeterminate: No matching clause: :write
+20	:invoke	:write	0
+20	:ok	:write	0
+21	:invoke	:write	3
+21	:ok	:write	3
+22	:invoke	:cas	[0 0]
+23	:invoke	:write	4
+22	:fail	:cas	[0 0]	:precondition-failed
+23	:ok	:write	4
+24	:invoke	:write	9
+24	:ok	:write	9
+:nemesis	:invoke	:cas	[1 3]
+:nemesis	:info	:cas	[1 3]	indeterminate: No matching clause: :cas
+20	:invoke	:write	8
+20	:ok	:write	8
+21	:invoke	:write	2
+21	:ok	:write	2
+22	:invoke	:write	4
+22	:ok	:write	4
+23	:invoke	:write	3
+23	:ok	:write	3
+24	:invoke	:cas	[2 1]
+24	:fail	:cas	[2 1]	:precondition-failed
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+20	:invoke	:read	nil
+20	:ok	:read	3
+21	:invoke	:write	1
+21	:ok	:write	1
+22	:invoke	:read	nil
+22	:ok	:read	1
+23	:invoke	:read	nil
+23	:ok	:read	1
+24	:invoke	:read	nil
+24	:ok	:read	1
+:nemesis	:invoke	:write	9
+:nemesis	:info	:write	9	indeterminate: No matching clause: :write
+20	:invoke	:write	8
+20	:ok	:write	8
+21	:invoke	:cas	[3 3]
+21	:fail	:cas	[3 3]	:precondition-failed
+22	:invoke	:cas	[4 0]
+22	:fail	:cas	[4 0]	:precondition-failed
+23	:invoke	:cas	[0 4]
+23	:fail	:cas	[0 4]	:precondition-failed
+24	:invoke	:write	4
+24	:ok	:write	4
+:nemesis	:invoke	:cas	[4 1]
+:nemesis	:info	:cas	[4 1]	indeterminate: No matching clause: :cas
+20	:invoke	:read	nil
+20	:ok	:read	4
+21	:invoke	:write	9
+21	:ok	:write	9
+22	:invoke	:cas	[4 0]
+22	:fail	:cas	[4 0]	:precondition-failed
+23	:invoke	:cas	[2 2]
+23	:fail	:cas	[2 2]	:precondition-failed
+24	:invoke	:cas	[2 2]
+24	:fail	:cas	[2 2]	:precondition-failed
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+20	:invoke	:cas	[0 1]
+20	:fail	:cas	[0 1]	:precondition-failed
+21	:invoke	:write	7
+21	:ok	:write	7
+22	:invoke	:write	7
+22	:ok	:write	7
+23	:invoke	:cas	[2 1]
+23	:fail	:cas	[2 1]	:precondition-failed
+24	:invoke	:write	4
+24	:ok	:write	4
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+20	:invoke	:write	4
+20	:ok	:write	4
+21	:invoke	:write	7
+21	:ok	:write	7
+22	:invoke	:read	nil
+22	:ok	:read	7
+23	:invoke	:read	nil
+23	:ok	:read	7
+24	:invoke	:cas	[0 1]
+24	:fail	:cas	[0 1]	:precondition-failed
+:nemesis	:invoke	:cas	[2 1]
+:nemesis	:info	:cas	[2 1]	indeterminate: No matching clause: :cas
+20	:invoke	:cas	[2 1]
+20	:fail	:cas	[2 1]	:precondition-failed
+21	:invoke	:write	8
+21	:ok	:write	8
+22	:invoke	:read	nil
+22	:ok	:read	8
+23	:invoke	:read	nil
+23	:ok	:read	8
+24	:invoke	:cas	[2 1]
+24	:fail	:cas	[2 1]	:precondition-failed
+:nemesis	:invoke	:read	nil
+:nemesis	:info	:read	nil	indeterminate: No matching clause: :read
+20	:invoke	:read	nil
+20	:ok	:read	8
+21	:invoke	:read	nil
+21	:ok	:read	8
+22	:invoke	:read	nil
+22	:ok	:read	8

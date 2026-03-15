@@ -1,0 +1,760 @@
+0	:invoke	:write	0
+0	:info	:write	0	:timeout
+1	:invoke	:read	nil
+1	:info	:read	nil	:timeout
+2	:invoke	:read	nil
+2	:info	:read	nil	:timeout
+3	:invoke	:read	nil
+3	:info	:read	nil	:timeout
+4	:invoke	:read	nil
+4	:info	:read	nil	:timeout
+5	:invoke	:cas	[0 2]
+5	:info	:cas	[0 2]	:timeout
+10	:invoke	:cas	[3 3]
+10	:info	:cas	[3 3]	:timeout
+6	:invoke	:cas	[2 3]
+6	:info	:cas	[2 3]	:timeout
+7	:invoke	:write	2
+7	:info	:write	2	:timeout
+8	:invoke	:write	5
+8	:info	:write	5	:timeout
+9	:invoke	:write	4
+9	:info	:write	4	:timeout
+15	:invoke	:cas	[1 4]
+15	:info	:cas	[1 4]	:timeout
+20	:invoke	:read	nil
+20	:info	:read	nil	:timeout
+11	:invoke	:cas	[0 2]
+11	:info	:cas	[0 2]	:timeout
+12	:invoke	:write	7
+12	:info	:write	7	:timeout
+13	:invoke	:read	nil
+13	:info	:read	nil	:timeout
+14	:invoke	:read	nil
+14	:info	:read	nil	:timeout
+25	:invoke	:write	9
+25	:info	:write	9	:timeout
+30	:invoke	:cas	[2 2]
+30	:info	:cas	[2 2]	:timeout
+16	:invoke	:read	nil
+16	:info	:read	nil	:timeout
+17	:invoke	:write	0
+17	:info	:write	0	:timeout
+18	:invoke	:cas	[3 4]
+18	:info	:cas	[3 4]	:timeout
+19	:invoke	:write	9
+19	:info	:write	9	:timeout
+35	:invoke	:write	8
+35	:info	:write	8	:timeout
+40	:invoke	:cas	[4 3]
+40	:info	:cas	[4 3]	:timeout
+21	:invoke	:cas	[0 0]
+21	:info	:cas	[0 0]	:timeout
+22	:invoke	:read	nil
+22	:info	:read	nil	:timeout
+23	:invoke	:write	4
+23	:info	:write	4	:timeout
+24	:invoke	:write	9
+24	:info	:write	9	:timeout
+45	:invoke	:cas	[1 4]
+45	:info	:cas	[1 4]	:timeout
+50	:invoke	:read	nil
+50	:info	:read	nil	:timeout
+26	:invoke	:read	nil
+26	:info	:read	nil	:timeout
+27	:invoke	:cas	[0 0]
+27	:info	:cas	[0 0]	:timeout
+28	:invoke	:read	nil
+28	:info	:read	nil	:timeout
+29	:invoke	:write	4
+29	:info	:write	4	:timeout
+55	:invoke	:write	5
+55	:info	:write	5	:timeout
+60	:invoke	:cas	[1 0]
+60	:info	:cas	[1 0]	:timeout
+31	:invoke	:read	nil
+31	:info	:read	nil	:timeout
+32	:invoke	:read	nil
+32	:info	:read	nil	:timeout
+33	:invoke	:write	6
+33	:info	:write	6	:timeout
+34	:invoke	:cas	[1 3]
+34	:info	:cas	[1 3]	:timeout
+65	:invoke	:read	nil
+65	:info	:read	nil	:timeout
+70	:invoke	:write	2
+70	:info	:write	2	:timeout
+36	:invoke	:write	2
+36	:info	:write	2	:timeout
+37	:invoke	:write	3
+37	:info	:write	3	:timeout
+38	:invoke	:cas	[3 4]
+38	:info	:cas	[3 4]	:timeout
+39	:invoke	:read	nil
+39	:info	:read	nil	:timeout
+75	:invoke	:write	2
+75	:info	:write	2	:timeout
+80	:invoke	:cas	[4 1]
+80	:info	:cas	[4 1]	:timeout
+41	:invoke	:read	nil
+41	:info	:read	nil	:timeout
+42	:invoke	:cas	[4 3]
+42	:info	:cas	[4 3]	:timeout
+43	:invoke	:read	nil
+43	:info	:read	nil	:timeout
+44	:invoke	:read	nil
+44	:info	:read	nil	:timeout
+85	:invoke	:cas	[4 4]
+85	:info	:cas	[4 4]	:timeout
+90	:invoke	:read	nil
+90	:info	:read	nil	:timeout
+46	:invoke	:write	7
+46	:info	:write	7	:timeout
+47	:invoke	:write	4
+47	:info	:write	4	:timeout
+48	:invoke	:cas	[1 1]
+48	:info	:cas	[1 1]	:timeout
+49	:invoke	:write	6
+49	:info	:write	6	:timeout
+95	:invoke	:read	nil
+95	:info	:read	nil	:timeout
+100	:invoke	:write	4
+100	:info	:write	4	:timeout
+51	:invoke	:read	nil
+51	:info	:read	nil	:timeout
+52	:invoke	:write	8
+52	:info	:write	8	:timeout
+53	:invoke	:cas	[3 2]
+53	:info	:cas	[3 2]	:timeout
+54	:invoke	:cas	[2 3]
+54	:info	:cas	[2 3]	:timeout
+105	:invoke	:write	9
+105	:info	:write	9	:timeout
+110	:invoke	:cas	[1 1]
+110	:info	:cas	[1 1]	:timeout
+56	:invoke	:write	8
+56	:info	:write	8	:timeout
+57	:invoke	:write	1
+57	:info	:write	1	:timeout
+58	:invoke	:read	nil
+58	:info	:read	nil	:timeout
+59	:invoke	:cas	[2 3]
+59	:info	:cas	[2 3]	:timeout
+115	:invoke	:write	9
+115	:info	:write	9	:timeout
+120	:invoke	:read	nil
+120	:info	:read	nil	:timeout
+61	:invoke	:read	nil
+61	:info	:read	nil	:timeout
+62	:invoke	:cas	[0 1]
+62	:info	:cas	[0 1]	:timeout
+63	:invoke	:read	nil
+63	:info	:read	nil	:timeout
+64	:invoke	:read	nil
+64	:info	:read	nil	:timeout
+125	:invoke	:cas	[4 3]
+125	:info	:cas	[4 3]	:timeout
+130	:invoke	:cas	[3 3]
+130	:info	:cas	[3 3]	:timeout
+66	:invoke	:cas	[1 4]
+66	:info	:cas	[1 4]	:timeout
+67	:invoke	:cas	[3 2]
+67	:info	:cas	[3 2]	:timeout
+68	:invoke	:cas	[3 1]
+68	:info	:cas	[3 1]	:timeout
+69	:invoke	:cas	[0 3]
+69	:info	:cas	[0 3]	:timeout
+135	:invoke	:write	3
+135	:info	:write	3	:timeout
+140	:invoke	:cas	[3 4]
+140	:info	:cas	[3 4]	:timeout
+71	:invoke	:write	1
+71	:info	:write	1	:timeout
+72	:invoke	:cas	[1 1]
+72	:info	:cas	[1 1]	:timeout
+73	:invoke	:write	5
+73	:info	:write	5	:timeout
+74	:invoke	:read	nil
+74	:info	:read	nil	:timeout
+145	:invoke	:read	nil
+145	:info	:read	nil	:timeout
+150	:invoke	:read	nil
+150	:info	:read	nil	:timeout
+76	:invoke	:write	4
+76	:info	:write	4	:timeout
+77	:invoke	:cas	[4 3]
+77	:info	:cas	[4 3]	:timeout
+:nemesis	:info	:start	nil
+79	:invoke	:read	nil
+79	:info	:read	nil	:timeout
+:nemesis	:info	:start	"paused s2, s3"
+155	:invoke	:write	7
+155	:info	:write	7	:timeout
+160	:invoke	:cas	[3 1]
+160	:info	:cas	[3 1]	:timeout
+81	:invoke	:cas	[4 3]
+81	:info	:cas	[4 3]	:timeout
+82	:invoke	:cas	[4 4]
+82	:info	:cas	[4 4]	:timeout
+78	:invoke	:read	nil
+78	:info	:read	nil	:timeout
+84	:invoke	:write	0
+84	:info	:write	0	:timeout
+165	:invoke	:read	nil
+165	:info	:read	nil	:timeout
+170	:invoke	:read	nil
+170	:info	:read	nil	:timeout
+86	:invoke	:write	3
+86	:info	:write	3	:timeout
+87	:invoke	:write	7
+87	:info	:write	7	:timeout
+83	:invoke	:cas	[4 3]
+83	:info	:cas	[4 3]	:timeout
+89	:invoke	:cas	[3 2]
+89	:info	:cas	[3 2]	:timeout
+175	:invoke	:cas	[2 0]
+175	:info	:cas	[2 0]	:timeout
+180	:invoke	:read	nil
+180	:info	:read	nil	:timeout
+91	:invoke	:read	nil
+91	:info	:read	nil	:timeout
+92	:invoke	:cas	[4 2]
+92	:info	:cas	[4 2]	:timeout
+88	:invoke	:write	4
+88	:info	:write	4	:timeout
+94	:invoke	:read	nil
+94	:info	:read	nil	:timeout
+185	:invoke	:write	3
+185	:info	:write	3	:timeout
+190	:invoke	:cas	[2 4]
+190	:info	:cas	[2 4]	:timeout
+96	:invoke	:cas	[1 0]
+96	:info	:cas	[1 0]	:timeout
+97	:invoke	:write	3
+97	:info	:write	3	:timeout
+93	:invoke	:read	nil
+93	:info	:read	nil	:timeout
+99	:invoke	:cas	[4 2]
+99	:info	:cas	[4 2]	:timeout
+195	:invoke	:write	3
+195	:info	:write	3	:timeout
+200	:invoke	:cas	[2 2]
+200	:info	:cas	[2 2]	:timeout
+101	:invoke	:write	4
+101	:info	:write	4	:timeout
+102	:invoke	:read	nil
+102	:info	:read	nil	:timeout
+98	:invoke	:cas	[4 4]
+98	:info	:cas	[4 4]	:timeout
+104	:invoke	:cas	[1 4]
+104	:info	:cas	[1 4]	:timeout
+205	:invoke	:write	4
+205	:info	:write	4	:timeout
+210	:invoke	:read	nil
+210	:info	:read	nil	:timeout
+106	:invoke	:read	nil
+106	:info	:read	nil	:timeout
+107	:invoke	:cas	[1 3]
+107	:info	:cas	[1 3]	:timeout
+103	:invoke	:read	nil
+103	:info	:read	nil	:timeout
+109	:invoke	:write	7
+109	:info	:write	7	:timeout
+215	:invoke	:cas	[4 3]
+215	:info	:cas	[4 3]	:timeout
+220	:invoke	:cas	[3 4]
+220	:info	:cas	[3 4]	:timeout
+111	:invoke	:write	1
+111	:info	:write	1	:timeout
+112	:invoke	:read	nil
+112	:info	:read	nil	:timeout
+108	:invoke	:read	nil
+114	:invoke	:cas	[2 2]
+114	:info	:cas	[2 2]	:timeout
+108	:info	:read	nil	:timeout
+225	:invoke	:cas	[3 3]
+225	:info	:cas	[3 3]	:timeout
+230	:invoke	:write	4
+230	:info	:write	4	:timeout
+116	:invoke	:write	5
+116	:info	:write	5	:timeout
+117	:invoke	:read	nil
+117	:info	:read	nil	:timeout
+113	:invoke	:read	nil
+113	:info	:read	nil	:timeout
+119	:invoke	:write	0
+119	:info	:write	0	:timeout
+235	:invoke	:read	nil
+235	:info	:read	nil	:timeout
+240	:invoke	:write	9
+240	:info	:write	9	:timeout
+121	:invoke	:read	nil
+121	:info	:read	nil	:timeout
+122	:invoke	:read	nil
+122	:info	:read	nil	:timeout
+118	:invoke	:read	nil
+118	:info	:read	nil	:timeout
+124	:invoke	:read	nil
+124	:info	:read	nil	:timeout
+245	:invoke	:write	1
+245	:info	:write	1	:timeout
+250	:invoke	:cas	[3 2]
+250	:info	:cas	[3 2]	:timeout
+126	:invoke	:write	8
+126	:info	:write	8	:timeout
+127	:invoke	:read	nil
+127	:info	:read	nil	:timeout
+123	:invoke	:read	nil
+123	:info	:read	nil	:timeout
+129	:invoke	:read	nil
+129	:info	:read	nil	:timeout
+255	:invoke	:cas	[1 2]
+255	:info	:cas	[1 2]	:timeout
+260	:invoke	:write	4
+260	:info	:write	4	:timeout
+131	:invoke	:cas	[0 3]
+131	:info	:cas	[0 3]	:timeout
+132	:invoke	:write	9
+132	:info	:write	9	:timeout
+128	:invoke	:write	5
+128	:info	:write	5	:timeout
+134	:invoke	:cas	[4 0]
+134	:info	:cas	[4 0]	:timeout
+265	:invoke	:cas	[3 0]
+265	:info	:cas	[3 0]	:timeout
+270	:invoke	:cas	[0 3]
+270	:info	:cas	[0 3]	:timeout
+136	:invoke	:cas	[0 1]
+136	:info	:cas	[0 1]	:timeout
+137	:invoke	:cas	[4 4]
+137	:info	:cas	[4 4]	:timeout
+133	:invoke	:read	nil
+133	:info	:read	nil	:timeout
+139	:invoke	:write	5
+139	:info	:write	5	:timeout
+275	:invoke	:write	1
+275	:info	:write	1	:timeout
+280	:invoke	:read	nil
+280	:info	:read	nil	:timeout
+141	:invoke	:cas	[4 4]
+141	:info	:cas	[4 4]	:timeout
+142	:invoke	:read	nil
+142	:info	:read	nil	:timeout
+138	:invoke	:write	6
+138	:info	:write	6	:timeout
+144	:invoke	:read	nil
+144	:info	:read	nil	:timeout
+285	:invoke	:read	nil
+285	:info	:read	nil	:timeout
+290	:invoke	:read	nil
+290	:info	:read	nil	:timeout
+146	:invoke	:cas	[0 3]
+146	:info	:cas	[0 3]	:timeout
+147	:invoke	:cas	[2 3]
+147	:info	:cas	[2 3]	:timeout
+143	:invoke	:write	4
+143	:info	:write	4	:timeout
+149	:invoke	:cas	[1 2]
+149	:info	:cas	[1 2]	:timeout
+295	:invoke	:read	nil
+295	:info	:read	nil	:timeout
+300	:invoke	:read	nil
+300	:info	:read	nil	:timeout
+151	:invoke	:read	nil
+151	:info	:read	nil	:timeout
+152	:invoke	:cas	[4 0]
+152	:info	:cas	[4 0]	:timeout
+148	:invoke	:read	nil
+148	:info	:read	nil	:timeout
+154	:invoke	:cas	[3 4]
+154	:info	:cas	[3 4]	:timeout
+305	:invoke	:read	nil
+305	:info	:read	nil	:timeout
+310	:invoke	:cas	[0 2]
+310	:info	:cas	[0 2]	:timeout
+156	:invoke	:cas	[1 3]
+156	:info	:cas	[1 3]	:timeout
+157	:invoke	:write	4
+157	:info	:write	4	:timeout
+153	:invoke	:cas	[3 2]
+153	:info	:cas	[3 2]	:timeout
+159	:invoke	:cas	[3 0]
+159	:info	:cas	[3 0]	:timeout
+315	:invoke	:cas	[1 2]
+315	:info	:cas	[1 2]	:timeout
+320	:invoke	:cas	[3 0]
+320	:info	:cas	[3 0]	:timeout
+161	:invoke	:read	nil
+161	:info	:read	nil	:timeout
+162	:invoke	:read	nil
+162	:info	:read	nil	:timeout
+158	:invoke	:read	nil
+158	:info	:read	nil	:timeout
+164	:invoke	:write	3
+164	:info	:write	3	:timeout
+325	:invoke	:write	1
+325	:info	:write	1	:timeout
+330	:invoke	:read	nil
+330	:info	:read	nil	:timeout
+166	:invoke	:read	nil
+166	:info	:read	nil	:timeout
+167	:invoke	:write	5
+167	:info	:write	5	:timeout
+163	:invoke	:write	4
+163	:info	:write	4	:timeout
+169	:invoke	:cas	[4 2]
+169	:info	:cas	[4 2]	:timeout
+335	:invoke	:write	1
+335	:info	:write	1	:timeout
+340	:invoke	:cas	[0 3]
+340	:info	:cas	[0 3]	:timeout
+171	:invoke	:cas	[3 4]
+171	:info	:cas	[3 4]	:timeout
+172	:invoke	:write	6
+172	:info	:write	6	:timeout
+168	:invoke	:cas	[4 1]
+168	:info	:cas	[4 1]	:timeout
+174	:invoke	:write	0
+174	:info	:write	0	:timeout
+345	:invoke	:read	nil
+345	:info	:read	nil	:timeout
+350	:invoke	:write	0
+350	:info	:write	0	:timeout
+176	:invoke	:cas	[2 2]
+176	:info	:cas	[2 2]	:timeout
+177	:invoke	:write	4
+177	:info	:write	4	:timeout
+173	:invoke	:write	8
+173	:info	:write	8	:timeout
+179	:invoke	:write	0
+179	:info	:write	0	:timeout
+355	:invoke	:cas	[0 3]
+355	:info	:cas	[0 3]	:timeout
+360	:invoke	:cas	[4 1]
+360	:info	:cas	[4 1]	:timeout
+181	:invoke	:write	0
+181	:info	:write	0	:timeout
+182	:invoke	:cas	[3 0]
+182	:info	:cas	[3 0]	:timeout
+178	:invoke	:write	8
+178	:info	:write	8	:timeout
+184	:invoke	:cas	[3 3]
+184	:info	:cas	[3 3]	:timeout
+365	:invoke	:read	nil
+365	:info	:read	nil	:timeout
+370	:invoke	:cas	[2 0]
+370	:info	:cas	[2 0]	:timeout
+186	:invoke	:write	6
+186	:info	:write	6	:timeout
+187	:invoke	:write	8
+187	:info	:write	8	:timeout
+183	:invoke	:write	5
+183	:info	:write	5	:timeout
+189	:invoke	:write	7
+189	:info	:write	7	:timeout
+375	:invoke	:cas	[4 4]
+375	:info	:cas	[4 4]	:timeout
+380	:invoke	:cas	[2 1]
+380	:info	:cas	[2 1]	:timeout
+191	:invoke	:read	nil
+191	:info	:read	nil	:timeout
+192	:invoke	:cas	[3 4]
+192	:info	:cas	[3 4]	:timeout
+188	:invoke	:cas	[1 0]
+188	:info	:cas	[1 0]	:timeout
+194	:invoke	:read	nil
+194	:info	:read	nil	:timeout
+385	:invoke	:cas	[4 3]
+385	:info	:cas	[4 3]	:timeout
+390	:invoke	:write	4
+390	:info	:write	4	:timeout
+196	:invoke	:cas	[3 3]
+196	:info	:cas	[3 3]	:timeout
+197	:invoke	:cas	[4 1]
+197	:info	:cas	[4 1]	:timeout
+193	:invoke	:write	7
+193	:info	:write	7	:timeout
+199	:invoke	:write	2
+199	:info	:write	2	:timeout
+395	:invoke	:cas	[2 0]
+395	:info	:cas	[2 0]	:timeout
+400	:invoke	:cas	[3 0]
+400	:info	:cas	[3 0]	:timeout
+201	:invoke	:cas	[3 3]
+201	:info	:cas	[3 3]	:timeout
+202	:invoke	:write	8
+202	:info	:write	8	:timeout
+198	:invoke	:cas	[4 0]
+198	:info	:cas	[4 0]	:timeout
+204	:invoke	:cas	[3 3]
+204	:info	:cas	[3 3]	:timeout
+405	:invoke	:read	nil
+405	:info	:read	nil	:timeout
+410	:invoke	:cas	[3 2]
+410	:info	:cas	[3 2]	:timeout
+206	:invoke	:read	nil
+206	:info	:read	nil	:timeout
+207	:invoke	:write	1
+207	:info	:write	1	:timeout
+203	:invoke	:write	1
+203	:info	:write	1	:timeout
+209	:invoke	:read	nil
+209	:info	:read	nil	:timeout
+415	:invoke	:cas	[1 1]
+415	:info	:cas	[1 1]	:timeout
+420	:invoke	:write	3
+420	:info	:write	3	:timeout
+211	:invoke	:write	5
+211	:info	:write	5	:timeout
+212	:invoke	:cas	[4 0]
+212	:info	:cas	[4 0]	:timeout
+208	:invoke	:cas	[0 3]
+208	:info	:cas	[0 3]	:timeout
+214	:invoke	:read	nil
+214	:info	:read	nil	:timeout
+425	:invoke	:read	nil
+425	:info	:read	nil	:timeout
+430	:invoke	:cas	[2 3]
+430	:info	:cas	[2 3]	:timeout
+216	:invoke	:cas	[0 4]
+216	:info	:cas	[0 4]	:timeout
+217	:invoke	:write	0
+217	:info	:write	0	:timeout
+213	:invoke	:cas	[1 0]
+213	:info	:cas	[1 0]	:timeout
+219	:invoke	:read	nil
+219	:info	:read	nil	:timeout
+435	:invoke	:read	nil
+435	:info	:read	nil	:timeout
+440	:invoke	:read	nil
+440	:info	:read	nil	:timeout
+221	:invoke	:write	1
+221	:info	:write	1	:timeout
+222	:invoke	:write	5
+222	:info	:write	5	:timeout
+218	:invoke	:cas	[4 3]
+218	:info	:cas	[4 3]	:timeout
+224	:invoke	:read	nil
+224	:info	:read	nil	:timeout
+445	:invoke	:cas	[0 2]
+445	:info	:cas	[0 2]	:timeout
+450	:invoke	:write	4
+450	:info	:write	4	:timeout
+226	:invoke	:read	nil
+226	:info	:read	nil	:timeout
+227	:invoke	:cas	[0 3]
+227	:info	:cas	[0 3]	:timeout
+223	:invoke	:write	3
+223	:info	:write	3	:timeout
+229	:invoke	:cas	[0 2]
+229	:info	:cas	[0 2]	:timeout
+455	:invoke	:write	9
+455	:info	:write	9	:timeout
+:nemesis	:info	:stop	nil
+:nemesis	:info	:stop	"unpaused s2, s3"
+231	:invoke	:read	nil
+231	:info	:read	nil	:timeout
+232	:invoke	:read	nil
+232	:info	:read	nil	:timeout
+228	:invoke	:cas	[1 4]
+228	:info	:cas	[1 4]	:timeout
+234	:invoke	:write	0
+234	:info	:write	0	:timeout
+460	:invoke	:cas	[0 1]
+460	:info	:cas	[0 1]	:timeout
+465	:invoke	:write	9
+465	:info	:write	9	:timeout
+236	:invoke	:read	nil
+236	:info	:read	nil	:timeout
+237	:invoke	:read	nil
+237	:info	:read	nil	:timeout
+233	:invoke	:read	nil
+233	:info	:read	nil	:timeout
+239	:invoke	:read	nil
+239	:info	:read	nil	:timeout
+470	:invoke	:read	nil
+241	:invoke	:write	0
+470	:info	:read	nil	:timeout
+241	:info	:write	0	:timeout
+246	:invoke	:read	nil
+246	:info	:read	nil	:timeout
+242	:invoke	:read	nil
+242	:info	:read	nil	:timeout
+238	:invoke	:read	nil
+238	:info	:read	nil	:timeout
+244	:invoke	:cas	[2 2]
+244	:info	:cas	[2 2]	:timeout
+475	:invoke	:read	nil
+475	:info	:read	nil	:timeout
+480	:invoke	:cas	[0 0]
+480	:info	:cas	[0 0]	:timeout
+251	:invoke	:write	2
+251	:info	:write	2	:timeout
+247	:invoke	:read	nil
+247	:info	:read	nil	:timeout
+243	:invoke	:read	nil
+243	:info	:read	nil	:timeout
+249	:invoke	:write	1
+249	:info	:write	1	:timeout
+485	:invoke	:cas	[2 2]
+485	:info	:cas	[2 2]	:timeout
+490	:invoke	:write	6
+490	:info	:write	6	:timeout
+256	:invoke	:read	nil
+256	:info	:read	nil	:timeout
+252	:invoke	:read	nil
+252	:info	:read	nil	:timeout
+248	:invoke	:cas	[4 1]
+248	:info	:cas	[4 1]	:timeout
+254	:invoke	:cas	[2 1]
+254	:info	:cas	[2 1]	:timeout
+495	:invoke	:read	nil
+261	:invoke	:write	6
+495	:info	:read	nil	:timeout
+261	:info	:write	6	:timeout
+266	:invoke	:cas	[1 3]
+266	:info	:cas	[1 3]	:timeout
+257	:invoke	:write	1
+257	:info	:write	1	:timeout
+253	:invoke	:read	nil
+253	:info	:read	nil	:timeout
+259	:invoke	:read	nil
+259	:info	:read	nil	:timeout
+500	:invoke	:write	5
+500	:info	:write	5	:timeout
+505	:invoke	:write	4
+271	:invoke	:cas	[2 2]
+271	:info	:cas	[2 2]	:timeout
+505	:info	:write	4	:timeout
+262	:invoke	:write	7
+262	:info	:write	7	:timeout
+258	:invoke	:cas	[1 4]
+258	:info	:cas	[1 4]	:timeout
+264	:invoke	:write	8
+264	:info	:write	8	:timeout
+510	:invoke	:read	nil
+510	:info	:read	nil	:timeout
+515	:invoke	:write	4
+515	:info	:write	4	:timeout
+276	:invoke	:read	nil
+276	:info	:read	nil	:timeout
+267	:invoke	:cas	[3 2]
+267	:info	:cas	[3 2]	:timeout
+263	:invoke	:write	8
+263	:info	:write	8	:timeout
+269	:invoke	:cas	[1 2]
+269	:info	:cas	[1 2]	:timeout
+520	:invoke	:read	nil
+520	:info	:read	nil	:timeout
+525	:invoke	:write	2
+525	:info	:write	2	:timeout
+281	:invoke	:write	6
+281	:info	:write	6	:timeout
+272	:invoke	:cas	[1 1]
+272	:info	:cas	[1 1]	:timeout
+268	:invoke	:cas	[0 1]
+268	:info	:cas	[0 1]	:timeout
+274	:invoke	:write	9
+274	:info	:write	9	:timeout
+530	:invoke	:read	nil
+530	:info	:read	nil	:timeout
+535	:invoke	:read	nil
+535	:info	:read	nil	:timeout
+286	:invoke	:write	6
+286	:info	:write	6	:timeout
+277	:invoke	:write	7
+277	:info	:write	7	:timeout
+273	:invoke	:write	6
+273	:info	:write	6	:timeout
+279	:invoke	:read	nil
+279	:info	:read	nil	:timeout
+540	:invoke	:write	9
+540	:info	:write	9	:timeout
+545	:invoke	:cas	[4 1]
+545	:info	:cas	[4 1]	:timeout
+291	:invoke	:write	9
+291	:info	:write	9	:timeout
+282	:invoke	:read	nil
+282	:info	:read	nil	:timeout
+278	:invoke	:read	nil
+278	:info	:read	nil	:timeout
+284	:invoke	:cas	[4 0]
+284	:info	:cas	[4 0]	:timeout
+550	:invoke	:write	5
+550	:info	:write	5	:timeout
+555	:invoke	:write	0
+555	:info	:write	0	:timeout
+296	:invoke	:write	3
+296	:info	:write	3	:timeout
+287	:invoke	:cas	[0 0]
+287	:info	:cas	[0 0]	:timeout
+283	:invoke	:write	3
+283	:info	:write	3	:timeout
+289	:invoke	:cas	[2 4]
+289	:info	:cas	[2 4]	:timeout
+560	:invoke	:cas	[2 1]
+560	:info	:cas	[2 1]	:timeout
+565	:invoke	:read	nil
+565	:info	:read	nil	:timeout
+301	:invoke	:write	6
+301	:info	:write	6	:timeout
+292	:invoke	:read	nil
+292	:info	:read	nil	:timeout
+288	:invoke	:cas	[2 3]
+288	:info	:cas	[2 3]	:timeout
+294	:invoke	:read	nil
+294	:info	:read	nil	:timeout
+570	:invoke	:write	9
+570	:info	:write	9	:timeout
+575	:invoke	:read	nil
+575	:info	:read	nil	:timeout
+306	:invoke	:write	9
+306	:info	:write	9	:timeout
+297	:invoke	:write	4
+297	:info	:write	4	:timeout
+293	:invoke	:read	nil
+293	:info	:read	nil	:timeout
+299	:invoke	:read	nil
+299	:info	:read	nil	:timeout
+580	:invoke	:read	nil
+580	:info	:read	nil	:timeout
+585	:invoke	:cas	[1 4]
+585	:info	:cas	[1 4]	:timeout
+311	:invoke	:write	1
+311	:info	:write	1	:timeout
+302	:invoke	:write	5
+302	:info	:write	5	:timeout
+298	:invoke	:write	2
+298	:info	:write	2	:timeout
+304	:invoke	:write	0
+304	:info	:write	0	:timeout
+590	:invoke	:cas	[0 4]
+590	:info	:cas	[0 4]	:timeout
+595	:invoke	:read	nil
+595	:info	:read	nil	:timeout
+316	:invoke	:cas	[3 4]
+316	:info	:cas	[3 4]	:timeout
+307	:invoke	:read	nil
+307	:info	:read	nil	:timeout
+303	:invoke	:write	5
+303	:info	:write	5	:timeout
+309	:invoke	:write	5
+309	:info	:write	5	:timeout
+600	:invoke	:write	0
+600	:info	:write	0	:timeout
+605	:invoke	:write	7
+605	:info	:write	7	:timeout
+321	:invoke	:cas	[3 1]
+321	:info	:cas	[3 1]	:timeout
+312	:invoke	:read	nil
+312	:info	:read	nil	:timeout
+308	:invoke	:cas	[0 0]
+308	:info	:cas	[0 0]	:timeout
+314	:invoke	:write	5
+314	:info	:write	5	:timeout
+610	:invoke	:read	nil
+610	:info	:read	nil	:timeout
+615	:invoke	:read	nil
+615	:info	:read	nil	:timeout
+326	:invoke	:read	nil
+326	:info	:read	nil	:timeout

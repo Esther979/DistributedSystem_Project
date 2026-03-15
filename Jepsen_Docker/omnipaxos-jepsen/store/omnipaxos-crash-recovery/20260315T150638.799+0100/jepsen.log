@@ -1,0 +1,293 @@
+2026-03-15 15:06:38,828{GMT}	INFO	[jepsen test runner] jepsen.core: Command line:
+lein run test --no-ssh --concurrency 5 --test-type crash-recovery
+2026-03-15 15:06:38,876{GMT}	INFO	[jepsen test runner] jepsen.core: Running test:
+{:remote
+ #jepsen.control.retry.Remote{:remote #jepsen.control.scp.Remote{:cmd-remote #jepsen.control.sshj.SSHJRemote{:concurrency-limit 6,
+                                                                                                             :conn-spec nil,
+                                                                                                             :client nil,
+                                                                                                             :semaphore nil},
+                                                                 :conn-spec nil},
+                              :conn nil}
+ :concurrency 5
+ :db
+ #object[jepsen.db$reify__11249 "0x41db6e4b" "jepsen.db$reify__11249@41db6e4b"]
+ :leave-db-running? false
+ :name "omnipaxos-crash-recovery"
+ :logging-json? false
+ :start-time
+ #object[org.joda.time.DateTime "0x472dc215" "2026-03-15T15:06:38.799+01:00"]
+ :net
+ #object[jepsen.net$reify__12635
+         "0x1f031994"
+         "jepsen.net$reify__12635@1f031994"]
+ :client #omnipaxos_jepsen.client.OmniPaxosClient{:conn nil}
+ :barrier
+ #object[java.util.concurrent.CyclicBarrier
+         "0x37bac0f4"
+         "java.util.concurrent.CyclicBarrier@37bac0f4"]
+ :pure-generators true
+ :ssh
+ {:dummy? true,
+  :username "root",
+  :password "root",
+  :strict-host-key-checking false,
+  :private-key-path nil}
+ :checker
+ #object[jepsen.checker$compose$reify__10552
+         "0x20c55658"
+         "jepsen.checker$compose$reify__10552@20c55658"]
+ :argv ("test" "--no-ssh" "--concurrency" "5" "--test-type" "crash-recovery")
+ :nemesis
+ #unprintable "omnipaxos_jepsen.nemesis$crash_nemesis$reify__2393@951053f"
+ :test-type "crash-recovery"
+ :nodes ["localhost"]
+ :test-count 1
+ :generator
+ #object[jepsen.util.Forgettable
+         "0x44f5259a"
+         ((jepsen.generator.Synchronize
+           {:gen (jepsen.generator.OnThreads
+                  {:f #jepsen.generator.context.AllBut{:element :nemesis},
+                   :context-filter #object[jepsen.generator.context$make_thread_filter$lazy_filter__11515
+                                           "0x27ea7c8f"
+                                           "jepsen.generator.context$make_thread_filter$lazy_filter__11515@27ea7c8f"],
+                   :gen (jepsen.generator.Limit
+                         {:remaining 1,
+                          :gen {:type :invoke, :f :write, :value 0}})})})
+          (jepsen.generator.Synchronize
+           {:gen (jepsen.generator.OnThreads
+                  {:f #jepsen.generator.context.AllBut{:element :nemesis},
+                   :context-filter #object[jepsen.generator.context$make_thread_filter$lazy_filter__11515
+                                           "0x17e31657"
+                                           "jepsen.generator.context$make_thread_filter$lazy_filter__11515@17e31657"],
+                   :gen (jepsen.generator.TimeLimit
+                         {:limit 8000000000,
+                          :cutoff nil,
+                          :gen (jepsen.generator.Stagger
+                                {:dt 1000000000,
+                                 :next-time nil,
+                                 :gen (jepsen.generator.Mix
+                                       {:i 2,
+                                        :gens [#object[omnipaxos_jepsen.core$r
+                                                       "0x1e3c4c12"
+                                                       "omnipaxos_jepsen.core$r@1e3c4c12"]
+                                               #object[omnipaxos_jepsen.core$w
+                                                       "0x7a8e35d1"
+                                                       "omnipaxos_jepsen.core$w@7a8e35d1"]
+                                               #object[omnipaxos_jepsen.core$cas
+                                                       "0xe74300b"
+                                                       "omnipaxos_jepsen.core$cas@e74300b"]]})})})})})
+          (jepsen.generator.Synchronize
+           {:gen (jepsen.generator.Mix
+                  {:i 0,
+                   :gens [(jepsen.generator.OnThreads
+                           {:f #{:nemesis},
+                            :context-filter #object[jepsen.generator.context$make_thread_filter$lazy_filter__11515
+                                                    "0x1aade3c"
+                                                    "jepsen.generator.context$make_thread_filter$lazy_filter__11515@1aade3c"],
+                            :gen (jepsen.generator.Limit
+                                  {:remaining 1,
+                                   :gen {:type :info, :f :kill-leader}})})
+                          (jepsen.generator.OnThreads
+                           {:f #jepsen.generator.context.AllBut{:element :nemesis},
+                            :context-filter #object[jepsen.generator.context$make_thread_filter$lazy_filter__11515
+                                                    "0x7d8a5ec7"
+                                                    "jepsen.generator.context$make_thread_filter$lazy_filter__11515@7d8a5ec7"],
+                            :gen (jepsen.generator.TimeLimit
+                                  {:limit 8000000000,
+                                   :cutoff nil,
+                                   :gen (jepsen.generator.Stagger
+                                         {:dt 1000000000,
+                                          :next-time nil,
+                                          :gen (jepsen.generator.Mix
+                                                {:i 2,
+                                                 :gens [#object[omnipaxos_jepsen.core$r
+                                                                "0x1e3c4c12"
+                                                                "omnipaxos_jepsen.core$r@1e3c4c12"]
+                                                        #object[omnipaxos_jepsen.core$w
+                                                                "0x7a8e35d1"
+                                                                "omnipaxos_jepsen.core$w@7a8e35d1"]
+                                                        #object[omnipaxos_jepsen.core$cas
+                                                                "0xe74300b"
+                                                                "omnipaxos_jepsen.core$cas@e74300b"]]})})})})]})})
+          (jepsen.generator.Synchronize
+           {:gen (jepsen.generator.OnThreads
+                  {:f #{:nemesis},
+                   :context-filter #object[jepsen.generator.context$make_thread_filter$lazy_filter__11515
+                                           "0x76a1cc1a"
+                                           "jepsen.generator.context$make_thread_filter$lazy_filter__11515@76a1cc1a"],
+                   :gen (jepsen.generator.Limit
+                         {:remaining 1, :gen {:type :info, :f :restart}})})})
+          (jepsen.generator.Synchronize
+           {:gen (jepsen.generator.OnThreads
+                  {:f #jepsen.generator.context.AllBut{:element :nemesis},
+                   :context-filter #object[jepsen.generator.context$make_thread_filter$lazy_filter__11515
+                                           "0x597a5ead"
+                                           "jepsen.generator.context$make_thread_filter$lazy_filter__11515@597a5ead"],
+                   :gen (jepsen.generator.TimeLimit
+                         {:limit 10000000000,
+                          :cutoff nil,
+                          :gen (jepsen.generator.Stagger
+                                {:dt 1000000000,
+                                 :next-time nil,
+                                 :gen (jepsen.generator.Mix
+                                       {:i 1,
+                                        :gens [#object[omnipaxos_jepsen.core$r
+                                                       "0x1e3c4c12"
+                                                       "omnipaxos_jepsen.core$r@1e3c4c12"]
+                                               #object[omnipaxos_jepsen.core$w
+                                                       "0x7a8e35d1"
+                                                       "omnipaxos_jepsen.core$w@7a8e35d1"]
+                                               #object[omnipaxos_jepsen.core$cas
+                                                       "0xe74300b"
+                                                       "omnipaxos_jepsen.core$cas@e74300b"]]})})})})}))]
+ :os
+ #object[jepsen.os$reify__13040 "0xe763080" "jepsen.os$reify__13040@e763080"]
+ :time-limit 60}
+
+2026-03-15 15:06:39,866{GMT}	INFO	[jepsen test runner] jepsen.db: Tearing down DB
+2026-03-15 15:06:39,867{GMT}	INFO	[jepsen test runner] jepsen.db: Setting up DB
+2026-03-15 15:06:39,868{GMT}	INFO	[jepsen test runner] jepsen.core: Relative time begins now
+2026-03-15 15:06:39,883{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:write	0
+2026-03-15 15:06:40,017{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:write	0
+2026-03-15 15:06:40,019{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:cas	[1 0]
+2026-03-15 15:06:40,023{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:fail	:cas	[1 0]	:precondition-failed
+2026-03-15 15:06:40,202{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[4 1]
+2026-03-15 15:06:40,209{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[4 1]	:precondition-failed
+2026-03-15 15:06:40,797{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:write	3
+2026-03-15 15:06:40,807{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:ok	:write	3
+2026-03-15 15:06:41,371{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[0 4]
+2026-03-15 15:06:41,380{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:fail	:cas	[0 4]	:precondition-failed
+2026-03-15 15:06:41,978{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[2 3]
+2026-03-15 15:06:41,987{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:fail	:cas	[2 3]	:precondition-failed
+2026-03-15 15:06:42,493{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 15:06:42,502{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	3
+2026-03-15 15:06:42,856{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 15:06:42,865{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	3
+2026-03-15 15:06:43,779{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	8
+2026-03-15 15:06:43,790{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	8
+2026-03-15 15:06:43,894{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:read	nil
+2026-03-15 15:06:43,903{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:ok	:read	8
+2026-03-15 15:06:44,277{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 15:06:44,286{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	8
+2026-03-15 15:06:45,276{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 15:06:45,289{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	8
+2026-03-15 15:06:45,426{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:write	4
+2026-03-15 15:06:45,435{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:write	4
+2026-03-15 15:06:46,181{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:write	8
+2026-03-15 15:06:46,190{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:write	8
+2026-03-15 15:06:46,418{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[3 1]
+2026-03-15 15:06:46,428{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:fail	:cas	[3 1]	:precondition-failed
+2026-03-15 15:06:46,595{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:write	7
+2026-03-15 15:06:46,604{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:ok	:write	7
+2026-03-15 15:06:46,909{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:cas	[1 0]
+2026-03-15 15:06:46,919{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:fail	:cas	[1 0]	:precondition-failed
+2026-03-15 15:06:47,552{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:read	nil
+2026-03-15 15:06:47,562{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:read	7
+2026-03-15 15:06:47,563{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:info	:kill-leader	nil
+2026-03-15 15:06:47,563{GMT}	INFO	[jepsen worker nemesis] omnipaxos-jepsen.nemesis: Nemesis: killing leader s1
+2026-03-15 15:06:47,563{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:cas	[4 2]
+2026-03-15 15:06:47,573{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:fail	:cas	[4 2]	:precondition-failed
+2026-03-15 15:06:48,304{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:write	3
+2026-03-15 15:06:48,314{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:ok	:write	3
+2026-03-15 15:06:48,851{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:info	:kill-leader	"killed s1"
+2026-03-15 15:06:49,185{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:read	nil
+2026-03-15 15:06:49,190{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:info	:read	nil	:timeout
+2026-03-15 15:06:49,536{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2026-03-15 15:06:49,541{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:info	:read	nil	:timeout
+2026-03-15 15:06:49,741{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:cas	[3 4]
+2026-03-15 15:06:49,751{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:ok	:cas	[3 4]
+2026-03-15 15:06:50,198{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:write	4
+2026-03-15 15:06:50,203{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:info	:write	4	:timeout
+2026-03-15 15:06:51,126{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2026-03-15 15:06:51,131{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:info	:read	nil	:timeout
+2026-03-15 15:06:51,880{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:cas	[3 3]
+2026-03-15 15:06:51,884{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:info	:cas	[3 3]	:timeout
+2026-03-15 15:06:52,061{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[3 2]
+2026-03-15 15:06:52,067{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:cas	[3 2]	:precondition-failed
+2026-03-15 15:06:53,021{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:cas	[2 4]
+2026-03-15 15:06:53,030{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:fail	:cas	[2 4]	:precondition-failed
+2026-03-15 15:06:53,384{GMT}	INFO	[jepsen worker 0] jepsen.util: 5	:invoke	:cas	[4 2]
+2026-03-15 15:06:53,394{GMT}	INFO	[jepsen worker 0] jepsen.util: 5	:ok	:cas	[4 2]
+2026-03-15 15:06:53,949{GMT}	INFO	[jepsen worker 0] jepsen.util: 5	:invoke	:write	1
+2026-03-15 15:06:53,959{GMT}	INFO	[jepsen worker 0] jepsen.util: 5	:ok	:write	1
+2026-03-15 15:06:54,606{GMT}	INFO	[jepsen worker 1] jepsen.util: 6	:invoke	:cas	[2 4]
+2026-03-15 15:06:54,615{GMT}	INFO	[jepsen worker 1] jepsen.util: 6	:fail	:cas	[2 4]	:precondition-failed
+2026-03-15 15:06:55,114{GMT}	INFO	[jepsen worker 2] jepsen.util: 7	:invoke	:cas	[3 1]
+2026-03-15 15:06:55,123{GMT}	INFO	[jepsen worker 2] jepsen.util: 7	:fail	:cas	[3 1]	:precondition-failed
+2026-03-15 15:06:55,166{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[3 2]
+2026-03-15 15:06:55,171{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:cas	[3 2]	:precondition-failed
+2026-03-15 15:06:55,171{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:info	:restart	nil
+2026-03-15 15:06:55,171{GMT}	INFO	[jepsen worker nemesis] omnipaxos-jepsen.nemesis: Nemesis: restarting all nodes
+2026-03-15 15:07:00,396{GMT}	INFO	[jepsen worker nemesis] jepsen.util: :nemesis	:info	:restart	"restarted all nodes"
+2026-03-15 15:07:00,397{GMT}	INFO	[jepsen worker 0] jepsen.util: 5	:invoke	:write	0
+2026-03-15 15:07:00,412{GMT}	INFO	[jepsen worker 0] jepsen.util: 5	:ok	:write	0
+2026-03-15 15:07:00,969{GMT}	INFO	[jepsen worker 0] jepsen.util: 5	:invoke	:read	nil
+2026-03-15 15:07:00,974{GMT}	INFO	[jepsen worker 0] jepsen.util: 5	:info	:read	nil	:timeout
+2026-03-15 15:07:01,187{GMT}	INFO	[jepsen worker 1] jepsen.util: 6	:invoke	:cas	[0 4]
+2026-03-15 15:07:01,198{GMT}	INFO	[jepsen worker 1] jepsen.util: 6	:ok	:cas	[0 4]
+2026-03-15 15:07:01,952{GMT}	INFO	[jepsen worker 2] jepsen.util: 7	:invoke	:cas	[0 1]
+2026-03-15 15:07:01,957{GMT}	INFO	[jepsen worker 2] jepsen.util: 7	:info	:cas	[0 1]	:timeout
+2026-03-15 15:07:02,528{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:cas	[3 3]
+2026-03-15 15:07:02,538{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:cas	[3 3]	:precondition-failed
+2026-03-15 15:07:03,327{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:read	nil
+2026-03-15 15:07:03,336{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:ok	:read	4
+2026-03-15 15:07:03,455{GMT}	INFO	[jepsen worker 0] jepsen.util: 10	:invoke	:write	9
+2026-03-15 15:07:03,465{GMT}	INFO	[jepsen worker 0] jepsen.util: 10	:ok	:write	9
+2026-03-15 15:07:04,456{GMT}	INFO	[jepsen worker 0] jepsen.util: 10	:invoke	:read	nil
+2026-03-15 15:07:04,462{GMT}	INFO	[jepsen worker 0] jepsen.util: 10	:ok	:read	9
+2026-03-15 15:07:05,364{GMT}	INFO	[jepsen worker 1] jepsen.util: 6	:invoke	:write	1
+2026-03-15 15:07:05,374{GMT}	INFO	[jepsen worker 1] jepsen.util: 6	:ok	:write	1
+2026-03-15 15:07:06,173{GMT}	INFO	[jepsen worker 2] jepsen.util: 12	:invoke	:write	6
+2026-03-15 15:07:06,183{GMT}	INFO	[jepsen worker 2] jepsen.util: 12	:ok	:write	6
+2026-03-15 15:07:07,009{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:write	9
+2026-03-15 15:07:07,013{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:info	:write	9	:timeout
+2026-03-15 15:07:07,921{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:read	nil
+2026-03-15 15:07:07,930{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:ok	:read	6
+2026-03-15 15:07:08,164{GMT}	INFO	[jepsen worker 0] jepsen.util: 10	:invoke	:cas	[4 2]
+2026-03-15 15:07:08,174{GMT}	INFO	[jepsen worker 0] jepsen.util: 10	:fail	:cas	[4 2]	:precondition-failed
+2026-03-15 15:07:08,418{GMT}	INFO	[jepsen worker 0] jepsen.util: 10	:invoke	:read	nil
+2026-03-15 15:07:08,423{GMT}	INFO	[jepsen worker 0] jepsen.util: 10	:info	:read	nil	:timeout
+2026-03-15 15:07:08,709{GMT}	INFO	[jepsen worker 1] jepsen.util: 6	:invoke	:read	nil
+2026-03-15 15:07:08,719{GMT}	INFO	[jepsen worker 1] jepsen.util: 6	:ok	:read	6
+2026-03-15 15:07:09,556{GMT}	INFO	[jepsen worker 2] jepsen.util: 12	:invoke	:read	nil
+2026-03-15 15:07:09,566{GMT}	INFO	[jepsen worker 2] jepsen.util: 12	:ok	:read	6
+2026-03-15 15:07:10,147{GMT}	INFO	[jepsen worker 3] jepsen.util: 13	:invoke	:write	6
+2026-03-15 15:07:10,157{GMT}	INFO	[jepsen worker 3] jepsen.util: 13	:ok	:write	6
+2026-03-15 15:07:10,391{GMT}	INFO	[jepsen test runner] jepsen.core: Run complete, writing
+2026-03-15 15:07:10,428{GMT}	INFO	[jepsen test runner] jepsen.core: Analyzing...
+2026-03-15 15:07:10,761{GMT}	INFO	[jepsen test runner] jepsen.core: Analysis complete
+2026-03-15 15:07:10,769{GMT}	INFO	[jepsen results] jepsen.store: Wrote /Users/esther/coding/Rust/DistributedSystem_Project/Jepsen/omnipaxos-jepsen/store/omnipaxos-crash-recovery/20260315T150638.799+0100/results.edn
+2026-03-15 15:07:10,789{GMT}	INFO	[jepsen test runner] jepsen.core: {:linearizable {:valid? true,
+                :model #knossos.model.CASRegister{:value 6},
+                :analyzer :wgl,
+                :final-paths (),
+                :configs ()},
+ :timeline {:valid? true},
+ :stats {:valid? true,
+         :count 50,
+         :ok-count 27,
+         :fail-count 14,
+         :info-count 9,
+         :by-f {:cas {:valid? true,
+                      :count 19,
+                      :ok-count 3,
+                      :fail-count 14,
+                      :info-count 2},
+                :read {:valid? true,
+                       :count 16,
+                       :ok-count 11,
+                       :fail-count 0,
+                       :info-count 5},
+                :write {:valid? true,
+                        :count 15,
+                        :ok-count 13,
+                        :fail-count 0,
+                        :info-count 2}}},
+ :perf {:latency-graph {:valid? true},
+        :rate-graph {:valid? true},
+        :valid? true},
+ :valid? true}
+
+
+Everything looks good! ヽ(‘ー`)ノ

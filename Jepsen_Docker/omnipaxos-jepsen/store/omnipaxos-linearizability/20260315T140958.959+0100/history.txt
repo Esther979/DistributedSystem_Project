@@ -1,0 +1,452 @@
+0	:invoke	:write	0
+0	:ok	:write	0
+1	:invoke	:write	9
+1	:ok	:write	9
+2	:invoke	:read	nil
+2	:ok	:read	9
+3	:invoke	:cas	[1 3]
+3	:fail	:cas	[1 3]	:precondition-failed
+4	:invoke	:write	1
+4	:ok	:write	1
+0	:invoke	:cas	[3 3]
+0	:fail	:cas	[3 3]	:precondition-failed
+0	:invoke	:write	9
+0	:ok	:write	9
+1	:invoke	:cas	[4 3]
+1	:fail	:cas	[4 3]	:precondition-failed
+2	:invoke	:cas	[4 4]
+2	:fail	:cas	[4 4]	:precondition-failed
+3	:invoke	:write	9
+3	:ok	:write	9
+4	:invoke	:cas	[3 0]
+4	:fail	:cas	[3 0]	:precondition-failed
+0	:invoke	:cas	[3 4]
+0	:fail	:cas	[3 4]	:precondition-failed
+0	:invoke	:write	0
+0	:ok	:write	0
+1	:invoke	:read	nil
+1	:ok	:read	0
+2	:invoke	:cas	[0 3]
+2	:ok	:cas	[0 3]
+3	:invoke	:cas	[0 4]
+3	:fail	:cas	[0 4]	:precondition-failed
+4	:invoke	:cas	[4 1]
+4	:fail	:cas	[4 1]	:precondition-failed
+0	:invoke	:cas	[3 2]
+0	:ok	:cas	[3 2]
+0	:invoke	:read	nil
+0	:ok	:read	2
+1	:invoke	:write	3
+1	:ok	:write	3
+2	:invoke	:cas	[2 3]
+2	:fail	:cas	[2 3]	:precondition-failed
+3	:invoke	:read	nil
+3	:ok	:read	3
+4	:invoke	:write	8
+0	:invoke	:write	8
+4	:ok	:write	8
+0	:ok	:write	8
+0	:invoke	:read	nil
+0	:ok	:read	8
+1	:invoke	:cas	[3 2]
+1	:fail	:cas	[3 2]	:precondition-failed
+2	:invoke	:read	nil
+2	:ok	:read	8
+3	:invoke	:read	nil
+3	:ok	:read	8
+4	:invoke	:cas	[3 4]
+4	:fail	:cas	[3 4]	:precondition-failed
+0	:invoke	:read	nil
+0	:ok	:read	8
+0	:invoke	:read	nil
+0	:ok	:read	8
+1	:invoke	:write	0
+1	:ok	:write	0
+2	:invoke	:cas	[4 2]
+2	:fail	:cas	[4 2]	:precondition-failed
+3	:invoke	:write	0
+3	:ok	:write	0
+4	:invoke	:read	nil
+4	:ok	:read	0
+0	:invoke	:cas	[4 1]
+0	:fail	:cas	[4 1]	:precondition-failed
+0	:invoke	:write	7
+1	:invoke	:write	6
+0	:ok	:write	7
+1	:ok	:write	6
+2	:invoke	:write	0
+2	:ok	:write	0
+3	:invoke	:cas	[4 0]
+3	:fail	:cas	[4 0]	:precondition-failed
+4	:invoke	:read	nil
+4	:ok	:read	0
+0	:invoke	:read	nil
+0	:ok	:read	0
+0	:invoke	:read	nil
+0	:ok	:read	0
+1	:invoke	:read	nil
+1	:ok	:read	0
+2	:invoke	:write	1
+2	:ok	:write	1
+3	:invoke	:read	nil
+3	:ok	:read	1
+4	:invoke	:read	nil
+4	:ok	:read	1
+0	:invoke	:read	nil
+0	:ok	:read	1
+0	:invoke	:write	2
+0	:ok	:write	2
+1	:invoke	:cas	[2 0]
+1	:ok	:cas	[2 0]
+2	:invoke	:cas	[4 4]
+2	:fail	:cas	[4 4]	:precondition-failed
+3	:invoke	:read	nil
+3	:ok	:read	0
+4	:invoke	:write	1
+4	:ok	:write	1
+0	:invoke	:write	4
+0	:ok	:write	4
+0	:invoke	:write	1
+0	:ok	:write	1
+1	:invoke	:cas	[4 4]
+1	:fail	:cas	[4 4]	:precondition-failed
+2	:invoke	:read	nil
+3	:invoke	:write	8
+2	:ok	:read	1
+3	:ok	:write	8
+4	:invoke	:write	1
+4	:ok	:write	1
+0	:invoke	:write	0
+0	:ok	:write	0
+0	:invoke	:write	6
+0	:ok	:write	6
+1	:invoke	:read	nil
+1	:ok	:read	6
+2	:invoke	:write	5
+2	:ok	:write	5
+3	:invoke	:read	nil
+3	:ok	:read	5
+4	:invoke	:cas	[3 2]
+4	:fail	:cas	[3 2]	:precondition-failed
+0	:invoke	:cas	[2 4]
+0	:fail	:cas	[2 4]	:precondition-failed
+0	:invoke	:cas	[2 2]
+0	:fail	:cas	[2 2]	:precondition-failed
+1	:invoke	:write	6
+1	:ok	:write	6
+2	:invoke	:write	5
+2	:ok	:write	5
+3	:invoke	:write	3
+3	:ok	:write	3
+4	:invoke	:read	nil
+4	:ok	:read	3
+0	:invoke	:read	nil
+0	:ok	:read	3
+0	:invoke	:read	nil
+0	:ok	:read	3
+1	:invoke	:read	nil
+1	:ok	:read	3
+2	:invoke	:cas	[3 0]
+2	:ok	:cas	[3 0]
+3	:invoke	:read	nil
+4	:invoke	:read	nil
+3	:ok	:read	0
+4	:ok	:read	0
+0	:invoke	:write	3
+0	:ok	:write	3
+0	:invoke	:cas	[4 2]
+0	:fail	:cas	[4 2]	:precondition-failed
+1	:invoke	:read	nil
+1	:ok	:read	3
+2	:invoke	:write	2
+2	:ok	:write	2
+3	:invoke	:write	3
+3	:ok	:write	3
+4	:invoke	:read	nil
+4	:ok	:read	3
+0	:invoke	:read	nil
+0	:ok	:read	3
+0	:invoke	:read	nil
+0	:ok	:read	3
+1	:invoke	:cas	[0 1]
+1	:fail	:cas	[0 1]	:precondition-failed
+2	:invoke	:read	nil
+2	:ok	:read	3
+3	:invoke	:write	8
+3	:ok	:write	8
+4	:invoke	:cas	[2 1]
+4	:fail	:cas	[2 1]	:precondition-failed
+0	:invoke	:read	nil
+0	:ok	:read	8
+0	:invoke	:read	nil
+0	:ok	:read	8
+1	:invoke	:cas	[1 1]
+2	:invoke	:write	3
+1	:fail	:cas	[1 1]	:precondition-failed
+2	:ok	:write	3
+3	:invoke	:cas	[0 1]
+3	:fail	:cas	[0 1]	:precondition-failed
+4	:invoke	:read	nil
+4	:ok	:read	3
+0	:invoke	:read	nil
+0	:ok	:read	3
+0	:invoke	:write	4
+0	:ok	:write	4
+1	:invoke	:read	nil
+1	:ok	:read	4
+2	:invoke	:write	3
+2	:ok	:write	3
+3	:invoke	:read	nil
+3	:ok	:read	3
+4	:invoke	:read	nil
+4	:ok	:read	3
+0	:invoke	:read	nil
+0	:ok	:read	3
+0	:invoke	:cas	[1 1]
+0	:fail	:cas	[1 1]	:precondition-failed
+1	:invoke	:read	nil
+1	:ok	:read	3
+2	:invoke	:read	nil
+2	:ok	:read	3
+3	:invoke	:write	9
+3	:ok	:write	9
+4	:invoke	:write	0
+4	:ok	:write	0
+0	:invoke	:write	1
+0	:ok	:write	1
+0	:invoke	:read	nil
+0	:ok	:read	1
+1	:invoke	:cas	[4 1]
+1	:fail	:cas	[4 1]	:precondition-failed
+:nemesis	:info	:start	nil
+3	:invoke	:read	nil
+3	:ok	:read	1
+:nemesis	:info	:start	"paused s2, s3"
+4	:invoke	:read	nil
+0	:invoke	:write	8
+1	:invoke	:write	5
+2	:invoke	:read	nil
+3	:invoke	:write	7
+4	:info	:read	nil	:timeout
+9	:invoke	:read	nil
+0	:info	:write	8	:timeout
+1	:info	:write	5	:timeout
+2	:info	:read	nil	:timeout
+5	:invoke	:write	6
+3	:info	:write	7	:timeout
+6	:invoke	:cas	[4 3]
+7	:invoke	:cas	[3 3]
+8	:invoke	:read	nil
+9	:info	:read	nil	:timeout
+14	:invoke	:cas	[4 1]
+5	:info	:write	6	:timeout
+10	:invoke	:cas	[4 2]
+6	:info	:cas	[4 3]	:timeout
+11	:invoke	:cas	[2 0]
+7	:info	:cas	[3 3]	:timeout
+12	:invoke	:write	0
+8	:info	:read	nil	:timeout
+13	:invoke	:write	5
+14	:info	:cas	[4 1]	:timeout
+19	:invoke	:read	nil
+10	:info	:cas	[4 2]	:timeout
+15	:invoke	:write	4
+11	:info	:cas	[2 0]	:timeout
+16	:invoke	:write	1
+12	:info	:write	0	:timeout
+17	:invoke	:write	3
+13	:info	:write	5	:timeout
+18	:invoke	:cas	[0 3]
+19	:info	:read	nil	:timeout
+15	:info	:write	4	:timeout
+16	:info	:write	1	:timeout
+17	:info	:write	3	:timeout
+18	:info	:cas	[0 3]	:timeout
+:nemesis	:info	:stop	nil
+:nemesis	:info	:stop	"unpaused s2, s3"
+21	:invoke	:write	3
+21	:ok	:write	3
+22	:invoke	:cas	[4 3]
+22	:fail	:cas	[4 3]	:precondition-failed
+23	:invoke	:read	nil
+23	:ok	:read	3
+24	:invoke	:write	7
+24	:ok	:write	7
+20	:invoke	:write	8
+20	:ok	:write	8
+20	:invoke	:write	8
+20	:ok	:write	8
+21	:invoke	:cas	[3 1]
+21	:fail	:cas	[3 1]	:precondition-failed
+22	:invoke	:cas	[0 4]
+22	:fail	:cas	[0 4]	:precondition-failed
+23	:invoke	:read	nil
+23	:ok	:read	8
+24	:invoke	:read	nil
+24	:ok	:read	8
+20	:invoke	:write	5
+20	:ok	:write	5
+20	:invoke	:read	nil
+20	:ok	:read	5
+21	:invoke	:cas	[0 2]
+21	:fail	:cas	[0 2]	:precondition-failed
+22	:invoke	:read	nil
+22	:ok	:read	5
+23	:invoke	:read	nil
+23	:ok	:read	5
+24	:invoke	:read	nil
+24	:ok	:read	5
+20	:invoke	:read	nil
+20	:ok	:read	5
+20	:invoke	:cas	[2 4]
+20	:fail	:cas	[2 4]	:precondition-failed
+21	:invoke	:write	1
+21	:ok	:write	1
+22	:invoke	:read	nil
+22	:ok	:read	1
+23	:invoke	:read	nil
+23	:ok	:read	1
+24	:invoke	:write	6
+24	:ok	:write	6
+20	:invoke	:write	4
+20	:ok	:write	4
+20	:invoke	:write	6
+20	:ok	:write	6
+21	:invoke	:read	nil
+21	:ok	:read	6
+22	:invoke	:read	nil
+22	:ok	:read	6
+23	:invoke	:read	nil
+23	:ok	:read	6
+24	:invoke	:read	nil
+20	:invoke	:cas	[2 3]
+24	:ok	:read	6
+20	:fail	:cas	[2 3]	:precondition-failed
+20	:invoke	:write	9
+20	:ok	:write	9
+21	:invoke	:write	3
+21	:ok	:write	3
+22	:invoke	:write	5
+22	:ok	:write	5
+23	:invoke	:read	nil
+23	:ok	:read	5
+24	:invoke	:write	3
+24	:ok	:write	3
+20	:invoke	:read	nil
+20	:ok	:read	3
+20	:invoke	:read	nil
+20	:ok	:read	3
+21	:invoke	:cas	[4 3]
+21	:fail	:cas	[4 3]	:precondition-failed
+22	:invoke	:write	9
+22	:ok	:write	9
+23	:invoke	:write	8
+23	:ok	:write	8
+24	:invoke	:write	1
+24	:ok	:write	1
+20	:invoke	:read	nil
+20	:ok	:read	1
+20	:invoke	:cas	[1 0]
+20	:ok	:cas	[1 0]
+21	:invoke	:cas	[3 1]
+21	:fail	:cas	[3 1]	:precondition-failed
+22	:invoke	:read	nil
+22	:ok	:read	0
+23	:invoke	:cas	[0 3]
+23	:ok	:cas	[0 3]
+24	:invoke	:read	nil
+24	:ok	:read	3
+20	:invoke	:cas	[4 0]
+20	:fail	:cas	[4 0]	:precondition-failed
+20	:invoke	:write	7
+20	:ok	:write	7
+21	:invoke	:write	5
+21	:ok	:write	5
+22	:invoke	:cas	[0 3]
+22	:fail	:cas	[0 3]	:precondition-failed
+23	:invoke	:read	nil
+23	:ok	:read	5
+24	:invoke	:cas	[3 0]
+24	:fail	:cas	[3 0]	:precondition-failed
+20	:invoke	:write	8
+20	:ok	:write	8
+20	:invoke	:read	nil
+20	:ok	:read	8
+21	:invoke	:write	6
+21	:ok	:write	6
+22	:invoke	:read	nil
+22	:ok	:read	6
+23	:invoke	:read	nil
+23	:ok	:read	6
+24	:invoke	:cas	[3 4]
+24	:fail	:cas	[3 4]	:precondition-failed
+20	:invoke	:write	5
+20	:ok	:write	5
+20	:invoke	:write	0
+20	:ok	:write	0
+21	:invoke	:cas	[2 0]
+21	:fail	:cas	[2 0]	:precondition-failed
+22	:invoke	:read	nil
+22	:ok	:read	0
+23	:invoke	:read	nil
+23	:ok	:read	0
+24	:invoke	:read	nil
+24	:ok	:read	0
+20	:invoke	:read	nil
+20	:ok	:read	0
+20	:invoke	:write	4
+20	:ok	:write	4
+21	:invoke	:cas	[1 0]
+21	:fail	:cas	[1 0]	:precondition-failed
+22	:invoke	:read	nil
+22	:ok	:read	4
+23	:invoke	:write	5
+23	:ok	:write	5
+24	:invoke	:read	nil
+24	:ok	:read	5
+20	:invoke	:write	0
+20	:ok	:write	0
+20	:invoke	:read	nil
+20	:ok	:read	0
+21	:invoke	:read	nil
+21	:ok	:read	0
+22	:invoke	:read	nil
+22	:ok	:read	0
+23	:invoke	:read	nil
+23	:ok	:read	0
+24	:invoke	:read	nil
+24	:ok	:read	0
+20	:invoke	:write	4
+20	:ok	:write	4
+20	:invoke	:write	5
+20	:ok	:write	5
+21	:invoke	:cas	[3 3]
+21	:fail	:cas	[3 3]	:precondition-failed
+22	:invoke	:write	4
+22	:ok	:write	4
+23	:invoke	:write	4
+23	:ok	:write	4
+24	:invoke	:cas	[4 3]
+24	:ok	:cas	[4 3]
+20	:invoke	:read	nil
+20	:ok	:read	3
+20	:invoke	:cas	[0 2]
+20	:fail	:cas	[0 2]	:precondition-failed
+21	:invoke	:write	8
+21	:ok	:write	8
+22	:invoke	:write	2
+22	:ok	:write	2
+23	:invoke	:cas	[1 2]
+23	:fail	:cas	[1 2]	:precondition-failed
+24	:invoke	:cas	[0 0]
+24	:fail	:cas	[0 0]	:precondition-failed
+20	:invoke	:cas	[0 3]
+20	:fail	:cas	[0 3]	:precondition-failed
+20	:invoke	:read	nil
+20	:ok	:read	2
+21	:invoke	:write	9
+21	:ok	:write	9
+22	:invoke	:write	4
+22	:ok	:write	4
+23	:invoke	:write	7
+23	:ok	:write	7
