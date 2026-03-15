@@ -1,1 +1,5 @@
 /target
+
+Maelstrom_Docker/dockerVersion/maelstrom/*
+Maelstrom_Docker/dockerVersion/store/*
+Maelstrom_Docker/dockerVersion/target/*

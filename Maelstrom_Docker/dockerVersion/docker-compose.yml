@@ -1,0 +1,62 @@
+version: "3.9"
+
+services:
+  n1:
+    build: .
+    container_name: omnipaxos-n1
+    hostname: n1
+    environment:
+      OMNIPAXOS_STORAGE_PATH: /data
+      OMNIPAXOS_RECOVER: "${OMNIPAXOS_RECOVER:-0}"
+      RUST_BACKTRACE: "1"
+      NODE_PORT: "7001"
+      KV_BIN: "/app/kv-node"
+    volumes:
+      - n1-data:/data
+    ports:
+      - "7001:7001"
+    networks:
+      - omnipaxos-net
+
+  n2:
+    build: .
+    container_name: omnipaxos-n2
+    hostname: n2
+    environment:
+      OMNIPAXOS_STORAGE_PATH: /data
+      OMNIPAXOS_RECOVER: "${OMNIPAXOS_RECOVER:-0}"
+      RUST_BACKTRACE: "1"
+      NODE_PORT: "7002"
+      KV_BIN: "/app/kv-node"
+    volumes:
+      - n2-data:/data
+    ports:
+      - "7002:7002"
+    networks:
+      - omnipaxos-net
+
+  n3:
+    build: .
+    container_name: omnipaxos-n3
+    hostname: n3
+    environment:
+      OMNIPAXOS_STORAGE_PATH: /data
+      OMNIPAXOS_RECOVER: "${OMNIPAXOS_RECOVER:-0}"
+      RUST_BACKTRACE: "1"
+      NODE_PORT: "7003"
+      KV_BIN: "/app/kv-node"
+    volumes:
+      - n3-data:/data
+    ports:
+      - "7003:7003"
+    networks:
+      - omnipaxos-net
+
+networks:
+  omnipaxos-net:
+    driver: bridge
+
+volumes:
+  n1-data:
+  n2-data:
+  n3-data:
