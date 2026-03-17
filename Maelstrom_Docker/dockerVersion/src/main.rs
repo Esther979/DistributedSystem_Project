@@ -14,6 +14,7 @@ use omnipaxos::storage::{StopSign, Storage, StorageResult};
 use omnipaxos::util::{LogEntry, NodeId};
 use omnipaxos::{OmniPaxos, OmniPaxosConfig};
 
+// 命令模型
 #[derive(Clone, Debug, Serialize, Deserialize, Entry)]
 pub enum KVCommand {
     Read { key: u64, msg_id: u64, client: String, node: String },
@@ -21,6 +22,7 @@ pub enum KVCommand {
     Cas { key: u64, from: u64, to: u64, msg_id: u64, client: String, node: String },
 }
 
+//回复返回模型
 #[derive(Clone, Debug, Serialize, Deserialize)]
 enum CachedReply {
     WriteOk,
@@ -29,6 +31,7 @@ enum CachedReply {
     Error { code: u32, text: String },
 }
 
+// 存储app_state部分
 #[derive(Clone, Debug, Serialize, Deserialize, Default)]
 struct AppState {
     kv: HashMap<u64, u64>,
@@ -36,20 +39,6 @@ struct AppState {
     applied_idx: u64,
 }
 
-fn cmd_req_id(cmd: &KVCommand) -> String {
-    match cmd {
-        KVCommand::Read { client, msg_id, .. }
-        | KVCommand::Write { client, msg_id, .. }
-        | KVCommand::Cas { client, msg_id, .. } => format!("{}:{}", client, msg_id),
-    }
-}
-
-fn parse_node_id(s: &str) -> NodeId {
-    s.trim_start_matches('n').parse::<u64>().unwrap_or(0) + 1
-}
-fn node_name_from_pid(pid: NodeId) -> String {
-    format!("n{}", pid - 1)
-}
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Message {
     pub src: String,
@@ -83,27 +72,48 @@ pub struct Body {
     pub extra: serde_json::Map<String, serde_json::Value>,
 }
 
+// 三种事件类型
 pub enum Event {
     Message(Message),
     Tick,
     Shutdown,
 }
 
+// create unqiue cmd id client:msg_id
+fn cmd_req_id(cmd: &KVCommand) -> String {
+    match cmd {
+        KVCommand::Read { client, msg_id, .. }
+        | KVCommand::Write { client, msg_id, .. }
+        | KVCommand::Cas { client, msg_id, .. } => format!("{}:{}", client, msg_id),
+    }
+}
+
+// docker node-id to kv node-id
+fn parse_node_id(s: &str) -> NodeId {
+    s.trim_start_matches('n').parse::<u64>().unwrap_or(0) + 1
+}
+
+fn node_name_from_pid(pid: NodeId) -> String {
+    format!("n{}", pid - 1)
+}
+
+// set storage path
 fn storage_root() -> String {
     std::env::var("OMNIPAXOS_STORAGE_PATH").unwrap_or_else(|_| {
         let cwd = std::env::current_dir().unwrap_or_else(|_| ".".into());
         cwd.join("store_local").to_string_lossy().into_owned()
     })
 }
-
+// 节点总目录
 fn server_base_dir(pid: NodeId) -> String {
     format!("{}/server-{}", storage_root(), pid)
 }
-
+// 节点下paxos共识目录
 fn paxos_base_dir(pid: NodeId) -> String {
     format!("{}/paxos", server_base_dir(pid))
 }
 
+// 获取地址
 fn app_state_file(pid: NodeId) -> PathBuf {
     PathBuf::from(server_base_dir(pid)).join("app_state.bin")
 }
@@ -112,10 +122,12 @@ fn ensure_server_dirs(pid: NodeId) {
     let _ = std::fs::create_dir_all(paxos_base_dir(pid));
 }
 
+// 保证所有buffer写进磁盘中
 fn fsync_dir(path: &Path) -> io::Result<()> {
     File::open(path)?.sync_all()
 }
 
+// 存储app_state data
 fn persist_app_state(pid: NodeId, state: &AppState) -> io::Result<()> {
     let dir = PathBuf::from(server_base_dir(pid));
     fs::create_dir_all(&dir)?;
@@ -182,8 +194,8 @@ struct CrashSafeFileStorage<T>
 where
     T: omnipaxos::storage::Entry,
 {
-    dir: PathBuf,
-    state_file: PathBuf,
+    dir: PathBuf,  //存储根目录
+    state_file: PathBuf, //状态文件目录
     state: CrashSafeState<T>,
 }
 
@@ -192,6 +204,7 @@ where
     T: omnipaxos::storage::Entry + Serialize + for<'a> Deserialize<'a>,
     T::Snapshot: Serialize + for<'a> Deserialize<'a>,
 {
+    //启动时调用
     fn open(dir: impl AsRef<Path>, fresh_start: bool) -> Self {
         let dir = dir.as_ref().to_path_buf();
         let state_file = dir.join("state.bin");
@@ -210,6 +223,7 @@ where
         Self { dir, state_file, state }
     }
 
+    //运行
     fn persist(&self) -> StorageResult<()> {
         let tmp = self.dir.join("state.bin.tmp");
         let bytes = bincode::serialize(&self.state)?;
@@ -223,6 +237,7 @@ where
         Ok(())
     }
 
+    //全局索引和本地vector的换算  读写日志
     fn local_index(&self, global_idx: u64) -> usize {
         global_idx.saturating_sub(self.state.trimmed_idx) as usize
     }
@@ -233,20 +248,21 @@ where
     T: omnipaxos::storage::Entry + Serialize + for<'a> Deserialize<'a>,
     T::Snapshot: Serialize + for<'a> Deserialize<'a>,
 {
+    // 追加一个日志
     fn append_entry(&mut self, entry: T) -> StorageResult<u64> {
         self.state.log.push(entry);
         self.persist()?;
         self.get_log_len()
     }
-
+    //追加多个日志
     fn append_entries(&mut self, mut entries: Vec<T>) -> StorageResult<u64> {
         self.state.log.append(&mut entries);
         self.persist()?;
         self.get_log_len()
     }
-
+    //追加
     fn append_on_prefix(&mut self, from_idx: u64, entries: Vec<T>) -> StorageResult<u64> {
-        let local_from = self.local_index(from_idx).min(self.state.log.len());
+        let local_from = self.local_index(from_idx).min(self.state.log.len());  //get log_index
         self.state.log.truncate(local_from);
         self.state.log.extend(entries);
         self.persist()?;
@@ -307,6 +323,7 @@ where
         Ok(self.state.stopsign.clone())
     }
 
+    //真的删除值了
     fn trim(&mut self, trimmed_idx: u64) -> StorageResult<()> {
         if trimmed_idx <= self.state.trimmed_idx {
             return Ok(());
@@ -321,6 +338,7 @@ where
         self.persist()
     }
 
+    //更新了删除的值
     fn set_compacted_idx(&mut self, trimmed_idx: u64) -> StorageResult<()> {
         if trimmed_idx > self.state.trimmed_idx {
             self.state.trimmed_idx = trimmed_idx;
@@ -342,6 +360,7 @@ where
     }
 }
 
+// 创建omnipaxos节点实例 欸嘿
 fn build_omnipaxos(
     my_pid: NodeId,
     all_pids: Vec<NodeId>,
@@ -385,7 +404,7 @@ fn send_reply(
     };
     println!("{}", serde_json::to_string(&msg).unwrap());
 }
-
+// stdout
 fn send_read_reply(
     src: &str,
     dest: &str,
@@ -443,6 +462,7 @@ fn send_cached_reply(src: &str, dest: &str, in_reply_to: u64, msg_id: u64, reply
     }
 }
 
+// 转发打包
 fn send_forward_req(src: &str, dest: &str, cmd: &KVCommand) {
     let mut extra = serde_json::Map::new();
     extra.insert(
@@ -470,7 +490,7 @@ fn send_forward_req(src: &str, dest: &str, cmd: &KVCommand) {
 
     println!("{}", serde_json::to_string(&msg).unwrap());
 }
-
+//拆包转发
 fn forwarded_cmd_from_msg(msg: &Message) -> Option<KVCommand> {
     let v = msg.body.extra.get("cmd")?.clone();
     serde_json::from_value::<KVCommand>(v).ok()
@@ -493,6 +513,7 @@ fn node_log(node: &str, event: &str, fields: serde_json::Value) {
     );
 }
 
+// change KV
 fn apply_in_memory(cmd: &KVCommand, kv: &mut HashMap<u64, u64>) -> bool {
     match cmd {
         KVCommand::Write { key, value, .. } => {
@@ -510,7 +531,7 @@ fn apply_in_memory(cmd: &KVCommand, kv: &mut HashMap<u64, u64>) -> bool {
         KVCommand::Read { .. } => true,
     }
 }
-
+// 从KV中获取已经响应apply存储过的值了
 fn cached_reply_for(cmd: &KVCommand, cmd_ok: bool, kv: &HashMap<u64, u64>) -> CachedReply {
     match cmd {
         KVCommand::Write { .. } => CachedReply::WriteOk,
@@ -530,6 +551,7 @@ fn cached_reply_for(cmd: &KVCommand, cmd_ok: bool, kv: &HashMap<u64, u64>) -> Ca
     }
 }
 
+// apply context 把所有要改的东西都加进去 ‘a life cycle 引用才需要
 struct ApplyCtx<'a> {
     kv_store: &'a mut HashMap<u64, u64>,
     executed: &'a mut HashMap<String, CachedReply>,
@@ -541,6 +563,7 @@ struct ApplyCtx<'a> {
     recovery_fence: u64,
 }
 
+//decided -> apply kv
 fn apply_entries(entries: Vec<LogEntry<KVCommand>>, ctx: &mut ApplyCtx<'_>) {
     for entry in entries {
         let LogEntry::Decided(cmd) = entry else { continue };
@@ -566,7 +589,7 @@ fn apply_entries(entries: Vec<LogEntry<KVCommand>>, ctx: &mut ApplyCtx<'_>) {
                 "cmd": format!("{:?}", cmd),
             }),
         );
-
+        //如果已经执行过了 跳过
         let cached = if let Some(cached) = ctx.executed.get(&rid).cloned() {
             node_log(
                 ctx.my_node_id_str,
@@ -579,6 +602,7 @@ fn apply_entries(entries: Vec<LogEntry<KVCommand>>, ctx: &mut ApplyCtx<'_>) {
             );
             cached
         } else {
+            //真的更新到kv中
             let cmd_ok = apply_in_memory(&cmd, ctx.kv_store);
 
             node_log(
@@ -592,6 +616,7 @@ fn apply_entries(entries: Vec<LogEntry<KVCommand>>, ctx: &mut ApplyCtx<'_>) {
                 }),
             );
 
+            //构造缓存回复
             let cached = cached_reply_for(&cmd, cmd_ok, ctx.kv_store);
             ctx.executed.insert(rid.clone(), cached.clone());
 
@@ -617,7 +642,7 @@ fn apply_entries(entries: Vec<LogEntry<KVCommand>>, ctx: &mut ApplyCtx<'_>) {
                 );
                 break;
             }
-
+            //已经成功保存到内盘了
             node_log(
                 ctx.my_node_id_str,
                 "command_applied_persisted",
@@ -646,6 +671,7 @@ fn apply_entries(entries: Vec<LogEntry<KVCommand>>, ctx: &mut ApplyCtx<'_>) {
             }),
         );
 
+        //代表已经回过客户 不能重复回包
         if next_idx <= ctx.recovery_fence || !owned_by_me {
             node_log(
                 ctx.my_node_id_str,
@@ -660,7 +686,7 @@ fn apply_entries(entries: Vec<LogEntry<KVCommand>>, ctx: &mut ApplyCtx<'_>) {
                     },
                 }),
             );
-            continue;
+            continue; //直接跳到下一次循环
         }
 
         *ctx.reply_msg_id += 1;
@@ -692,10 +718,12 @@ fn apply_entries(entries: Vec<LogEntry<KVCommand>>, ctx: &mut ApplyCtx<'_>) {
     }
 }
 
+//主函数 main
 fn main() {
     let (tx, rx) = mpsc::channel::<Event>();
 
-    let tx_in = tx.clone();
+    let tx_in = tx.clone();  //发送TCP数据
+    //创建新线程，从srdin里一行行读取JSON数据，转换成Event message 发给主循环
     thread::spawn(move || {
         let stdin = io::stdin();
         for line in stdin.lock().lines() {
@@ -708,9 +736,10 @@ fn main() {
                 Err(_) => break,
             }
         }
+        //读完或者错误
         let _ = tx_in.send(Event::Shutdown);
     });
-
+    //每5ms 发一次tick
     let tx_tick = tx.clone();
     thread::spawn(move || loop {
         thread::sleep(Duration::from_millis(5));
@@ -763,6 +792,7 @@ fn main() {
                             let local_decided = op.get_decided_idx();
 
                             let loaded = if let Ok(Some(app)) = load_app_state(my_pid) {
+                                //decided but not applied
                                 if app.applied_idx <= local_decided {
                                     kv_store = app.kv;
                                     executed = app.executed;
@@ -818,6 +848,7 @@ fn main() {
                             }
                             op
                         } else {
+                            // #fresh start
                             let _ = fs::remove_file(app_state_file(my_pid));
                             eprintln!("🆕 [{}] fresh start", my_node_id_str);
                             node_log(
@@ -873,6 +904,7 @@ fn main() {
                                     if let (Some(k), Some(f), Some(t)) =
                                         (msg.body.key, msg.body.from, msg.body.to)
                                     {
+                                        // 枚举值符合 就执行构造请求
                                         Some(KVCommand::Cas {
                                             key: k,
                                             from: f,
@@ -889,6 +921,7 @@ fn main() {
                             };
 
                             if let Some(c) = cmd {
+                                // create unqiue id
                                 let rid = cmd_req_id(&c);
 
                                 node_log(
@@ -907,7 +940,7 @@ fn main() {
                                         "pending_len": pending.len(),
                                     }),
                                 );
-
+                                //请求已被执行过 直接apply
                                 if let Some(cached) = executed.get(&rid).cloned() {
                                     node_log(
                                         &my_node_id_str,
@@ -1135,7 +1168,7 @@ fn main() {
             Event::Tick => {
                 if let Some(op) = &mut omnipaxos {
                     op.tick();
-
+                    // 转发omnipaxos内部产生的任何信息
                     let outbound = op.outgoing_messages();
                     for m in outbound {
                         let bytes = bincode::serialize(&m).unwrap();

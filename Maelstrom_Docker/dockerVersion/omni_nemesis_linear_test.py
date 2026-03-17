@@ -29,15 +29,18 @@ NODE_PORTS = {
 CONTAINER_NAMES = {n: f"omnipaxos-{n}" for n in ALL_NODES}
 COMPOSE = ["docker-compose"]
 
+# 运行时间  客户端数目 KRY 每3s注入一个故障 probe_key 
 WORKLOAD_SECONDS = 60.0
 CLIENTS = 4
 KEYSPACE = 7
 NEMESIS_INTERVAL_S = 3.0
 PROBE_KEY_BASE = 10_000_000
 
+# 防止其他线程毁坏数据
 NODE_LOCKS = {n: threading.Lock() for n in ALL_NODES}
 
 MISSING = object()
+# python的递归限制
 sys.setrecursionlimit(20000)
 
 VERBOSE_STDOUT = False
@@ -54,7 +57,7 @@ def console(msg: str):
 def now_ts() -> float:
     return time.time()
 
-
+# 记录事件
 @dataclass
 class ArtifactWriter:
     root: Path = field(default_factory=lambda: Path("store/linear-nemesis") / time.strftime("%Y%m%dT%H%M%S"))
@@ -77,6 +80,7 @@ class ArtifactWriter:
             print(f"[event] {kind}: {kwargs}")
 
         related_nodes = []
+        # 事件归档
         for key in ("node", "src", "dest", "victim", "leader", "leader_at_time"):
             val = kwargs.get(key)
             if isinstance(val, str) and val in ALL_NODES:
@@ -116,12 +120,13 @@ class ArtifactWriter:
 ART = ArtifactWriter()
 
 
+# 封装了 docker命令
 def sh(cmd, check=True, env=None, timeout=None):
     if VERBOSE_STDOUT:
         print(f"[cmd] {' '.join(shlex.quote(str(x)) for x in cmd)}")
     return subprocess.run(cmd, check=check, env=env, timeout=timeout)
 
-
+# 故障分区  全联通 隔离一个节点 分成两段  只是不转发消息了TCP消息，而非实际更改网络
 class Partition:
     def __init__(self):
         self.lock = threading.Lock()
@@ -134,19 +139,19 @@ class Partition:
             self.left.clear()
             self.right.clear()
             self.isolated.clear()
-
+    # 孤立某个点
     def isolate(self, node: str):
         with self.lock:
             self.left.clear()
             self.right.clear()
             self.isolated = {node}
-
+    # 分区
     def split(self, left: List[str], right: List[str]):
         with self.lock:
             self.left = set(left)
             self.right = set(right)
             self.isolated.clear()
-
+    # 判断两节点是否可以通信
     def allowed(self, src: str, dst: str) -> bool:
         with self.lock:
             if src in self.isolated or dst in self.isolated:
@@ -159,7 +164,7 @@ class Partition:
 
 PARTITION = Partition()
 
-
+# 到单个TCP的连接
 class NodeConn:
     def __init__(self, name: str, port: int, router: "Router"):
         self.name = name
@@ -171,7 +176,7 @@ class NodeConn:
         self.wfile = None
         self.alive = False
         self.reader_thread = None
-
+    # 连接到docker  并起一个后台reader线程
     def connect(self, retries=120, sleep_s=0.5):
         self.close()
         last_err = None
@@ -192,6 +197,7 @@ class NodeConn:
                 time.sleep(sleep_s)
         raise RuntimeError(f"failed to connect to {self.name} on port {self.port}: {last_err!r}")
 
+    # //一直读节点返回的json 统一交给router处理
     def _reader(self):
         try:
             while self.alive:
@@ -229,7 +235,8 @@ class NodeConn:
         self.sock = None
         ART.event("node_closed", node=self.name)
 
-
+# Router相关
+# 测试器内部的消息总线
 class Router:
     def __init__(self):
         self.nodes: Dict[str, NodeConn] = {}
@@ -237,21 +244,22 @@ class Router:
         self.pending_lock = threading.Lock()
         self.msg_id = 1
         self.msg_id_lock = threading.Lock()
-
+    # 注册节点
     def register_node(self, node_conn: NodeConn):
         self.nodes[node_conn.name] = node_conn
-
+    # 发送的节点id
     def next_msg_id(self) -> int:
         with self.msg_id_lock:
             mid = self.msg_id
             self.msg_id += 1
             return mid
-
+    # 处理节点信息
     def handle_from_node(self, src_node: str, msg: dict):
         dest = msg.get("dest")
         body = msg.get("body", {})
-
+        # 目标是另一个节点
         if dest in self.nodes:
+            # 是否允许发消息
             if PARTITION.allowed(src_node, dest):
                 target = self.nodes[dest]
                 if target.alive:
@@ -262,15 +270,18 @@ class Router:
             else:
                 ART.event("partition_drop", src=src_node, dest=dest, body_type=body.get("type"))
             return
-
+        # 回复给client的信息，返回等待的信息
         if dest and dest.startswith("c"):
+            # 组装Key
             key = (dest, body.get("in_reply_to"))
             with self.pending_lock:
                 q = self.pending.get(key)
+            # client 等待这个rpc回复
             if q is not None:
+                # rpc拿到回复
                 q.put(msg)
             return
-
+    # 发请求  先注册的等待队列，再发请求，再阻塞等待回复
     def rpc(self, node: str, client: str, msg_type: str, timeout_s=5.0, **fields):
         msg_id = self.next_msg_id()
         q = queue.Queue()
@@ -296,7 +307,7 @@ class Router:
         finally:
             with self.pending_lock:
                 self.pending.pop(key, None)
-
+    # 初始化kv 节点
     def init_node(self, node: str):
         reply = self.rpc(
             node=node,
@@ -309,7 +320,7 @@ class Router:
         if body_type(reply) != "init_ok":
             raise RuntimeError(f"init failed for {node}: {reply!r}")
         console(f"[init] {node} ok")
-
+    # 读写cas命令
     def write(self, node: str, key: int, value: int, client: str):
         return self.rpc(node=node, client=client, msg_type="write", timeout_s=5.0, key=key, value=value)
 
@@ -329,9 +340,10 @@ def body_type(msg: dict) -> Optional[str]:
 
 def body_code(msg: dict) -> Optional[int]:
     return msg.get("body", {}).get("code")
-
-
+# LEADER探测和重试辅助函数
+# 判断谁是leader
 def maybe_find_leader(router: Router) -> str:
+    # 生成测试key 与原来的key不重合
     probe_key = PROBE_KEY_BASE + (int(time.time() * 1000) % 10000)
     for node in ALL_NODES:
         nc = router.nodes.get(node)
@@ -346,7 +358,7 @@ def maybe_find_leader(router: Router) -> str:
             ART.event("leader_probe_failed", node=node, error=repr(e))
     raise RuntimeError("could not find leader")
 
-
+# 重试20次来找leader
 def find_leader_with_retry(router: Router, attempts=20, sleep_s=0.7) -> str:
     last_err = None
     for _ in range(attempts):
@@ -357,7 +369,7 @@ def find_leader_with_retry(router: Router, attempts=20, sleep_s=0.7) -> str:
             time.sleep(sleep_s)
     raise RuntimeError(f"could not find leader after retries: {last_err!r}")
 
-
+# 等待端口连接 port is ready/
 def wait_for_port(port: int, timeout_s: float = 30.0):
     deadline = time.time() + timeout_s
     last_err = None
@@ -371,7 +383,7 @@ def wait_for_port(port: int, timeout_s: float = 30.0):
             time.sleep(0.25)
     raise RuntimeError(f"port {port} not ready after {timeout_s}s: {last_err!r}")
 
-
+# 尝试20次重启
 def init_with_retry(router: Router, node: str, attempts: int = 20, sleep_s: float = 1.0):
     last_err = None
     for _ in range(attempts):
@@ -388,29 +400,34 @@ def init_with_retry(router: Router, node: str, attempts: int = 20, sleep_s: floa
             time.sleep(sleep_s)
     raise RuntimeError(f"init_with_retry failed for {node}: {last_err!r}")
 
-
+# docker相关
+# kill 容器
 def docker_kill(node: str):
     cname = f"omnipaxos-{node}"
     ART.event("docker_kill", node=node, container=cname)
     sh(["docker", "kill", cname], check=True)
     time.sleep(1.5)
 
-
+# recovery 容器
 def docker_resume(node: str):
     print(f"[debug] docker_resume start: {node}")
     ART.event("docker_resume", node=node)
+    # 清掉旧容器
     sh(["docker", "rm", "-f", CONTAINER_NAMES[node]], check=False)
-
+    
+    # 设置恢复模式
     env = os.environ.copy()
     env["OMNIPAXOS_RECOVER"] = "1"
     sh(COMPOSE + ["up", "-d", node], check=True, env=env)
 
     print(f"[debug] docker_resume up-done: {node}, waiting port {NODE_PORTS[node]}")
+    # 连接节点
     wait_for_port(NODE_PORTS[node], timeout_s=30.0)
     print(f"[debug] docker_resume port-ready: {node}")
     time.sleep(0.5)
 
 def connect_and_init_all(router: Router):
+    # 初始单个Tcp docker的连接
     for n, p in NODE_PORTS.items():
         nc = NodeConn(n, p, router)
         router.register_node(nc)
@@ -420,6 +437,7 @@ def connect_and_init_all(router: Router):
         init_with_retry(router, n, attempts=10, sleep_s=1.0)
     time.sleep(1.0)
 
+# 重启连接并初始化
 def reconnect_and_init(router: Router, node: str):
     print(f"[debug] reconnect_and_init start: {node}")
     old = router.nodes[node]
@@ -451,7 +469,7 @@ def reconnect_and_init(router: Router, node: str):
 
     raise RuntimeError(f"reconnect_and_init failed for {node}: {last_err!r}")
 
-
+# 重置并开始
 def reset_and_start():
     sh(COMPOSE + ["down", "-v"], check=False)
     sh(COMPOSE + ["build"], check=True)
@@ -464,7 +482,7 @@ def reset_and_start():
         wait_for_port(NODE_PORTS[n], timeout_s=30.0)
     time.sleep(1.0)
 
-
+# 故障注入器
 class Nemesis(threading.Thread):
     def __init__(self, router: Router, stop_event: threading.Event):
         super().__init__(daemon=True)
@@ -480,6 +498,7 @@ class Nemesis(threading.Thread):
     def run(self):
         while not self.stop_event.wait(NEMESIS_INTERVAL_S):
             try:
+                # 每隔3S执行一次
                 self.step()
             except Exception as e:
                 ART.event("nemesis_error", error=repr(e))
@@ -487,6 +506,7 @@ class Nemesis(threading.Thread):
                     print(f"[nemesis] ERROR: {e!r}")
                     traceback.print_exc()
 
+    # 执行一次完整的崩溃恢复流程
     def crash_and_restart(self, victim: str, down_time: float = 4.0):
         with NODE_LOCKS[victim]:
             docker_kill(victim)
@@ -497,7 +517,7 @@ class Nemesis(threading.Thread):
             reconnect_and_init(self.router, victim)
             self.killed.discard(victim)
             self.restart_count += 1
-
+    # 先杀leader 再follower 再un_covered 再其他的故障分类
     def choose_action(self) -> str:
         if not self.covered_leader_crash:
             return "kill_leader"
@@ -508,13 +528,14 @@ class Nemesis(threading.Thread):
         return RNG.choice(["isolate_leader", "split", "kill_follower", "kill_leader"])
 
     def step(self):
+        # 所有故障跑过一次之后 有概率恢复网络
         if self.covered_leader_crash and self.covered_follower_crash and len(self.covered_crash_nodes) == len(ALL_NODES) and RNG.random() < 0.30:
             PARTITION.clear()
             payload = {"ts": time.time(), "action": "heal_partition"}
             ART.append_nemesis(payload)
             ART.event("nemesis_action", **payload)
             return
-
+        # 选择故障分类
         action = self.choose_action()
         print(f"[debug] nemesis chose action={action}")
         payload = {"ts": time.time(), "action": action}
@@ -601,7 +622,8 @@ class Nemesis(threading.Thread):
             
         ART.append_nemesis(payload)
         ART.event("nemesis_action", **payload)
-
+    
+    # 清除故障发生器的所有数据
     def cleanup(self):
         PARTITION.clear()
         for node in sorted(list(self.killed)):
@@ -614,7 +636,7 @@ class Nemesis(threading.Thread):
                     ART.event("nemesis_cleanup_failed", node=node, error=repr(e))
         self.killed.clear()
 
-
+# 复制持续制造业务请求
 class Worker(threading.Thread):
     def __init__(self, worker_id: int, router: Router, stop_event: threading.Event):
         super().__init__(daemon=True)
@@ -625,7 +647,7 @@ class Worker(threading.Thread):
         self.rand = random.Random(SEED * 1000 + worker_id)
         self.last_leader: Optional[str] = None
         self.last_leader_ts: float = 0.0
-
+    # 缓存1s 找leader
     def choose_node(self) -> str:
         now = time.time()
         if self.last_leader and (now - self.last_leader_ts) < 1.0:
@@ -645,7 +667,7 @@ class Worker(threading.Thread):
 
     def choose_key(self) -> int:
         return self.rand.randint(1, KEYSPACE)
-
+    # 一直运行操作
     def run(self):
         while not self.stop_event.is_set():
             try:
@@ -653,7 +675,7 @@ class Worker(threading.Thread):
             except Exception as e:
                 ART.event("worker_loop_error", worker=self.worker_id, error=repr(e))
                 time.sleep(0.1)
-
+    # 随机发送read write cas请求
     def one_op(self):
         node = self.choose_node()
         key = self.choose_key()
@@ -670,7 +692,7 @@ class Worker(threading.Thread):
             "start": start_mono,
             "start_wall": start_wall,
         }
-
+        # 通过路由器随机发送请求
         try:
             if op_kind == "read":
                 resp = self.router.read(node, key, self.process)
@@ -691,7 +713,8 @@ class Worker(threading.Thread):
             record["end_wall"] = end_wall
             record["response"] = resp
             ART.append_history(record)
-
+        
+        # 超时
         except queue.Empty:
             end_wall = time.time()
             end_mono = time.monotonic()
@@ -712,7 +735,8 @@ class Worker(threading.Thread):
 def op_ok_type(rec: dict) -> Optional[str]:
     return rec.get("response", {}).get("body", {}).get("type")
 
-
+# 验证历史记录时间戳
+# 和线性一致性验证有关
 def validate_history_timestamps(history: List[dict]):
     bad = []
     for idx, rec in enumerate(history):
@@ -727,7 +751,7 @@ def validate_history_timestamps(history: List[dict]):
         sample = json.dumps(bad[:10], ensure_ascii=False, indent=2)
         raise RuntimeError(f"invalid history timestamps detected, sample:\n{sample}")
 
-
+# 对象创建后不可变 用来线性一致性检测
 @dataclass(frozen=True)
 class HistOp:
     idx: int
@@ -741,14 +765,14 @@ class HistOp:
     input_data: Tuple[Tuple[str, Any], ...]
     output_data: Tuple[Tuple[str, Any], ...]
     raw: Any
-
+    # 提供方法可以取输入输出的内容
     def input_dict(self) -> dict:
         return dict(self.input_data)
 
     def output_dict(self) -> dict:
         return dict(self.output_data)
 
-
+# 记录input value
 def record_input_fields(rec: dict) -> dict:
     if rec["type"] == "write":
         return {"value": rec["value"]}
@@ -758,7 +782,7 @@ def record_input_fields(rec: dict) -> dict:
         return {"from": rec["from"], "to": rec["to"]}
     return {}
 
-
+# normalize response
 def normalize_record(idx: int, rec: dict) -> HistOp:
     body = rec.get("response", {}).get("body", {})
     t = body.get("type")
@@ -1002,7 +1026,7 @@ def check_linearizable_full(history: List[dict], key: int, max_witness_steps: in
         "reason": reason,
     }
 
-
+# 生成日志
 def build_recovery_summary() -> dict:
     summary = {
         "kills": {n: 0 for n in ALL_NODES},
@@ -1030,7 +1054,7 @@ def build_recovery_summary() -> dict:
     summary["all_nodes_crash_tested"] = all(summary["coverage"].values())
     return summary
 
-
+# 时间戳清洗函数
 def _fmt_ts(x):
     if x is None:
         return None
@@ -1039,7 +1063,7 @@ def _fmt_ts(x):
     except Exception:
         return None
 
-
+# 日志相关
 def detect_log_recovery_mode(log_text: str) -> dict:
     low = log_text.lower()
     return {"fresh_start": "fresh start" in low, "restored_from_storage": "restored paxos storage" in low}
@@ -1230,26 +1254,32 @@ def docker_logs(node: str) -> str:
     except Exception as e:
         return f"<failed to read logs for {node}: {e!r}>"
 
-
+# 主函数
 def main():
     print(f"[test] running workload for {WORKLOAD_SECONDS:.1f}s with {CLIENTS} clients over {KEYSPACE} keys")
+    # 清除并重新开启docker节点
     reset_and_start()
+    # 连接并初始化TCP docker节点
     connect_and_init_all(ROUTER)
-
+    # 创建线程，只要不被出发就继续工作
     stop_event = threading.Event()
+    # 初始化worker
     workers = [Worker(i, ROUTER, stop_event) for i in range(CLIENTS)]
+    # 初始化故障发生器
     nemesis = Nemesis(ROUTER, stop_event)
-
+    # 开始一直发 write cas read
     for w in workers:
         w.start()
+    # 开始每隔3s 添加故障
     nemesis.start()
 
     time.sleep(WORKLOAD_SECONDS)
+    # 关闭线程
     stop_event.set()
 
     for w in workers:
         w.join(timeout=3.0)
-
+    # 主线程等这些线程结束
     nemesis.join(timeout=3.0)
     nemesis.cleanup()
     
